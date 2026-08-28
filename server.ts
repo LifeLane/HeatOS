@@ -27,9 +27,8 @@ import { getFortyGuardConfig } from './src/server/fortyguard/config';
 import { FortyGuardLogger } from './src/server/fortyguard/logger';
 import { FortyGuardError } from './src/server/fortyguard/errors';
 
-async function startServer() {
+export async function createApp() {
   const app = express();
-  const PORT = 3000;
 
   // Middlewares
   app.use(express.json());
@@ -45,9 +44,15 @@ async function startServer() {
 
     res.json({
       status: 'healthy',
+      service: 'HeatOS API',
+      environment: process.env.NODE_ENV || 'development',
       provider: 'FortyGuard Data Fabric',
       mockMode: config.mock,
       baseUrl: config.baseUrl,
+      ai: {
+        route: 'available',
+        providers: ['groq', 'nvidia', 'local_deterministic'],
+      },
       cacheStats: stats,
       timestamp: new Date().toISOString(),
     });
@@ -1017,6 +1022,22 @@ async function startServer() {
     }
   });
 
+  // Ensure unknown /api/* requests return JSON 404 instead of falling back to HTML
+  app.use('/api/*', (req, res) => {
+    return res.status(404).json({
+      error: true,
+      code: 'NOT_FOUND',
+      message: `API endpoint ${req.baseUrl || req.path} not found`,
+    });
+  });
+
+  return app;
+}
+
+export async function startServer() {
+  const app = await createApp();
+  const PORT = 3000;
+
   // -------------------------------------------------------------
   // VITE MIDDLEWARE (Development) / STATIC ASSETS (Production)
   // -------------------------------------------------------------
@@ -1039,4 +1060,11 @@ async function startServer() {
   });
 }
 
-startServer();
+if (process.env.VERCEL !== '1' && process.env.NODE_ENV !== 'test') {
+  const isDirectRun = process.argv[1] && (process.argv[1].endsWith('server.ts') || process.argv[1].endsWith('server.cjs'));
+  if (isDirectRun || process.env.AUTO_START_SERVER === 'true' || !process.env.NODE_ENV) {
+    startServer().catch(err => {
+      console.error('Failed to start server:', err);
+    });
+  }
+}

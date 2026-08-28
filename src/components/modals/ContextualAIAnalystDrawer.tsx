@@ -203,16 +203,18 @@ export const ContextualAIAnalystDrawer: React.FC = () => {
           )}
 
           {error && (
-            <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-start gap-2.5">
-              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-rose-600" />
+            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-amber-600" />
               <div className="flex-1">
-                <div className="font-bold mb-0.5">Analysis Unavailable</div>
-                <div>{error}</div>
+                <div className="font-bold mb-0.5">HeatOS Intelligence is temporarily unavailable.</div>
+                <div className="text-amber-800 mb-2">Your environmental telemetry is still available. Retry the analysis.</div>
+                {error && <div className="text-[10px] text-amber-700/80 font-mono mb-2 hidden">Details: {error}</div>}
                 <button
                   onClick={() => runAnalysis()}
-                  className="mt-2 text-[11px] font-bold text-rose-900 underline"
+                  className="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold transition-colors shadow-xs cursor-pointer flex items-center gap-1.5"
                 >
-                  Retry Query
+                  <RefreshCw className="w-3 h-3" />
+                  Retry Analysis
                 </button>
               </div>
             </div>
