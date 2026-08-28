@@ -65,7 +65,7 @@ export const MapToolbar: React.FC<MapToolbarProps> = ({
   isLoading = false,
   onOpenDiagnostics,
 }) => {
-  const [isCollapsed, setIsCollapsed] = useState(typeof window !== "undefined" ? window.innerWidth < 768 : false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {

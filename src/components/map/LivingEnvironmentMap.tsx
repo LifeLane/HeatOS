@@ -93,7 +93,7 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
   const [selectedAlert, setSelectedAlert] = useState<EnvironmentalEvent | null>(null);
   const [inspectorData, setInspectorData] = useState<LocationSnapshotData | null>(null);
   const [isInspectorOpen, setIsInspectorOpen] = useState<boolean>(false);
-  const [isLayerSelectorVisible, setIsLayerSelectorVisible] = useState<boolean>(typeof window !== "undefined" ? window.innerWidth > 768 : true);
+  const [isLayerSelectorVisible, setIsLayerSelectorVisible] = useState<boolean>(true);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
   // 2D Mesh pan & drag state

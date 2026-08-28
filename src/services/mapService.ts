@@ -55,7 +55,8 @@ export class MapService {
   public static async runDiagnostics(): Promise<any> {
     const response = await fetch('/api/environmental/map/tests');
     if (!response.ok) {
-      throw new Error(`Failed to run map diagnostic tests: ${response.statusText}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `Failed to run map diagnostic tests: HTTP ${response.status}`);
     }
     return response.json();
   }

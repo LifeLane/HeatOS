@@ -26,7 +26,7 @@ interface MapLegendProps {
 
 export const MapLegend: React.FC<MapLegendProps> = ({ layerData }) => {
   // Collapsed by default until user clicks to expand
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
   if (!layerData || !layerData.legend) return null;
 

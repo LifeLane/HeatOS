@@ -83,7 +83,7 @@ export async function runMapTestSuite(): Promise<MapTestSuiteReport> {
       const layers = mapState.availableLayers;
       const passed =
         layers.length >= 4 &&
-        layers.every((l) => ['heat', 'air', 'water', 'nature', 'fire', 'solar'].includes(l)) &&
+        layers.every((l) => ['heat', 'air', 'water', 'nature', 'fire', 'solar', 'heat_risk', 'precipitation', 'wind', 'humidity'].includes(l)) &&
         Boolean(mapState.layers[mapState.activeLayer]?.grid);
 
       results.push({
