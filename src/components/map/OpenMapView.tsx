@@ -33,6 +33,7 @@ export const OpenMapView: React.FC<OpenMapViewProps> = ({
     initialCenter: [latitude, longitude],
     initialZoom: zoom,
     onCameraChange,
+    onClickMapLocation,
     onMarkerClick: (marker) => {
       if (marker.type === 'hotspot' && marker.rawItem) {
         onSelectHotspot(marker.rawItem as MapHotspotNode);

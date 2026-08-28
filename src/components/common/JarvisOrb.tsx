@@ -96,7 +96,7 @@ export const JarvisOrb: React.FC = () => {
         payload.prompt = `[SATELLITE/VISION SCENE] ${command}`;
       }
 
-      const res = await fetch('/api/environmental/ai/analyze', {
+      const res = await fetch('/api/environmental/ai/route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

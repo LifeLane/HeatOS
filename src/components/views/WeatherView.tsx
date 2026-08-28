@@ -382,6 +382,7 @@ export const WeatherView: React.FC = () => {
             {/* 1. Ambient Temperature */}
             <MetricCard
               id="weather-metric-temp"
+              metricKey="temperature"
               variant="compact"
               label="Temperature"
               value={formatTemp(tempC)}
@@ -394,6 +395,7 @@ export const WeatherView: React.FC = () => {
             {/* 2. Relative Humidity */}
             <MetricCard
               id="weather-metric-humidity"
+              metricKey="humidity"
               variant="compact"
               label="Humidity"
               value={`${humidityPct}%`}
@@ -406,6 +408,7 @@ export const WeatherView: React.FC = () => {
             {/* 3. Surface Wind & Gusts */}
             <MetricCard
               id="weather-metric-wind"
+              metricKey="wind_speed"
               variant="compact"
               label="Wind & Gusts"
               value={windData.speedKmh}
@@ -419,6 +422,7 @@ export const WeatherView: React.FC = () => {
             {/* 4. Dew Point */}
             <MetricCard
               id="weather-metric-dewpoint"
+              metricKey="dew_point"
               variant="compact"
               label="Dew Point"
               value={`${dewPointC.toFixed(1)}°C`}
@@ -431,6 +435,7 @@ export const WeatherView: React.FC = () => {
             {/* 5. Atmospheric Pressure */}
             <MetricCard
               id="weather-metric-pressure"
+              metricKey="pressure"
               variant="compact"
               label="Atm Pressure"
               value={pressureHpa}
@@ -444,6 +449,7 @@ export const WeatherView: React.FC = () => {
             {/* 6. Heat Index */}
             <MetricCard
               id="weather-metric-heatindex"
+              metricKey="heat_index"
               variant="compact"
               label="Heat Index"
               value={formatTemp(heatIndexC)}
@@ -456,6 +462,7 @@ export const WeatherView: React.FC = () => {
             {/* 7. Psychrometric Wet Bulb */}
             <MetricCard
               id="weather-metric-wetbulb"
+              metricKey="wet_bulb"
               variant="compact"
               label="Wet Bulb"
               value={formatTemp(wetBulbC)}
@@ -468,6 +475,7 @@ export const WeatherView: React.FC = () => {
             {/* 8. Air Quality Index */}
             <MetricCard
               id="weather-metric-aqi"
+              metricKey="air_quality"
               variant="compact"
               label="Air Quality"
               value={aqiVal}
@@ -481,6 +489,7 @@ export const WeatherView: React.FC = () => {
             {/* 9. Solar Irradiance */}
             <MetricCard
               id="weather-metric-solar"
+              metricKey="solar_irradiance"
               variant="compact"
               label="Solar Irradiance"
               value={solarGhi}
@@ -494,6 +503,7 @@ export const WeatherView: React.FC = () => {
             {/* 10. UV Index */}
             <MetricCard
               id="weather-metric-uv"
+              metricKey="uv_index"
               variant="compact"
               label="UV Index"
               value={`UV ${uvIdx}`}
@@ -506,6 +516,7 @@ export const WeatherView: React.FC = () => {
             {/* 11. FortyGuard Heat Island */}
             <MetricCard
               id="weather-metric-uhi"
+              metricKey="heat_island"
               variant="compact"
               label="Heat Island"
               value={`+${uhiVal.toFixed(1)}°C`}
@@ -518,6 +529,7 @@ export const WeatherView: React.FC = () => {
             {/* 12. Tree Canopy Buffer */}
             <MetricCard
               id="weather-metric-canopy"
+              metricKey="canopy_cover"
               variant="compact"
               label="Tree Canopy"
               value={`${canopyPct}%`}

@@ -155,8 +155,15 @@ export class CentralAIService {
     });
 
     const { persona, skill, routingRationale, curatedContext } = routingResult;
-    const personaMeta = PERSONA_METADATA[persona];
-    const skillMeta = SKILL_METADATA[skill];
+    let personaMeta = PERSONA_METADATA[persona as keyof typeof PERSONA_METADATA];
+    if (!personaMeta) {
+      personaMeta = PERSONA_METADATA['NATURE_ANALYST'];
+    }
+    
+    let skillMeta = SKILL_METADATA[skill as keyof typeof SKILL_METADATA];
+    if (!skillMeta) {
+      skillMeta = SKILL_METADATA['analyze_environment'];
+    }
 
     // 3. Compute Deterministic Local Intelligence (Authoritative Foundation)
     const deterministicResult = this.computeDeterministicBaseline(

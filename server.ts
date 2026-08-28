@@ -807,7 +807,28 @@ async function startServer() {
         targetedData,
       });
 
-      return res.json(result);
+      const clientResponse = {
+        id: result.id,
+        persona: result.data.persona,
+        personaTitle: result.data.personaTitle,
+        skill: result.data.skill,
+        skillTitle: result.data.skillTitle,
+        headline: result.data.headline,
+        confidence: result.data.confidence,
+        insufficientData: result.data.insufficientData,
+        structure: result.data.structure,
+        keyMetrics: result.data.keyMetrics,
+        citations: result.data.citations,
+        suggestedActions: result.data.suggestedActions,
+        suggestedQuestions: result.data.suggestedQuestions,
+        routingRationale: result.data.routingRationale,
+        generatedAt: result.data.generatedAt,
+        isFallback: result.fallbackUsed,
+        providerModel: result.model,
+        location: result.data.location,
+      };
+
+      return res.json(clientResponse);
     } catch (err: any) {
       FortyGuardLogger.error('Error in /api/environmental/ai/route', {
         requestId,

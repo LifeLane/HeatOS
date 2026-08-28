@@ -232,6 +232,7 @@ export const DashboardView: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <CardEntrance delay={0.1}>
             <MetricCard
+              metricKey="air_quality"
               label="Air Quality"
               value={currentLocation.aqi.toString()}
               unit="AQI"
@@ -247,6 +248,7 @@ export const DashboardView: React.FC = () => {
           </CardEntrance>
           <CardEntrance delay={0.2}>
             <MetricCard
+              metricKey="humidity"
               label="Humidity"
               value={currentLocation.humidity.toString()}
               unit="%"
@@ -262,6 +264,7 @@ export const DashboardView: React.FC = () => {
           </CardEntrance>
           <CardEntrance delay={0.3}>
             <MetricCard
+              metricKey="uv_index"
               label="UV Index"
               value={currentLocation.uvIndex.toString()}
               unit=""
@@ -274,6 +277,7 @@ export const DashboardView: React.FC = () => {
           </CardEntrance>
           <CardEntrance delay={0.4}>
             <MetricCard
+              metricKey="canopy_cover"
               label="Canopy Cover"
               value={currentLocation.canopyCoverage.toString()}
               unit="%"
@@ -285,6 +289,7 @@ export const DashboardView: React.FC = () => {
           
           <CardEntrance delay={0.5}>
             <MetricCard
+              metricKey="wind_speed"
               label="Wind Speed"
               value={normalizedState?.currentConditions?.wind?.value?.speedKmh || 12}
               unit="km/h"
@@ -297,6 +302,7 @@ export const DashboardView: React.FC = () => {
           </CardEntrance>
           <CardEntrance delay={0.6}>
             <MetricCard
+              metricKey="heat_index"
               label="Heat Index"
               value={normalizedState?.currentConditions?.heatIndex?.value || currentLocation.ambientTemp + 1}
               unit="°C"
@@ -312,6 +318,7 @@ export const DashboardView: React.FC = () => {
           </CardEntrance>
           <CardEntrance delay={0.7}>
             <MetricCard
+              metricKey="solar_irradiance"
               label="Solar Irradiance"
               value={normalizedState?.currentConditions?.solarIrradiance?.value || 850}
               unit="W/m²"
@@ -324,6 +331,7 @@ export const DashboardView: React.FC = () => {
           </CardEntrance>
           <CardEntrance delay={0.8}>
             <MetricCard
+              metricKey="dew_point"
               label="Dew Point"
               value={normalizedState?.currentConditions?.dewPoint?.value || 14}
               unit="°C"

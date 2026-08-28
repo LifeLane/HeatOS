@@ -18,7 +18,7 @@ export interface ProviderConfig {
 export function getGroqConfig(): ProviderConfig {
   return {
     apiKey: process.env.GROQ_API_KEY,
-    model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
+    model: 'llama3-70b-8192',
     timeoutMs: parseInt(process.env.GROQ_TIMEOUT || '8000', 10),
     maxRetries: parseInt(process.env.GROQ_MAX_RETRIES || '2', 10),
   };
@@ -27,7 +27,7 @@ export function getGroqConfig(): ProviderConfig {
 export function getNvidiaConfig(): ProviderConfig {
   return {
     apiKey: process.env.NVIDIA_API_KEY,
-    model: process.env.NVIDIA_MODEL || 'nvidia/nemotron-3-ultra-550b-a55b',
+    model: 'meta/llama3-70b-instruct',
     timeoutMs: parseInt(process.env.NVIDIA_TIMEOUT || '12000', 10),
     maxRetries: parseInt(process.env.NVIDIA_MAX_RETRIES || '2', 10),
   };

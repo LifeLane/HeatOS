@@ -31,7 +31,7 @@ export class AiAnalystService {
    * Request specialized environmental intelligence analysis from HeatOS AI Engine.
    */
   public static async analyze(request: AIAnalysisRequest): Promise<AIAnalysisResponse> {
-    const response = await fetch('/api/environmental/ai/analyze', {
+    const response = await fetch('/api/environmental/ai/route', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

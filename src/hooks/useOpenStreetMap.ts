@@ -17,17 +17,21 @@ interface UseOpenStreetMapProps {
   initialZoom: number;
   onMarkerClick?: (marker: MarkerData) => void;
   onCameraChange?: (lat: number, lng: number, zoom: number) => void;
+  onClickMapLocation?: (lat: number, lng: number) => void;
 }
 
 export function useOpenStreetMap({
   initialCenter,
   initialZoom,
   onMarkerClick,
-  onCameraChange
+  onCameraChange,
+  onClickMapLocation
 }: UseOpenStreetMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<{ [key: string]: L.Marker }>({});
+  const callbacksRef = useRef({ onCameraChange, onClickMapLocation, onMarkerClick });
+  useEffect(() => { callbacksRef.current = { onCameraChange, onClickMapLocation, onMarkerClick }; }, [onCameraChange, onClickMapLocation, onMarkerClick]);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -48,7 +52,13 @@ export function useOpenStreetMap({
     map.on('moveend', () => {
       const center = map.getCenter();
       const zoom = map.getZoom();
-      onCameraChange?.(center.lat, center.lng, zoom);
+      const cb = callbacksRef.current.onCameraChange;
+      if (cb) cb(center.lat, center.lng, zoom);
+    });
+
+    map.on('click', (e) => {
+      const cb = callbacksRef.current.onClickMapLocation;
+      if (cb) cb(e.latlng.lat, e.latlng.lng);
     });
 
     mapRef.current = map;
@@ -111,7 +121,7 @@ export function useOpenStreetMap({
       }
 
       marker.on('click', () => {
-        onMarkerClick?.(markerData);
+        callbacksRef.current.onMarkerClick?.(markerData);
       });
 
       markersRef.current[markerData.id] = marker;

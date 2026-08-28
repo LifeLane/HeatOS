@@ -70,6 +70,7 @@ export const HomeView: React.FC = () => {
   // Environmental pillar data calculated dynamically based on current selected location
   const environmentalPillars = [
     {
+      metricKey: 'heat_island',
       id: 'pillar-heat',
       label: 'Surface Heat Anomaly',
       source: 'fortyguard',
@@ -91,6 +92,7 @@ export const HomeView: React.FC = () => {
       description: 'Thermal inertia across urban corridors',
     },
     {
+      metricKey: 'air_quality',
       id: 'pillar-air',
       label: 'Air Quality Index',
       source: 'epa_airnow',
@@ -112,6 +114,7 @@ export const HomeView: React.FC = () => {
       description: 'Particulate matter PM2.5 & PM10 levels',
     },
     {
+      metricKey: 'humidity',
       id: 'pillar-water',
       label: 'Ambient Moisture & Vapor',
       source: 'noaa_nws',
@@ -415,7 +418,7 @@ export const HomeView: React.FC = () => {
                     deltaLabel={pillar.deltaLabel}
                     sparkline={pillar.sparkline}
                     description={pillar.description}
-                    onClick={handleInspectZone}
+                    metricKey={pillar.metricKey}
                   />
                   <div className="mt-1.5 flex items-center justify-between px-1">
                     <SourceAttributionBadge
