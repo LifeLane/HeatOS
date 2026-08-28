@@ -18,8 +18,8 @@ export interface ProviderConfig {
 export function getGroqConfig(): ProviderConfig {
   return {
     apiKey: process.env.TABITOKEN_API_KEY || process.env.GROQ_API_KEY || 'sk-l1Ev24TEAoiVrLX0kTEIPMxvsHWSJYkw4tBgYVt1XJfPlxmp',
-    model: process.env.TABITOKEN_MODEL || process.env.GROQ_MODEL || 'claude-opus-5-thinking',
-    timeoutMs: parseInt(process.env.GROQ_TIMEOUT || '35000', 10),
+    model: process.env.TABITOKEN_MODEL || process.env.GROQ_MODEL || 'claude-opus-4-8-thinking',
+    timeoutMs: parseInt(process.env.GROQ_TIMEOUT || '50000', 10),
     maxRetries: parseInt(process.env.GROQ_MAX_RETRIES || '2', 10),
   };
 }
