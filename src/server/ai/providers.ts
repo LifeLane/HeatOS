@@ -17,9 +17,9 @@ export interface ProviderConfig {
 
 export function getGroqConfig(): ProviderConfig {
   return {
-    apiKey: process.env.GROQ_API_KEY,
-    model: 'llama3-70b-8192',
-    timeoutMs: parseInt(process.env.GROQ_TIMEOUT || '8000', 10),
+    apiKey: process.env.TABITOKEN_API_KEY || process.env.GROQ_API_KEY || 'sk-l1Ev24TEAoiVrLX0kTEIPMxvsHWSJYkw4tBgYVt1XJfPlxmp',
+    model: process.env.TABITOKEN_MODEL || process.env.GROQ_MODEL || 'claude-opus-5-thinking',
+    timeoutMs: parseInt(process.env.GROQ_TIMEOUT || '12000', 10),
     maxRetries: parseInt(process.env.GROQ_MAX_RETRIES || '2', 10),
   };
 }
@@ -27,7 +27,7 @@ export function getGroqConfig(): ProviderConfig {
 export function getNvidiaConfig(): ProviderConfig {
   return {
     apiKey: process.env.NVIDIA_API_KEY,
-    model: 'meta/llama3-70b-instruct',
+    model: process.env.NVIDIA_MODEL || 'meta/llama-3.1-70b-instruct',
     timeoutMs: parseInt(process.env.NVIDIA_TIMEOUT || '12000', 10),
     maxRetries: parseInt(process.env.NVIDIA_MAX_RETRIES || '2', 10),
   };
@@ -75,6 +75,29 @@ export interface RawAIProviderOutput {
 }
 
 /**
+ * Robustly extracts and parses JSON from LLM outputs, handling reasoning tags (<think>...</think>),
+ * markdown code blocks, and extra conversational text.
+ */
+function parseReasoningAndJsonOutput(rawContent: string): any {
+  if (!rawContent) return null;
+
+  // 1. Strip <think>...</think> reasoning blocks if present (e.g. from reasoning models)
+  let cleaned = rawContent.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+
+  // 2. Strip markdown code blocks (```json ... ``` or ``` ... ```)
+  cleaned = cleaned.replace(/```json/gi, '').replace(/```/g, '').trim();
+
+  // 3. Find first { and last } to isolate JSON object
+  const firstBrace = cleaned.indexOf('{');
+  const lastBrace = cleaned.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    cleaned = cleaned.substring(firstBrace, lastBrace + 1);
+  }
+
+  return JSON.parse(cleaned);
+}
+
+/**
  * Executes a call to Groq API (OpenAI-compatible /chat/completions) with retries & timeouts
  */
 export async function callGroqChat(params: {
@@ -86,7 +109,7 @@ export async function callGroqChat(params: {
     return null;
   }
 
-  const endpoint = 'https://api.groq.com/openai/v1/chat/completions';
+  const endpoint = process.env.TABITOKEN_ENDPOINT || 'https://tabitoken.com/v1/chat/completions';
   let attempt = 0;
 
   while (attempt <= config.maxRetries) {
@@ -113,9 +136,8 @@ export async function callGroqChat(params: {
               content: params.userPrompt,
             },
           ],
-          response_format: { type: 'json_object' },
           temperature: 0.1,
-          max_tokens: 1024,
+          max_tokens: 1536,
         }),
         signal: controller.signal,
       });
@@ -142,8 +164,8 @@ export async function callGroqChat(params: {
       
       if (!content) return null;
       
-      const parsed = JSON.parse(content);
-      if (parsed.whatsHappening && parsed.why && parsed.whatsNext && parsed.whatToDo) {
+      const parsed = parseReasoningAndJsonOutput(content);
+      if (parsed && parsed.whatsHappening && parsed.why && parsed.whatsNext && parsed.whatToDo) {
         return {
           headline: parsed.headline,
           whatsHappening: parsed.whatsHappening,
@@ -191,16 +213,15 @@ export async function callNvidiaChat(params: {
         ],
         temperature: 0.2,
         top_p: 0.95,
-        max_tokens: 1024,
+        max_tokens: 1536,
       });
 
-      let rawText = response.choices[0]?.message?.content;
+      const rawText = response.choices[0]?.message?.content;
       if (!rawText) return null;
       
-      rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-      const parsed = JSON.parse(rawText);
+      const parsed = parseReasoningAndJsonOutput(rawText);
 
-      if (parsed.whatsHappening && parsed.why && parsed.whatsNext && parsed.whatToDo) {
+      if (parsed && parsed.whatsHappening && parsed.why && parsed.whatsNext && parsed.whatToDo) {
         return {
           headline: parsed.headline,
           whatsHappening: parsed.whatsHappening,
@@ -259,7 +280,6 @@ IMPORTANT: Output MUST be a single raw valid JSON object with keys: "headline", 
         messages.push({ role: 'user', content: params.userPrompt });
       }
 
-      // We use raw fetch here to send the extra reasoning_effort parameter since the OpenAI SDK might not type it for all models
       const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -271,7 +291,7 @@ IMPORTANT: Output MUST be a single raw valid JSON object with keys: "headline", 
           model: config.model,
           messages,
           temperature: 0.2,
-          max_tokens: 1024,
+          max_tokens: 1536,
           reasoning_effort: 'max'
         })
       });
@@ -281,13 +301,12 @@ IMPORTANT: Output MUST be a single raw valid JSON object with keys: "headline", 
       }
 
       const json = await response.json();
-      let rawText = json.choices?.[0]?.message?.content;
+      const rawText = json.choices?.[0]?.message?.content;
       if (!rawText) return null;
       
-      rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-      const parsed = JSON.parse(rawText);
+      const parsed = parseReasoningAndJsonOutput(rawText);
 
-      if (parsed.whatsHappening && parsed.why && parsed.whatsNext && parsed.whatToDo) {
+      if (parsed && parsed.whatsHappening && parsed.why && parsed.whatsNext && parsed.whatToDo) {
         return {
           headline: parsed.headline,
           whatsHappening: parsed.whatsHappening,          
