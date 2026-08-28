@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useOpenStreetMap, MarkerData } from '../../hooks/useOpenStreetMap';
-import { FortyGuardLayerData, ThermalHotspot } from '../../server/fortyguard/types';
+import { MapLayerData, MapHotspotNode } from '../../server/map/types';
 import 'leaflet/dist/leaflet.css';
 
 interface OpenMapViewProps {
@@ -8,10 +8,10 @@ interface OpenMapViewProps {
   longitude: number;
   zoom: number;
   activeLayer: string;
-  layerData: FortyGuardLayerData | null;
+  layerData: MapLayerData | null | undefined;
   activeAlerts: any[];
   selectedRoute?: any | null;
-  onSelectHotspot: (hotspot: ThermalHotspot) => void;
+  onSelectHotspot: (hotspot: MapHotspotNode) => void;
   onSelectAlert: (alert: any) => void;
   onClickMapLocation?: (lat: number, lng: number) => void;
   onCameraChange?: (lat: number, lng: number, zoom: number) => void;
@@ -35,7 +35,7 @@ export const OpenMapView: React.FC<OpenMapViewProps> = ({
     onCameraChange,
     onMarkerClick: (marker) => {
       if (marker.type === 'hotspot' && marker.rawItem) {
-        onSelectHotspot(marker.rawItem as ThermalHotspot);
+        onSelectHotspot(marker.rawItem as MapHotspotNode);
       } else if (marker.type === 'alert' && marker.rawItem) {
         onSelectAlert(marker.rawItem);
       }

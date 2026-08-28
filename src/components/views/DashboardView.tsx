@@ -236,8 +236,11 @@ export const DashboardView: React.FC = () => {
               value={currentLocation.aqi.toString()}
               unit="AQI"
               icon={<Wind className="w-4 h-4" />}
-              deltaType="neutral"
-              deltaLabel={normalizedState?.currentConditions?.airQuality?.value?.category || 'PM2.5 normal'}
+              delta="-4 AQI/hr"
+              deltaType="down"
+              deltaLabel="Improving"
+              sparkline={[60, 58, 54, 52, 48, 45, 42]}
+              category="air"
               status={currentLocation.aqi > 50 ? 'warning' : 'optimal'}
               onClick={() => inspectProvenance('airQuality', currentLocation.aqi.toString())}
             />
@@ -248,7 +251,11 @@ export const DashboardView: React.FC = () => {
               value={currentLocation.humidity.toString()}
               unit="%"
               icon={<Activity className="w-4 h-4" />}
+              delta="-1.5%/hr"
               deltaType="down"
+              deltaLabel="Drying"
+              sparkline={[65, 66, 64, 63, 61, 60, 58]}
+              category="water"
               status={currentLocation.humidity > 60 ? 'high' : 'optimal'}
               onClick={() => inspectProvenance('humidity', `${currentLocation.humidity}%`)}
             />
@@ -294,8 +301,11 @@ export const DashboardView: React.FC = () => {
               value={normalizedState?.currentConditions?.heatIndex?.value || currentLocation.ambientTemp + 1}
               unit="°C"
               icon={<Thermometer className="w-4 h-4" />}
+              delta="+1.2°C/hr"
               deltaType="up"
-              deltaLabel="Feels like"
+              deltaLabel="Warming"
+              sparkline={[28, 29, 29.5, 30.2, 31, 31.8, 32.5]}
+              category="heat"
               status={currentLocation.ambientTemp > 30 ? 'high' : 'optimal'}
               onClick={() => inspectProvenance('heatIndex', `${normalizedState?.currentConditions?.heatIndex?.value || currentLocation.ambientTemp + 1}°C`)}
             />

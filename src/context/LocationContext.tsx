@@ -372,6 +372,22 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return () => clearInterval(timer);
   }, [isLive, currentLocation, loadEnvironmentalData]);
 
+
+  // Handle network online/offline events for intermittent connectivity
+  useEffect(() => {
+    const handleOnline = () => loadEnvironmentalData(currentLocation, true);
+    const handleOffline = () => loadEnvironmentalData(currentLocation, false);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [currentLocation, loadEnvironmentalData]);
+
+
   const setLocation = (locationId: string) => {
     const loc = SUPPORTED_LOCATIONS.find((l) => l.id === locationId);
     if (loc) {

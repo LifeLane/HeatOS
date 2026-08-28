@@ -367,7 +367,7 @@ export const ToolsView: React.FC = () => {
                 )}
 
                 {/* Grid using ToolCard */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4 sm:gap-6 items-stretch">
                   {catTools.map((tool) => (
                     <ToolCard
                       key={tool.id}
@@ -384,7 +384,7 @@ export const ToolsView: React.FC = () => {
       ) : (
         /* Filtered Search Results Grid */
         <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4 sm:gap-6 items-stretch">
             {filteredTools.map((tool) => {
               const catInfo = TOOL_CATEGORIES.find((c) => c.id === tool.category);
               return (

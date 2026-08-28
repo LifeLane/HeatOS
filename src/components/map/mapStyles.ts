@@ -4,7 +4,7 @@
  * FortyGuard thermal heatmaps, green canopy buffers, and environmental alert pins.
  */
 
-export const DARK_MAP_STYLE: google.maps.MapTypeStyle[] = [
+export const DARK_MAP_STYLE: any[] = [
   { elementType: 'geometry', stylers: [{ color: '#0f172a' }] },
   { elementType: 'labels.text.stroke', stylers: [{ color: '#0f172a' }] },
   { elementType: 'labels.text.fill', stylers: [{ color: '#94a3b8' }] },
@@ -85,7 +85,7 @@ export const DARK_MAP_STYLE: google.maps.MapTypeStyle[] = [
   },
 ];
 
-export const NATURE_MAP_STYLE: google.maps.MapTypeStyle[] = [
+export const NATURE_MAP_STYLE: any[] = [
   { elementType: 'geometry', stylers: [{ color: '#131e1c' }] },
   { elementType: 'labels.text.fill', stylers: [{ color: '#a7f3d0' }] },
   { elementType: 'labels.text.stroke', stylers: [{ color: '#064e3b' }] },

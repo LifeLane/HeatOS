@@ -96,7 +96,7 @@ export function useOpenStreetMap({
   const updateMarkers = (markers: MarkerData[]) => {
     if (!mapRef.current) return;
 
-    Object.values(markersRef.current).forEach(marker => {
+    (Object.values(markersRef.current) as L.Marker[]).forEach(marker => {
       marker.remove();
     });
     markersRef.current = {};

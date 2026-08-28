@@ -47,7 +47,6 @@ import { GlobeCanvas, GlobeCityNode } from './GlobeCanvas';
 import { FloatingLayerSelector } from './FloatingLayerSelector';
 import { MapLegend } from './MapLegend';
 import { MapToolbar } from './MapToolbar';
-import { TimePlaybackControl } from './TimePlaybackControl';
 import { MapSearchFlyout } from './MapSearchFlyout';
 import { LocationInspectorPanel, LocationSnapshotData } from './LocationInspectorPanel';
 import { NatureRouteOption } from './natureRouting';
@@ -75,7 +74,7 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
   // View Mode: 'google' (default, Google Maps + FortyGuard) | 'globe' (3D Earth) | 'mesh' (2D Urban Mesh)
   const [viewMode, setViewMode] = useState<'google' | 'globe' | 'mesh'>('google');
   const [isAutoRotate, setIsAutoRotate] = useState<boolean>(false);
-  const [timeHorizon, setTimeHorizon] = useState<MapTimeHorizon>('now');
+  
 
   // Map Camera State
   const [currentLat, setCurrentLat] = useState<number>(latitude);
@@ -204,25 +203,8 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
   // Helper to open Environmental Snapshot for a location
   const openSnapshotForCoordinates = useCallback(
     (lat: number, lng: number, name: string, hotspotNode?: MapHotspotNode) => {
-      // Calculate horizon delta if future time is selected
       let tempDelta = 0;
       let feelsDelta = 0;
-      if (timeHorizon === '+2h') {
-        tempDelta = +1.1;
-        feelsDelta = +1.4;
-      } else if (timeHorizon === '+4h') {
-        tempDelta = +2.5;
-        feelsDelta = +3.1;
-      } else if (timeHorizon === '+6h') {
-        tempDelta = -0.7;
-        feelsDelta = -0.9;
-      } else if (timeHorizon === '+12h') {
-        tempDelta = -4.2;
-        feelsDelta = -4.8;
-      } else if (timeHorizon === '+24h') {
-        tempDelta = +0.3;
-        feelsDelta = +0.4;
-      }
 
       const baseTemp = hotspotNode?.primaryValue ?? currentLocation.ambientTemp ?? 25.4;
       const baseFeels = currentLocation.apparentTemp ?? (baseTemp + 1.8);
@@ -253,13 +235,13 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
         solarUvIndex: currentLocation.uvIndex ?? 7,
         canopyCoveragePct: currentLocation.canopyCoverage ?? 24,
         hotspot: hotspotNode,
-        timeHorizonLabel: timeHorizon !== 'now' ? timeHorizon.toUpperCase() : undefined,
+        
       };
 
       setInspectorData(snapshot);
       setIsInspectorOpen(true);
     },
-    [currentLocation, mapState, timeHorizon]
+    [currentLocation, mapState, 'now']
   );
 
   // Mesh Pan / Drag Handlers
@@ -389,7 +371,7 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
             activeLayer={activeLayer}
             selectedLat={currentLat}
             selectedLng={currentLng}
-            timeHorizon={timeHorizon}
+            
             isAutoRotate={isAutoRotate}
             onSelectLocation={handleFlyTo}
           />
@@ -458,12 +440,12 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
       </div>
 
       {/* ---------------- POINT-LEVEL PROJECTION NOTICE (IF FUTURE TIME) ---------------- */}
-      {timeHorizon !== 'now' && (
+      {'now' !== 'now' && (
         <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
           <div className="px-3.5 py-1.5 rounded-full bg-slate-900/90 text-slate-100 border border-slate-700/80 shadow-xl backdrop-blur-md flex items-center gap-2 text-xs font-semibold">
             <Clock className="w-3.5 h-3.5 text-orange-400 shrink-0" />
             <span>
-              Point-Level Station Forecast ({timeHorizon.toUpperCase()}) Projected Across Microclimate Mesh
+              Point-Level Station Forecast ({'now'.toUpperCase()}) Projected Across Microclimate Mesh
             </span>
           </div>
         </div>
@@ -476,13 +458,8 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
           <MapLegend layerData={currentLayerData} />
         </div>
 
-        {/* Right / Center: Temporal Time Controller */}
-        <div className="pointer-events-auto self-end sm:self-auto w-full sm:w-auto">
-          <TimePlaybackControl
-            currentHorizon={timeHorizon}
-            onSelectHorizon={(horizon) => setTimeHorizon(horizon)}
-          />
-        </div>
+        
+        
       </div>
 
       {/* ---------------- ENVIRONMENTAL LOCATION INSPECTOR ---------------- */}
