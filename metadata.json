@@ -1,0 +1,6 @@
+{
+  "name": "HeatOS",
+  "description": "The Living Environment OS — an environmental intelligence platform to monitor, understand, and predict environmental states.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
