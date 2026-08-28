@@ -17,7 +17,7 @@
 import { AIRouterRequest, AIRouterResponse, AIProviderName, StructuredAIOutput } from './providerTypes';
 import { AICacheService } from './cacheService';
 import { AILoggerService } from './loggerService';
-import { callGroqChat, callNvidiaChat, callNvidiaMoonshotChat, getGroqConfig, getNvidiaConfig, getMoonshotConfig } from './providers';
+import { callTabiTokenChat, getTabiTokenConfig } from './providers';
 import { LocalIntelligenceEngine } from './localIntelligence';
 import { EnvironmentalStateManager } from '../state/snapshot';
 import { NaturePulseEngine } from '../pulse/engine';
@@ -203,54 +203,30 @@ Active Events: ${JSON.stringify(curatedContext.activeEventsSummary || [], null, 
 Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScore ?? 'N/A'}/100`;
 
     
-    // 6. Provider Selection & Invocation (Groq Primary -> Nvidia Fallback -> Deterministic Local)
-    const groqConfig = getGroqConfig();
-    const nvidiaConfig = getNvidiaConfig();
-    const moonshotConfig = getMoonshotConfig();
-
-    let provider: AIProviderName = 'local_deterministic';
-    let modelName = 'HeatOS Local Intelligence';
+    // 6. TabiToken AI Invocation (Exclusive Provider)
+    const tabiConfig = getTabiTokenConfig();
+    let provider: AIProviderName = 'tabitoken';
+    let modelName = tabiConfig.model;
     let rawOutput: any = null;
     let fallbackUsed = false;
     let retryCount = 0;
 
-    // Check if advanced reasoning or explicit Nvidia was requested
-    const requiresAdvancedNvidia = forceProvider === 'nvidia' || (prompt && prompt.toLowerCase().includes('deep advanced reasoning'));
-    const requiresMoonshot = forceProvider === 'moonshot' || (prompt && prompt.toLowerCase().includes('vision'));
-
-    if (requiresMoonshot && moonshotConfig.apiKey) {
-      provider = 'moonshot';
-      modelName = moonshotConfig.model;
-      rawOutput = await callNvidiaMoonshotChat({ systemInstruction, userPrompt, imageUrl: request.imageUrl });
-      if (!rawOutput) {
-         fallbackUsed = true;
-         retryCount++;
-      }
+    if (!tabiConfig.apiKey) {
+      throw new Error('TABITOKEN_API_KEY environment variable is not configured on the server.');
     }
 
-    if (!rawOutput && !requiresAdvancedNvidia && groqConfig.apiKey) {
-      // ATTEMPT 1: GROQ PRIMARY
-      provider = 'groq';
-      modelName = groqConfig.model;
-      rawOutput = await callGroqChat({ systemInstruction, userPrompt });
-      if (!rawOutput) {
-        // Groq failed, try Nvidia fallback
-        fallbackUsed = true;
-        retryCount++;
-      }
+    try {
+      rawOutput = await callTabiTokenChat({
+        systemInstruction,
+        userPrompt,
+        imageUrl: request.imageUrl,
+      });
+    } catch (err: any) {
+      FortyGuardLogger.error('TabiToken AI execution error', { error: err.message });
+      throw err;
     }
 
-    if (!rawOutput && nvidiaConfig.apiKey && (requiresAdvancedNvidia || fallbackUsed || !groqConfig.apiKey)) {
-      // ATTEMPT 2: NVIDIA FALLBACK / ADVANCED
-      provider = 'nvidia';
-      modelName = nvidiaConfig.model;
-      rawOutput = await callNvidiaChat({ systemInstruction, userPrompt });
-      if (!rawOutput) {
-        fallbackUsed = true;
-        retryCount++;
-      }
-    }
-// 7. Assemble and Validate Final Structured Response
+    // 7. Assemble and Validate Final Structured Response
     let finalStructure: StructuredExplanation = deterministicResult.structure;
     let headline = deterministicResult.headline;
     let suggestedQuestions = deterministicResult.suggestedQuestions;
@@ -265,12 +241,9 @@ Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScor
       };
       if (rawOutput.headline) headline = rawOutput.headline;
       if (rawOutput.suggestedQuestions) suggestedQuestions = rawOutput.suggestedQuestions;
-      confidence = rawOutput.confidence || 94;
+      confidence = rawOutput.confidence || 96;
     } else {
-      // Complete Fallback to Deterministic Engine
-      provider = 'local_deterministic';
-      modelName = 'HeatOS Local Rule Engine (Authoritative)';
-      fallbackUsed = true;
+      throw new Error('TabiToken response missing required structured explanation fields.');
     }
 
     const structuredOutput: StructuredAIOutput = {

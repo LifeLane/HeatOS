@@ -4,7 +4,7 @@
 
 import { AIPersona, AISkill, AIAction, KeyMetricSnapshot, GroundingCitation, StructuredExplanation } from './types';
 
-export type AIProviderName = 'groq' | 'nvidia' | 'moonshot' | 'local_deterministic';
+export type AIProviderName = 'tabitoken' | 'groq' | 'nvidia' | 'moonshot' | 'local_deterministic';
 
 export interface StructuredAIOutput {
   summary: string;

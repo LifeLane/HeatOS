@@ -51,7 +51,7 @@ export async function createApp() {
       baseUrl: config.baseUrl,
       ai: {
         route: 'available',
-        providers: ['groq', 'nvidia', 'local_deterministic'],
+        providers: ['tabitoken'],
       },
       cacheStats: stats,
       timestamp: new Date().toISOString(),
