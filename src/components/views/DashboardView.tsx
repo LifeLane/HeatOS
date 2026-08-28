@@ -23,6 +23,7 @@ import { useExplanation } from '../../context/ExplanationContext';
 import PageContainer from '../ui/PageContainer';
 import Card from '../ui/Card';
 import MetricCard from '../ui/MetricCard';
+import { AnimatedTelemetryCards } from '../dashboard/AnimatedTelemetryCards';
 import { FadeIn, CardEntrance, NumberCounter } from '../motion/MotionPrimitives';
 import { naturePulseApi } from '../../services/naturePulseApi';
 import { EventService } from '../../services/eventService';
@@ -219,6 +220,11 @@ export const DashboardView: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* ========================================================================= */}
+        {/* ANIMATED TELEMETRY (Heat Index, Air Quality, Humidity) */}
+        {/* ========================================================================= */}
+        <AnimatedTelemetryCards />
 
         {/* ========================================================================= */}
         {/* COMPACT METRICS GRID */}

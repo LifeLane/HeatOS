@@ -86,7 +86,7 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
   const [activeLayer, setActiveLayer] = useState<MapLayerKey>(initialLayer);
   const [mapState, setMapState] = useState<MapEnvironmentalStateResponse | null>(null);
   const [activeAlerts, setActiveAlerts] = useState<EnvironmentalEvent[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(typeof window !== "undefined" ? window.innerWidth > 768 : true);
   const [error, setError] = useState<string | null>(null);
 
   // Inspector & Selection State
@@ -94,7 +94,7 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
   const [selectedAlert, setSelectedAlert] = useState<EnvironmentalEvent | null>(null);
   const [inspectorData, setInspectorData] = useState<LocationSnapshotData | null>(null);
   const [isInspectorOpen, setIsInspectorOpen] = useState<boolean>(false);
-  const [isLayerSelectorVisible, setIsLayerSelectorVisible] = useState<boolean>(true);
+  const [isLayerSelectorVisible, setIsLayerSelectorVisible] = useState<boolean>(typeof window !== "undefined" ? window.innerWidth > 768 : true);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
   // 2D Mesh pan & drag state
@@ -322,13 +322,15 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
       }`}
     >
       {/* ---------------- TOP FLOATING BAR: SEARCH & LAYER SELECTOR ---------------- */}
-      <div className="absolute top-3 sm:top-4 inset-x-3 sm:inset-x-6 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+      <div className="absolute top-3 sm:top-4 inset-x-3 sm:inset-x-6 z-20 flex flex-col md:flex-row items-start md:items-center justify-between gap-2 pointer-events-none">
         {/* Left: Location Search Flyout & Live Mode */}
-        <div className="pointer-events-auto flex items-center gap-2">
-          <MapSearchFlyout
-            currentLocationName={locationName}
-            onSelectLocation={handleFlyTo}
-          />
+        <div className="pointer-events-auto flex items-center gap-2 w-full md:w-auto">
+          <div className="flex-1 min-w-0">
+            <MapSearchFlyout
+              currentLocationName={locationName}
+              onSelectLocation={handleFlyTo}
+            />
+          </div>
 
           {/* Environmental Mode Indicator */}
           <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/90 text-xs font-bold text-slate-800 shadow-lg shadow-slate-900/5">
@@ -341,7 +343,7 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
 
         {/* Center / Right: Floating Layer Selector */}
         {isLayerSelectorVisible && (
-          <div className="pointer-events-auto max-w-full overflow-x-auto transition-all duration-300">
+          <div className="pointer-events-auto w-full md:w-auto overflow-x-auto no-scrollbar transition-all duration-300">
             <FloatingLayerSelector
               activeLayer={activeLayer}
               availableLayers={availableLayers}
@@ -434,7 +436,7 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
       </div>
 
       {/* ---------------- RIGHT FLOATING COMPACT MAP CONTROLS ---------------- */}
-      <div className="absolute right-3 sm:right-4 top-20 z-20 flex flex-col gap-2 pointer-events-auto">
+      <div className="absolute right-3 sm:right-4 top-32 md:top-20 z-20 flex flex-col gap-2 pointer-events-auto">
         <MapToolbar
           viewMode={viewMode}
           onChangeViewMode={(mode) => setViewMode(mode)}
@@ -468,14 +470,14 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
       )}
 
       {/* ---------------- BOTTOM FLOATING BAR: TIMELINE & LEGEND ---------------- */}
-      <div className="absolute bottom-3 sm:bottom-4 inset-x-3 sm:inset-x-6 z-20 flex flex-col sm:flex-row items-end sm:items-center justify-between gap-2.5 pointer-events-none">
+      <div className="absolute bottom-20 sm:bottom-4 inset-x-3 sm:inset-x-6 z-20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 pointer-events-none">
         {/* Left: Dynamic Map Legend */}
-        <div className="pointer-events-auto">
+        <div className="pointer-events-auto self-start sm:self-auto max-w-full overflow-hidden">
           <MapLegend layerData={currentLayerData} />
         </div>
 
         {/* Right / Center: Temporal Time Controller */}
-        <div className="pointer-events-auto">
+        <div className="pointer-events-auto self-end sm:self-auto w-full sm:w-auto">
           <TimePlaybackControl
             currentHorizon={timeHorizon}
             onSelectHorizon={(horizon) => setTimeHorizon(horizon)}

@@ -51,7 +51,7 @@ export const TimePlaybackControl: React.FC<TimePlaybackControlProps> = ({
   return (
     <div
       id="time-playback-control"
-      className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-1.5 sm:p-2 shadow-lg shadow-slate-900/5 flex flex-col sm:flex-row items-center gap-1.5 sm:gap-2.5 select-none transition-all"
+      className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-1.5 sm:p-2 shadow-lg shadow-slate-900/5 flex flex-row flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 select-none transition-all"
     >
       {/* Play/Pause & Reset Control */}
       <div className="flex items-center gap-1">

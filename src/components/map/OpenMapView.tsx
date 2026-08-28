@@ -1,17 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { ShieldAlert, Flame, MapPin } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { useOpenStreetMap, MarkerData } from '../../hooks/useOpenStreetMap';
 import { FortyGuardLayerData, ThermalHotspot } from '../../server/fortyguard/types';
-
-// Fix leaflet icon issue
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+import 'leaflet/dist/leaflet.css';
 
 interface OpenMapViewProps {
   latitude: number;
@@ -27,78 +17,6 @@ interface OpenMapViewProps {
   onCameraChange?: (lat: number, lng: number, zoom: number) => void;
 }
 
-// Component to handle camera changes
-const CameraController: React.FC<{
-  latitude: number;
-  longitude: number;
-  zoom: number;
-  onCameraChange?: (lat: number, lng: number, zoom: number) => void;
-}> = ({ latitude, longitude, zoom, onCameraChange }) => {
-  const map = useMap();
-  const isProgrammaticMove = useRef(false);
-  
-  useEffect(() => {
-    const currentCenter = map.getCenter();
-    const currentZoom = map.getZoom();
-    
-    // Only fly if we're actually changing coordinates to avoid feedback loops
-    const dist = currentCenter.distanceTo([latitude, longitude]);
-    if (dist > 50 || currentZoom !== zoom) {
-      isProgrammaticMove.current = true;
-      map.flyTo([latitude, longitude], zoom, { duration: 1.5 });
-    }
-  }, [latitude, longitude, zoom, map]);
-
-  useEffect(() => {
-    if (!onCameraChange) return;
-    
-    const handleMoveEnd = () => {
-      if (isProgrammaticMove.current) {
-        isProgrammaticMove.current = false;
-        return; // Skip notifying parent if this move was initiated by props
-      }
-      const currentCenter = map.getCenter();
-      const currentZoom = map.getZoom();
-      onCameraChange(currentCenter.lat, currentCenter.lng, currentZoom);
-    };
-    
-    map.on('moveend', handleMoveEnd);
-    return () => {
-      map.off('moveend', handleMoveEnd);
-    };
-  }, [map, onCameraChange]);
-
-  return null;
-};
-
-// Custom DivIcons for our markers
-const createCustomIcon = (type: 'hotspot' | 'alert', severity: string, name: string) => {
-  let bgColor, borderColor, iconHtml;
-  
-  if (type === 'hotspot') {
-    if (severity === 'critical') {
-       bgColor = 'bg-rose-600'; borderColor = 'border-rose-400';
-    } else if (severity === 'high') {
-       bgColor = 'bg-orange-600'; borderColor = 'border-orange-400';
-    } else {
-       bgColor = 'bg-emerald-600'; borderColor = 'border-emerald-400';
-    }
-    iconHtml = `<div class="w-6 h-6 rounded-full ${bgColor} border-2 ${borderColor} flex items-center justify-center shadow-lg text-white font-bold text-xs"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c-1.57 0-2.5-1.5-2.5-3A4.5 4.5 0 0 1 13 4.5c.34-.14 1.34-1 1-2.5C18 3.5 20 7.5 20 11a8 8 0 1 1-16 0c0-2.3 1-4 2-5 .2 1.3 1 2.5 2.5 3z"/></svg></div>`;
-  } else {
-    const isCritical = severity.toLowerCase() === 'critical' || severity === 'HIGH';
-    bgColor = isCritical ? 'bg-rose-600' : 'bg-amber-500';
-    borderColor = isCritical ? 'border-rose-300' : 'border-amber-300';
-    iconHtml = `<div class="w-8 h-8 rounded-full ${bgColor} border-2 ${borderColor} flex items-center justify-center shadow-lg text-white font-bold"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>`;
-  }
-
-  return L.divIcon({
-    html: iconHtml,
-    className: 'custom-leaflet-marker',
-    iconSize: type === 'hotspot' ? [24, 24] : [32, 32],
-    iconAnchor: type === 'hotspot' ? [12, 12] : [16, 16]
-  });
-};
-
 export const OpenMapView: React.FC<OpenMapViewProps> = ({
   latitude,
   longitude,
@@ -111,67 +29,113 @@ export const OpenMapView: React.FC<OpenMapViewProps> = ({
   onClickMapLocation,
   onCameraChange,
 }) => {
-  const center: [number, number] = [latitude, longitude];
+  const { mapContainerRef, isReady, panTo, updateMarkers } = useOpenStreetMap({
+    initialCenter: [latitude, longitude],
+    initialZoom: zoom,
+    onCameraChange,
+    onMarkerClick: (marker) => {
+      if (marker.type === 'hotspot' && marker.rawItem) {
+        onSelectHotspot(marker.rawItem as ThermalHotspot);
+      } else if (marker.type === 'alert' && marker.rawItem) {
+        onSelectAlert(marker.rawItem);
+      }
+    }
+  });
+
+  // Pan when props change
+  useEffect(() => {
+    if (isReady) {
+      panTo(latitude, longitude, zoom);
+    }
+  }, [latitude, longitude, zoom, isReady]);
+
+  // Update markers when layerData or alerts change
+  useEffect(() => {
+    if (!isReady) return;
+
+    const markers: MarkerData[] = [];
+    
+    // Add current location marker
+    markers.push({
+      id: 'current_location',
+      latitude,
+      longitude,
+      popupContent: '<strong>Current Location</strong>',
+      type: 'user'
+    });
+
+    if (layerData?.hotspots) {
+      layerData.hotspots.forEach(hotspot => {
+        markers.push({
+          id: hotspot.id,
+          latitude: hotspot.latitude,
+          longitude: hotspot.longitude,
+          type: 'hotspot',
+          severity: hotspot.severity,
+          popupContent: `<strong>${hotspot.name}</strong><br/>${hotspot.primaryValue}${hotspot.primaryUnit}`,
+          rawItem: hotspot
+        });
+      });
+    }
+
+    if (activeAlerts) {
+      activeAlerts.forEach(alert => {
+        const alertLat = alert.location?.latitude ?? alert.spatialContext?.latitude ?? latitude;
+        const alertLng = alert.location?.longitude ?? alert.spatialContext?.longitude ?? longitude;
+        markers.push({
+          id: alert.id,
+          latitude: alertLat,
+          longitude: alertLng,
+          type: 'alert',
+          severity: alert.severity,
+          popupContent: `<strong>${alert.summary?.headline || 'Alert'}</strong>`,
+          rawItem: alert
+        });
+      });
+    }
+
+    updateMarkers(markers);
+  }, [layerData, activeAlerts, latitude, longitude, isReady]);
 
   return (
     <div className="w-full h-full relative overflow-hidden select-none z-0">
-      <MapContainer 
-        center={center} 
-        zoom={zoom} 
-        style={{ width: '100%', height: '100%' }}
-        zoomControl={false}
-        attributionControl={true}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          className="map-tiles-dark"
-        />
-        
-        <CameraController latitude={latitude} longitude={longitude} zoom={zoom} onCameraChange={onCameraChange} />
-
-        <Marker position={center}>
-          <Popup>Current Location</Popup>
-        </Marker>
-
-        {layerData?.hotspots?.map((hotspot) => (
-          <Marker
-            key={hotspot.id}
-            position={[hotspot.latitude, hotspot.longitude]}
-            icon={createCustomIcon('hotspot', hotspot.severity, hotspot.name)}
-            eventHandlers={{
-              click: () => onSelectHotspot(hotspot),
-            }}
-          >
-            <Popup className="custom-popup">
-              <strong>{hotspot.name}</strong><br/>
-              {hotspot.primaryValue}{hotspot.primaryUnit}
-            </Popup>
-          </Marker>
-        ))}
-
-        {activeAlerts.map((alert) => {
-          const alertLat = alert.location?.latitude ?? alert.spatialContext?.latitude ?? latitude;
-          const alertLng = alert.location?.longitude ?? alert.spatialContext?.longitude ?? longitude;
-          
-          return (
-            <Marker
-              key={alert.id}
-              position={[alertLat, alertLng]}
-              icon={createCustomIcon('alert', alert.severity, alert.summary?.headline || 'Alert')}
-              eventHandlers={{
-                click: () => onSelectAlert(alert),
-              }}
-            />
-          );
-        })}
-      </MapContainer>
+      <div ref={mapContainerRef} className="w-full h-full" />
+      
+      {/* Real-time Environmental Animated Overlay */}
+      {layerData?.grid && layerData.grid.length > 0 && (
+        <div className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen flex items-center justify-center z-[400]">
+          <div className="grid grid-cols-6 gap-2 sm:gap-4 p-4 sm:p-8 w-full max-w-2xl h-full max-h-[500px]">
+            {layerData.grid.slice(0, 36).map((cell, idx) => (
+              <div
+                key={idx}
+                className="rounded-3xl transition-all duration-1000 blur-2xl sm:blur-3xl"
+                style={{
+                  backgroundColor:
+                    activeLayer === 'heat' || activeLayer === 'heat_risk'
+                      ? `rgba(239, 68, 68, ${0.2 + cell.normalizedIntensity * 0.8})`
+                      : activeLayer === 'nature'
+                      ? `rgba(16, 185, 129, ${0.2 + cell.normalizedIntensity * 0.8})`
+                      : activeLayer === 'air'
+                      ? `rgba(20, 184, 166, ${0.2 + cell.normalizedIntensity * 0.8})`
+                      : `rgba(59, 130, 246, ${0.2 + cell.normalizedIntensity * 0.8})`,
+                  transform: `scale(${0.8 + cell.normalizedIntensity * 0.4})`,
+                  animation: `pulse-opacity ${3 + (idx % 3)}s infinite alternate`
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
       
       {/* CSS overrides for dark mode map and custom popups */}
       <style dangerouslySetInnerHTML={{__html: `
         .leaflet-container {
           background: #090d16;
           font-family: inherit;
+        }
+        @keyframes pulse-opacity {
+          0% { opacity: 0.6; }
+          100% { opacity: 1; }
         }
         .map-tiles-dark {
           filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
