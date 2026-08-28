@@ -11,6 +11,9 @@ import { EPAAirQualityProvider } from './providers/epa.provider';
 import { NASAFIRMSWildfireProvider } from './providers/nasa-firms.provider';
 import { OpenSatelliteVegetationProvider } from './providers/satellite-ndvi.provider';
 import { USGSWaterProvider } from './providers/usgs-water.provider';
+import { EonetProvider } from './providers/eonet.provider';
+import { PurpleAirProvider } from './providers/purpleair.provider';
+
 
 export class EnvironmentalProviderRegistry {
   private providers: Map<string, IEnvironmentalDataProvider> = new Map();
@@ -29,6 +32,8 @@ export class EnvironmentalProviderRegistry {
     this.register(new NASAFIRMSWildfireProvider());
     this.register(new OpenSatelliteVegetationProvider());
     this.register(new USGSWaterProvider());
+    this.register(new EonetProvider());
+    this.register(new PurpleAirProvider());
   }
 
   public register(provider: IEnvironmentalDataProvider): void {

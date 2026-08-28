@@ -29,6 +29,7 @@ export interface AIRouterRequest {
   quickQuestionKey?: string;
   bypassCache?: boolean;
   forceProvider?: AIProviderName;
+  imageUrl?: string;
   // Specific targeted data to minimize context window
   targetedData?: {
     temperature?: number;

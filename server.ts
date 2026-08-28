@@ -701,6 +701,9 @@ async function startServer() {
         activeMetricKey,
         quickQuestionKey,
         bypassCache,
+        forceProvider,
+        imageUrl,
+        targetedData
       } = req.body;
 
       if (latitude === undefined || longitude === undefined) {

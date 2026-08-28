@@ -50,8 +50,8 @@ export class OpenEnvironmentalDataFabric {
     // 1. Resolve active providers
     const fgProvider = this.registry.get('fortyguard');
     const noaaProvider = this.registry.get('noaa_nws');
-    const epaProvider = this.registry.get('epa_airnow');
-    const firmsProvider = this.registry.get('nasa_firms');
+    const epaProvider = this.registry.get('purple_air') || this.registry.get('epa_airnow');
+    const firmsProvider = this.registry.get('nasa_eonet') || this.registry.get('nasa_firms');
     const satProvider = this.registry.get('satellite_vegetation');
     const usgsProvider = this.registry.get('usgs_water');
 

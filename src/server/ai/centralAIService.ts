@@ -214,7 +214,7 @@ Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScor
     if (requiresMoonshot && moonshotConfig.apiKey) {
       provider = 'moonshot';
       modelName = moonshotConfig.model;
-      rawOutput = await callNvidiaMoonshotChat({ systemInstruction, userPrompt });
+      rawOutput = await callNvidiaMoonshotChat({ systemInstruction, userPrompt, imageUrl: request.imageUrl });
       if (!rawOutput) {
          fallbackUsed = true;
          retryCount++;

@@ -33,6 +33,7 @@ import { EnvironmentalBriefModal } from './components/modals/EnvironmentalBriefM
 import { SubscriptionModal } from './components/modals/SubscriptionModal';
 import { ContextualAIAnalystDrawer } from './components/modals/ContextualAIAnalystDrawer';
 import { CommercialDemoTour } from './components/common/CommercialDemoTour';
+import { JarvisOrb } from './components/common/JarvisOrb';
 
 const MainContent: React.FC = () => {
   const {
@@ -96,6 +97,7 @@ const MainContent: React.FC = () => {
       <ProfileSettingsModal />
       <AlertDetailModal />
       <EnvironmentalBriefModal />
+      <JarvisOrb />
       <OpenDataFabricModal
         isOpen={isFabricModalOpen}
         onClose={() => setIsFabricModalOpen(false)}
