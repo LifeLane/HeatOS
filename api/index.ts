@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { createApp } from '../server';
 
 let cachedApp: any = null;
