@@ -20,7 +20,10 @@ export interface ProviderConfig {
 export function getTabiTokenConfig(): ProviderConfig {
   const apiKey = process.env.TABITOKEN_API_KEY || process.env.GROQ_API_KEY || 'sk-l1Ev24TEAoiVrLX0kTEIPMxvsHWSJYkw4tBgYVt1XJfPlxmp';
   const endpoint = process.env.TABITOKEN_ENDPOINT || 'https://tabitoken.com/v1/chat/completions';
-  const model = process.env.TABITOKEN_MODEL || process.env.GROQ_MODEL || 'claude-opus-4-8';
+  let model = process.env.TABITOKEN_MODEL || process.env.GROQ_MODEL || 'claude-opus-4-8';
+  if (model === 'claude-opus-5-thinking') {
+    model = 'claude-opus-4-8';
+  }
   const timeoutMs = parseInt(process.env.TABITOKEN_TIMEOUT || process.env.GROQ_TIMEOUT || '55000', 10);
   const maxRetries = parseInt(process.env.TABITOKEN_MAX_RETRIES || process.env.GROQ_MAX_RETRIES || '1', 10);
 
@@ -117,8 +120,19 @@ export async function callTabiTokenChat(params: {
         const errText = await response.text().catch(() => '');
         FortyGuardLogger.warn(`TabiToken HTTP ${response.status} on attempt ${attempt}: ${errText.substring(0, 200)}`);
         
-        if (response.status === 401 || response.status === 403) {
-          throw new Error(`TabiToken Authentication Error (${response.status}): Invalid API key.`);
+        if (response.status === 401) {
+          throw new Error(`TabiToken Authentication Error (401): Invalid API key.`);
+        }
+        if (response.status === 403) {
+          if (errText.includes('no access to model') && config.model !== 'claude-opus-4-8') {
+            FortyGuardLogger.warn(`Model ${config.model} unauthorized. Falling back to claude-opus-4-8.`);
+            config.model = 'claude-opus-4-8';
+            if (attempt <= config.maxRetries + 1) {
+              continue;
+            }
+          } else {
+            throw new Error(`TabiToken Authentication Error (403): ${errText || 'Access denied.'}`);
+          }
         }
 
         if (attempt <= config.maxRetries) {
