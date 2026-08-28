@@ -767,6 +767,7 @@ async function startServer() {
         quickQuestionKey,
         bypassCache,
         forceProvider,
+        imageUrl,
         targetedData,
       } = req.body;
 
@@ -802,6 +803,7 @@ async function startServer() {
         quickQuestionKey,
         bypassCache: Boolean(bypassCache),
         forceProvider,
+        imageUrl,
         targetedData,
       });
 

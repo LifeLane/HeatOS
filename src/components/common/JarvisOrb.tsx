@@ -22,7 +22,7 @@ export const JarvisOrb: React.FC = () => {
   
   const { location } = useLocation();
   const { currentState } = useFortyGuard();
-  const { openAssistant } = useAIAnalyst();
+  const { openAIWithContext } = useAIAnalyst();
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -108,7 +108,7 @@ export const JarvisOrb: React.FC = () => {
         setResponse(textToSpeak);
         synthesizeSpeech(textToSpeak);
         // Also open the text UI so they can read it
-        openAssistant('NATURE_ANALYST', 'analyze_environment', command);
+        openAIWithContext({ question: command, sourceModule: 'Jarvis Voice' });
       } else {
         synthesizeSpeech("I'm sorry, I couldn't process that request at this time.");
       }

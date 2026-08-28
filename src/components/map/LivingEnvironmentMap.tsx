@@ -42,7 +42,7 @@ import {
   MapTimeHorizon,
 } from '../../server/map/types';
 import { EnvironmentalEvent } from '../../server/events/types';
-import { GoogleMapsView } from './GoogleMapsView';
+import { OpenMapView } from './OpenMapView';
 import { GlobeCanvas, GlobeCityNode } from './GlobeCanvas';
 import { FloatingLayerSelector } from './FloatingLayerSelector';
 import { MapLegend } from './MapLegend';
@@ -355,7 +355,7 @@ export const LivingEnvironmentMap: React.FC<LivingEnvironmentMapProps> = ({
       <div className="absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
         {viewMode === 'google' ? (
           /* Google Maps + FortyGuard Spatial Environmental Layer */
-          <GoogleMapsView
+          <OpenMapView
             latitude={currentLat}
             longitude={currentLng}
             zoom={zoom}
