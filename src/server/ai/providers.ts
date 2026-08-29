@@ -22,8 +22,8 @@ export function getTabiTokenConfig(): ProviderConfig {
   const apiKey = process.env.TABITOKEN_API_KEY || '';
   const endpoint = process.env.TABITOKEN_ENDPOINT || 'https://tabitoken.com/v1/chat/completions';
   const model = process.env.TABITOKEN_MODEL || 'claude-opus-4-8';
-  const timeoutMs = parseInt(process.env.TABITOKEN_TIMEOUT || '55000', 10);
-  const maxRetries = parseInt(process.env.TABITOKEN_MAX_RETRIES || '1', 10);
+  const timeoutMs = parseInt(process.env.TABITOKEN_TIMEOUT || '270000', 10);
+  const maxRetries = parseInt(process.env.TABITOKEN_MAX_RETRIES || '0', 10);
 
   return {
     endpoint,

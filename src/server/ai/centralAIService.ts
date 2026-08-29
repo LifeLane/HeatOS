@@ -53,7 +53,7 @@ export class CentralAIService {
     if (!request.bypassCache) {
       const cached = AICacheService.get(dedupeKey);
       if (cached) {
-        AILoggerService.record({
+        AILoggerService.log({
           requestId,
           provider: cached.provider,
           model: cached.model,
@@ -291,7 +291,7 @@ Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScor
     };
 
     // Log request telemetry
-    AILoggerService.record({
+    AILoggerService.log({
       requestId,
       provider,
       model: modelName,
