@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
 import path from 'path';
-import { createServer as createViteServer } from 'vite';
 import { globalDataOrchestrator } from './src/server/orchestrator';
 import { globalOpenDataFabric } from './src/server/fabric/orchestrator';
 import { globalProviderRegistry } from './src/server/fabric/registry';
@@ -1105,6 +1104,7 @@ export async function startServer() {
   // VITE MIDDLEWARE (Development) / STATIC ASSETS (Production)
   // -------------------------------------------------------------
   if (process.env.NODE_ENV !== 'production') {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',

@@ -135,13 +135,27 @@ export async function callTabiTokenChat(params: {
       clearTimeout(timeoutId);
       const latencyMs = Date.now() - startTime;
 
+      const contentType = response.headers.get('content-type') || '';
+      const responseText = await response.text();
+
+      if (contentType.includes('text/html') || responseText.trim().toLowerCase().startsWith('<!doctype') || responseText.trim().toLowerCase().startsWith('<html')) {
+        FortyGuardLogger.warn(`TabiToken upstream returned HTML block (Cloudflare/WAF) instead of JSON on attempt ${attempt}`, {
+          requestId,
+          status: response.status,
+          contentType,
+          snippet: responseText.substring(0, 150),
+        });
+        const htmlErr: any = new Error(`TabiToken upstream returned HTML protection/challenge page (HTTP ${response.status}). Access blocked.`);
+        htmlErr.code = 'TABITOKEN_UPSTREAM_BLOCKED';
+        throw htmlErr;
+      }
+
       if (!response.ok) {
-        const errText = await response.text().catch(() => '');
         FortyGuardLogger.warn(`TabiToken HTTP ${response.status} on attempt ${attempt}`, {
           requestId,
           status: response.status,
           latencyMs,
-          errorSnippet: errText.substring(0, 200),
+          errorSnippet: responseText.substring(0, 200),
         });
 
         let errorCode = 'TABITOKEN_UPSTREAM_ERROR';
@@ -161,12 +175,18 @@ export async function callTabiTokenChat(params: {
           continue;
         }
 
-        const upErr: any = new Error(`TabiToken API error: HTTP ${response.status} - ${errText.substring(0, 100)}`);
+        const upErr: any = new Error(`TabiToken API error: HTTP ${response.status} - ${responseText.substring(0, 100)}`);
         upErr.code = errorCode;
         throw upErr;
       }
 
-      const json = await response.json();
+      let json: any;
+      try {
+        json = JSON.parse(responseText);
+      } catch (parseErr: any) {
+        throw new Error(`Failed to parse JSON from TabiToken response: ${parseErr.message}`);
+      }
+
       const content = json.choices?.[0]?.message?.content;
 
       FortyGuardLogger.info('TabiToken response received', {
