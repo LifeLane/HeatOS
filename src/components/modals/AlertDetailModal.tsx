@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { useMonitoring } from '../../context/MonitoringContext';
 import { AlertTier } from '../../server/monitoring/types';
+import { safeFormatDateTime, safeFormatShortTime } from '../../utils/formatters';
 
 export const AlertDetailModal: React.FC = () => {
   const {
@@ -44,7 +45,7 @@ export const AlertDetailModal: React.FC = () => {
     if (!selectedAlert) return;
     const text = `[HeatOS Alert - ${selectedAlert.tier}] ${selectedAlert.headline}
 Location: ${selectedAlert.where.locationName} (${selectedAlert.where.latitude}, ${selectedAlert.where.longitude})
-Detected: ${new Date(selectedAlert.when.detectedAt).toLocaleString()}
+Detected: ${safeFormatDateTime(selectedAlert.when.detectedAt)}
 What Happened: ${selectedAlert.whatHappened}
 Evidence: Observed ${selectedAlert.evidence.observedValue}°C vs Baseline ${selectedAlert.evidence.baselineValue}°C (Delta: +${selectedAlert.evidence.anomalyDelta}°C)
 Why It Matters: ${selectedAlert.whyItMatters.healthRisk}
@@ -132,7 +133,7 @@ Sources: ${selectedAlert.sources.map(s => s.sourceName).join(', ')}`;
               </span>
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-zinc-500" />
-                {selectedAlert ? new Date(selectedAlert.when.detectedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                {selectedAlert ? safeFormatShortTime(selectedAlert.when.detectedAt) : ''}
               </span>
               <span className="text-zinc-500">ID: {selectedAlert?.eventId}</span>
             </div>

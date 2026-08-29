@@ -78,8 +78,10 @@ export const ForecastView: React.FC = () => {
   };
 
   // Generate extended 5-day multi-metric forecast dynamically based on current base temps
-  const upcomingDays = ['Tomorrow', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const dailyForecast = upcomingDays.map((dayLabel, i) => {
+  const dailyForecast = Array.from({ length: 5 }).map((_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() + i + 1);
+    const dayLabel = i === 0 ? 'Tomorrow' : d.toLocaleDateString([], { weekday: 'long' });
     const baseT = currentLocation.ambientTemp;
     const dailyBaseT = baseT + (Math.sin(i) * 3); // realistic variance based on current temps
     return {

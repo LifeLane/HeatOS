@@ -23,6 +23,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useMonitoring } from '../../context/MonitoringContext';
+import { safeFormatDateTime } from '../../utils/formatters';
 
 export const EnvironmentalBriefModal: React.FC = () => {
   const { selectedBrief, isLoadingBrief, isBriefModalOpen, closeEnvironmentalBrief, executeStandardAction } = useMonitoring();
@@ -35,7 +36,7 @@ export const EnvironmentalBriefModal: React.FC = () => {
 
     const md = `# HeatOS Environmental Intelligence Brief
 **Location:** ${selectedBrief.locationName} (${selectedBrief.coordinates.latitude}, ${selectedBrief.coordinates.longitude})
-**Generated At:** ${new Date(selectedBrief.generatedAt).toLocaleString()}
+**Generated At:** ${safeFormatDateTime(selectedBrief.generatedAt)}
 **Operating Mode:** ${selectedBrief.personaMode}
 
 ---
@@ -178,7 +179,7 @@ ${selectedBrief.dataSources.map(s => `- **${s.providerName}** [${s.category}] - 
                   </span>
                   <span>•</span>
                   <Calendar className="w-3.5 h-3.5 text-zinc-500" />
-                  <span>{new Date(selectedBrief.generatedAt).toLocaleString()}</span>
+                  <span>{safeFormatDateTime(selectedBrief.generatedAt)}</span>
                 </div>
                 <p className="text-sm text-zinc-200 leading-relaxed">{selectedBrief.executiveSummary}</p>
               </div>

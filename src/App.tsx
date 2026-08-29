@@ -8,6 +8,7 @@ import { AIAnalystProvider } from './context/AIAnalystContext';
 import { ExplanationProvider } from './context/ExplanationContext';
 
 import AppHeader from './components/common/AppHeader';
+import TopAnnouncementBar from './components/common/TopAnnouncementBar';
 import DesktopSidebar from './components/common/DesktopSidebar';
 import MobileBottomNav from './components/common/MobileBottomNav';
 import MetricExplanation from './components/common/MetricExplanation';
@@ -68,14 +69,18 @@ const MainContent: React.FC = () => {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen flex bg-[#FBFBFA] text-slate-900 selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden w-full min-w-0">
-      {/* Desktop Left Sidebar */}
-      <DesktopSidebar />
+    <div className="min-h-screen flex flex-col bg-[#FBFBFA] text-slate-900 selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden w-full min-w-0">
+      {/* Sleek Sticky Top Announcement Bar */}
+      <TopAnnouncementBar />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:pb-8 overflow-x-hidden">
-        {/* Compact Sticky Header */}
-        <AppHeader />
+      <div className="flex-1 flex w-full min-w-0">
+        {/* Desktop Left Sidebar */}
+        <DesktopSidebar />
+
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:pb-8 overflow-x-hidden">
+          {/* Compact Sticky Header */}
+          <AppHeader />
 
         {/* Dynamic Route Router */}
         <main className="flex-1 p-2.5 xs:p-3 sm:p-5 md:p-6 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
@@ -93,6 +98,7 @@ const MainContent: React.FC = () => {
 
         {/* Mobile Sticky Bottom Navigation */}
         <MobileBottomNav />
+      </div>
       </div>
 
       {/* Global Modals, Drawers & Assistants */}

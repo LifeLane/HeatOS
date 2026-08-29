@@ -54,6 +54,7 @@ import SecondaryButton from '../ui/SecondaryButton';
 import { FadeIn } from '../motion/MotionPrimitives';
 import AIDiagnosticsModal from '../modals/AIDiagnosticsModal';
 import { useExplanation } from '../../context/ExplanationContext';
+import { safeFormatTime } from '../../utils/formatters';
 
 const PERSONA_CONFIG: Record<
   AIPersona | 'AUTO',
@@ -429,7 +430,7 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
                     Engine: {analysis.providerModel}
                   </div>
                   <div className="text-[10px] text-slate-400 mt-0.5">
-                    {new Date(analysis.generatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                    {safeFormatTime(analysis.generatedAt)}
                   </div>
                 </div>
               </div>

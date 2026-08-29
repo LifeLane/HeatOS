@@ -18,6 +18,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { PulseDimensionResult, PulseStatus } from '../../types/naturePulse';
+import { safeFormatTime } from '../../utils/formatters';
 
 interface DimensionDetailModalProps {
   dimension: PulseDimensionResult | null;
@@ -236,7 +237,7 @@ export const DimensionDetailModal: React.FC<DimensionDetailModalProps> = ({
             </p>
             <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
               <span>Source: <strong className="text-slate-300">{dimension.sourceName}</strong></span>
-              <span>Observed: {new Date(dimension.timestamp).toLocaleTimeString()}</span>
+              <span>Observed: {safeFormatTime(dimension.timestamp)}</span>
             </div>
           </div>
         </div>

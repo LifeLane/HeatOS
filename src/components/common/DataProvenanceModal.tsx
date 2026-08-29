@@ -11,6 +11,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { MetricProvenance } from '../../types/normalizedEnvironmentalState';
+import { safeFormatShortTime } from '../../utils/formatters';
 
 interface DataProvenanceModalProps {
   isOpen: boolean;
@@ -100,7 +101,7 @@ export const DataProvenanceModal: React.FC<DataProvenanceModalProps> = ({
                   <span className="text-[10px] font-bold uppercase tracking-wider">Observed</span>
                 </div>
                 <p className="text-xs font-semibold text-slate-700 truncate">
-                  {new Date(provenance.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {safeFormatShortTime(provenance.timestamp)}
                 </p>
               </div>
             </div>
