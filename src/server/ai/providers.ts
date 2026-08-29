@@ -122,6 +122,8 @@ export async function callTabiTokenChat(params: {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json, text/plain, */*',
+          'User-Agent': 'HeatOS-Environmental-Fabric/1.0 (Enterprise Engine; +https://heatos.vercel.app)',
           Authorization: `Bearer ${config.apiKey}`,
         },
         body: JSON.stringify({
