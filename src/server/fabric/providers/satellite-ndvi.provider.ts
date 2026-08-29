@@ -20,9 +20,10 @@ export class OpenSatelliteVegetationProvider extends BaseEnvironmentalDataProvid
     const vegBlock: VegetationTelemetryBlock = {
       ndvi: 0.45,
       evi: 0.38,
-      canopyCoverPct: 42,
-      vegetationHealthStatus: 'moderate',
-      stressAnomalyIndex: 0.12
+      canopyCoveragePct: 42,
+      coolingBufferFactor: 0.65,
+      urbanGreeningStatus: 'moderate',
+      sensorPlatform: 'Sentinel-2 MSI'
     };
     return {
       providerId: this.id,

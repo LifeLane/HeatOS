@@ -18,10 +18,11 @@ export class USGSWaterProvider extends BaseEnvironmentalDataProvider {
   public async getCurrentData(location: GeoLocationQuery, options: ProviderRequestOptions = {}): Promise<NormalizedProviderTelemetry> {
     this.checkRateLimit();
     const waterBlock: WaterTelemetryBlock = {
-      waterTempC: 18.5,
-      gageHeightM: 1.42,
-      dischargeCfs: 240,
-      hydrologicalStatus: 'normal'
+      droughtSeverityIndex: 'Normal',
+      streamflowStatus: 'normal',
+      relativeSoilMoisturePct: 48,
+      evaporativeCoolingPotential: 'Moderate',
+      gageLocation: 'USGS NWIS Stream Gage'
     };
     return {
       providerId: this.id,

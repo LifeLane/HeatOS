@@ -22,10 +22,11 @@ export class NASAFIRMSWildfireProvider extends BaseEnvironmentalDataProvider {
     this.checkRateLimit();
     const wfBlock: WildfireTelemetryBlock = {
       activeFiresCountInRadius: 0,
-      maxRadiativePowerMw: 0,
       nearestFireDistanceKm: 150,
+      fireRadiativePowerMw: 0,
       wildfireRiskLevel: 'low',
-      airQualityImpactPotential: 'minimal'
+      smokePlumeRisk: 'clear',
+      detectionSensor: 'VIIRS/MODIS NRT'
     };
     return {
       providerId: this.id,
