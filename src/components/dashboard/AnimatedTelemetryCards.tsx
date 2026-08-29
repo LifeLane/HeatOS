@@ -10,39 +10,36 @@ export const AnimatedTelemetryCards: React.FC = () => {
   const airQuality = currentLocation.aqi;
   const humidity = currentLocation.humidity;
 
-  const heatStatus = heatIndex > 35 ? 'text-rose-500' : heatIndex > 30 ? 'text-amber-500' : 'text-emerald-500';
-  const aqiStatus = airQuality > 100 ? 'text-rose-500' : airQuality > 50 ? 'text-amber-500' : 'text-emerald-500';
-  const humidityStatus = humidity > 60 ? 'text-blue-500' : 'text-emerald-500';
+  const heatStatus = heatIndex > 35 ? 'text-rose-600' : heatIndex > 30 ? 'text-amber-600' : 'text-emerald-600';
+  const aqiStatus = airQuality > 100 ? 'text-rose-600' : airQuality > 50 ? 'text-amber-600' : 'text-emerald-600';
+  const humidityStatus = humidity > 60 ? 'text-blue-600' : 'text-emerald-600';
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
       
       {/* Heat Index Card */}
-      <div className="telemetry-card group relative bg-slate-900 border border-slate-700/60 rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-rose-900/20 hover:-translate-y-1">
-        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-rose-500 to-orange-500 opacity-80"></div>
-        <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700">
-          <Flame size={120} />
-        </div>
+      <div className="telemetry-card group relative bg-white border border-slate-200/80 hover:border-blue-300 rounded-2xl p-5 overflow-hidden transition-all duration-300 shadow-xs hover:shadow-md">
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-rose-500 to-orange-500"></div>
         
         <div className="flex justify-between items-start mb-2 relative z-10">
-          <h3 className="text-slate-400 text-sm font-semibold uppercase tracking-wider">Heat Index</h3>
-          <div className="p-2 rounded-xl bg-slate-800/80 border border-slate-700/50">
-            <Flame className={`w-5 h-5 ${heatStatus} animate-pulse`} />
+          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">Heat Index</h3>
+          <div className="p-2 rounded-xl bg-rose-50 border border-rose-100">
+            <Flame className={`w-4 h-4 ${heatStatus} animate-pulse`} />
           </div>
         </div>
         
         <div className="flex justify-between items-end relative z-10">
-          <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-black font-mono text-slate-100">{heatIndex}</span>
-            <span className="text-slate-400 font-mono font-bold">°C</span>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-3xl sm:text-4xl font-black font-mono text-slate-900">{heatIndex}</span>
+            <span className="text-slate-500 font-mono font-bold">°C</span>
           </div>
           <div className="flex flex-col items-end">
-            <div className="flex items-center gap-1 text-rose-400 text-[10px] sm:text-xs font-bold bg-rose-500/10 px-1.5 sm:px-2 py-1 rounded-lg">
+            <div className="flex items-center gap-1 text-rose-700 text-[10px] sm:text-xs font-bold bg-rose-50 px-2 py-1 rounded-lg border border-rose-200">
               <TrendingUp className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               <span>+1.2°/hr</span>
             </div>
             <svg className="w-16 h-6 sm:w-20 sm:h-8 mt-1.5 sm:mt-2 overflow-visible opacity-80" viewBox="0 0 100 30" preserveAspectRatio="none">
-              <path d="M0,25 C20,25 40,20 60,15 C80,10 100,2 100,2" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-rose-400 drop-shadow-md" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M0,25 C20,25 40,20 60,15 C80,10 100,2 100,2" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-rose-500" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
         </div>
@@ -55,31 +52,28 @@ export const AnimatedTelemetryCards: React.FC = () => {
       </div>
 
       {/* Air Quality Card */}
-      <div className="telemetry-card group relative bg-slate-900 border border-slate-700/60 rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-amber-900/20 hover:-translate-y-1">
-        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-amber-400 to-yellow-600 opacity-80"></div>
-        <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700">
-          <Wind size={120} />
-        </div>
+      <div className="telemetry-card group relative bg-white border border-slate-200/80 hover:border-blue-300 rounded-2xl p-5 overflow-hidden transition-all duration-300 shadow-xs hover:shadow-md">
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-amber-400 to-yellow-600"></div>
         
         <div className="flex justify-between items-start mb-2 relative z-10">
-          <h3 className="text-slate-400 text-sm font-semibold uppercase tracking-wider">Air Quality</h3>
-          <div className="p-2 rounded-xl bg-slate-800/80 border border-slate-700/50">
-            <Wind className={`w-5 h-5 ${aqiStatus} float-animation`} />
+          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">Air Quality</h3>
+          <div className="p-2 rounded-xl bg-amber-50 border border-amber-100">
+            <Wind className={`w-4 h-4 ${aqiStatus} float-animation`} />
           </div>
         </div>
         
         <div className="flex justify-between items-end relative z-10">
-          <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-black font-mono text-slate-100">{airQuality}</span>
-            <span className="text-slate-400 font-mono font-bold">AQI</span>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-3xl sm:text-4xl font-black font-mono text-slate-900">{airQuality}</span>
+            <span className="text-slate-500 font-mono font-bold">AQI</span>
           </div>
           <div className="flex flex-col items-end">
-            <div className="flex items-center gap-1 text-emerald-400 text-[10px] sm:text-xs font-bold bg-emerald-500/10 px-1.5 sm:px-2 py-1 rounded-lg">
+            <div className="flex items-center gap-1 text-emerald-700 text-[10px] sm:text-xs font-bold bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200">
               <TrendingDown className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               <span>-4 AQI/hr</span>
             </div>
             <svg className="w-16 h-6 sm:w-20 sm:h-8 mt-1.5 sm:mt-2 overflow-visible opacity-80" viewBox="0 0 100 30" preserveAspectRatio="none">
-              <path d="M0,5 C20,5 40,15 60,10 C80,20 100,25 100,25" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-emerald-400 drop-shadow-md" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M0,5 C20,5 40,15 60,10 C80,20 100,25 100,25" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-emerald-500" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
         </div>
@@ -92,31 +86,28 @@ export const AnimatedTelemetryCards: React.FC = () => {
       </div>
 
       {/* Humidity Card */}
-      <div className="telemetry-card group relative bg-slate-900 border border-slate-700/60 rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-blue-900/20 hover:-translate-y-1">
-        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-blue-400 to-cyan-600 opacity-80"></div>
-        <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-700">
-          <Droplets size={120} />
-        </div>
+      <div className="telemetry-card group relative bg-white border border-slate-200/80 hover:border-blue-300 rounded-2xl p-5 overflow-hidden transition-all duration-300 shadow-xs hover:shadow-md">
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-blue-400 to-cyan-600"></div>
         
         <div className="flex justify-between items-start mb-2 relative z-10">
-          <h3 className="text-slate-400 text-sm font-semibold uppercase tracking-wider">Humidity</h3>
-          <div className="p-2 rounded-xl bg-slate-800/80 border border-slate-700/50">
-            <Droplets className={`w-5 h-5 ${humidityStatus} bounce-subtle`} />
+          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">Humidity</h3>
+          <div className="p-2 rounded-xl bg-blue-50 border border-blue-100">
+            <Droplets className={`w-4 h-4 ${humidityStatus} bounce-subtle`} />
           </div>
         </div>
         
         <div className="flex justify-between items-end relative z-10">
-          <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-black font-mono text-slate-100">{humidity}</span>
-            <span className="text-slate-400 font-mono font-bold">%</span>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-3xl sm:text-4xl font-black font-mono text-slate-900">{humidity}</span>
+            <span className="text-slate-500 font-mono font-bold">%</span>
           </div>
           <div className="flex flex-col items-end">
-            <div className="flex items-center gap-1 text-slate-400 text-[10px] sm:text-xs font-bold bg-slate-800 px-1.5 sm:px-2 py-1 rounded-lg">
+            <div className="flex items-center gap-1 text-slate-700 text-[10px] sm:text-xs font-bold bg-slate-100 px-2 py-1 rounded-lg border border-slate-200">
               <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               <span>Stable</span>
             </div>
             <svg className="w-16 h-6 sm:w-20 sm:h-8 mt-1.5 sm:mt-2 overflow-visible opacity-80" viewBox="0 0 100 30" preserveAspectRatio="none">
-              <path d="M0,15 C20,13 40,17 60,14 C80,16 100,15 100,15" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-slate-400 drop-shadow-md" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M0,15 C20,13 40,17 60,14 C80,16 100,15 100,15" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-blue-500" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
         </div>
