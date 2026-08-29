@@ -203,33 +203,33 @@ export const ForecastView: React.FC = () => {
                   <div className="flex items-center justify-between text-xs font-medium">
                     <div className="flex items-center gap-1.5 text-slate-500">
                       <Droplets className="w-3.5 h-3.5 text-blue-500" />
-                      <span>Humidity</span>
+                      <span className="font-bold text-[10px] tracking-wide uppercase">HUMIDITY</span>
                     </div>
-                    <span className="text-slate-800 font-bold">{day.humidity.toFixed(0)}%</span>
+                    <span className="text-slate-800 font-bold font-mono">{day.humidity.toFixed(0)}%</span>
                   </div>
                   
                   <div className="flex items-center justify-between text-xs font-medium">
                     <div className="flex items-center gap-1.5 text-slate-500">
                       <Wind className="w-3.5 h-3.5 text-slate-400" />
-                      <span>Wind</span>
+                      <span className="font-bold text-[10px] tracking-wide uppercase">WIND</span>
                     </div>
-                    <span className="text-slate-800 font-bold">{day.windSpeed.toFixed(0)} km/h</span>
+                    <span className="text-slate-800 font-bold font-mono">{day.windSpeed.toFixed(0)} km/h</span>
                   </div>
 
                   <div className="flex items-center justify-between text-xs font-medium">
                     <div className="flex items-center gap-1.5 text-slate-500">
                       <CloudRain className="w-3.5 h-3.5 text-indigo-400" />
-                      <span>Precip</span>
+                      <span className="font-bold text-[10px] tracking-wide uppercase">PRECIPITATION</span>
                     </div>
-                    <span className="text-slate-800 font-bold">{day.precipChance}%</span>
+                    <span className="text-slate-800 font-bold font-mono">{day.precipChance}%</span>
                   </div>
 
                   <div className="flex items-center justify-between text-xs font-medium">
                     <div className="flex items-center gap-1.5 text-slate-500">
                       <Sun className="w-3.5 h-3.5 text-orange-400" />
-                      <span>UV Index</span>
+                      <span className="font-bold text-[10px] tracking-wide uppercase">UV EXPOSURE</span>
                     </div>
-                    <span className="text-slate-800 font-bold">{day.uvIndex}</span>
+                    <span className="text-slate-800 font-bold font-mono">{day.uvIndex}</span>
                   </div>
                 </div>
               </div>

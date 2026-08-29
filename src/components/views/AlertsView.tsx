@@ -273,12 +273,12 @@ export const AlertsView: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
-                  Environmental Monitoring
+                  ENVIRONMENTAL WATCH
                 </h1>
-                <StatusPill status="optimal" label="ACTIVE SURVEILLANCE" size="sm" />
+                <StatusPill status="optimal" label="ACTIVE WATCH" size="sm" />
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                Proactive anomaly detection, multi-factor hazard surveillance, and threshold monitoring for {currentLocation.displayName}.
+                Track the places, assets, and environmental signals that can affect operations.
               </p>
             </div>
           </div>
@@ -290,20 +290,20 @@ export const AlertsView: React.FC = () => {
                 setActiveTab('tools');
                 openTool('vulnerability-alert-system', 'MONITOR');
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 transition-all shadow-xs cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 transition-all shadow-xs cursor-pointer uppercase"
               id="btn-vulnerability-cta"
             >
               <Activity className="w-4 h-4" />
-              <span>Vulnerability Alerts</span>
+              <span>RISK WATCH</span>
             </button>
             {/* CREATE MONITOR (Primary) */}
             <button
               id="btn-create-monitor-top"
               onClick={() => setIsCreateMonitorOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white shadow-2xs transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white shadow-2xs transition-all cursor-pointer uppercase"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Create Monitor</span>
+              <span>CREATE MONITOR</span>
             </button>
 
             {/* AI Action */}
@@ -318,7 +318,7 @@ export const AlertsView: React.FC = () => {
               size="sm"
             >
               <Sparkles className="w-3.5 h-3.5 mr-1.5 text-purple-600" />
-              Explain With AI
+              EXPLAIN SIGNAL
             </SecondaryButton>
 
             {/* Refresh */}
@@ -350,7 +350,7 @@ export const AlertsView: React.FC = () => {
               }`}
             >
               <ShieldAlert className="w-3.5 h-3.5" />
-              <span>Active Hazard Feed</span>
+              <span>ACTIVE SIGNALS</span>
               <span
                 className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
                   activeSubTab === 'hazards' ? 'bg-slate-700 text-white' : 'bg-slate-200 text-slate-700'
@@ -371,7 +371,7 @@ export const AlertsView: React.FC = () => {
               }`}
             >
               <Radio className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Live Channel Surveillance</span>
+              <span>LIVE SIGNAL CHANNELS</span>
               <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800">
                 6 LIVE
               </span>
@@ -388,7 +388,7 @@ export const AlertsView: React.FC = () => {
               }`}
             >
               <Bell className="w-3.5 h-3.5 text-[#2563EB]" />
-              <span>Custom Monitors</span>
+              <span>CUSTOM WATCHES</span>
               <span
                 className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
                   activeSubTab === 'monitors' ? 'bg-slate-700 text-white' : 'bg-slate-200 text-slate-700'

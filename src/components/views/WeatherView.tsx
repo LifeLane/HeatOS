@@ -85,27 +85,27 @@ export const WeatherView: React.FC = () => {
 
   // Compute concise Environmental Impact assessments strictly from available data
   const getHeatLoadImpact = () => {
-    if (uhiVal >= 3.0 || tempC >= 33) return { label: 'Severe urban heat load.', level: 'high', detail: `+${uhiVal.toFixed(1)}°C surface heat anomaly across paved corridors.` };
-    if (uhiVal >= 1.5 || tempC >= 27) return { label: 'Moderate urban heat load.', level: 'moderate', detail: `+${uhiVal.toFixed(1)}°C localized microclimate elevation above background.` };
-    return { label: 'Temperate baseline thermal load.', level: 'low', detail: 'Minimal thermal retention in surrounding urban fabric.' };
+    if (uhiVal >= 3.0 || tempC >= 33) return { label: 'SEVERE LOCAL HEAT LOAD', level: 'high', detail: `+${uhiVal.toFixed(1)}°C surface heat anomaly across paved corridors.` };
+    if (uhiVal >= 1.5 || tempC >= 27) return { label: 'MODERATE LOCAL HEAT LOAD', level: 'moderate', detail: `+${uhiVal.toFixed(1)}°C localized microclimate elevation above background.` };
+    return { label: 'TEMPERATE LOCAL HEAT LOAD', level: 'low', detail: 'Minimal thermal retention in surrounding urban fabric.' };
   };
 
   const getSolarExposureImpact = () => {
-    if (uvIdx >= 8 || solarGhi >= 750) return { label: 'High solar exposure.', level: 'high', detail: `${solarGhi} W/m² GHI radiation with UV Index ${uvIdx}.` };
-    if (uvIdx >= 5 || solarGhi >= 450) return { label: 'Moderate solar exposure.', level: 'moderate', detail: `${solarGhi} W/m² GHI radiation with UV Index ${uvIdx}.` };
-    return { label: 'Low solar radiation load.', level: 'low', detail: 'Diffuse solar insolation with low UV stress.' };
+    if (uvIdx >= 8 || solarGhi >= 750) return { label: 'HIGH SOLAR EXPOSURE', level: 'high', detail: `${solarGhi} W/m² GHI radiation with UV Index ${uvIdx}.` };
+    if (uvIdx >= 5 || solarGhi >= 450) return { label: 'MODERATE SOLAR EXPOSURE', level: 'moderate', detail: `${solarGhi} W/m² GHI radiation with UV Index ${uvIdx}.` };
+    return { label: 'LOW SOLAR EXPOSURE', level: 'low', detail: 'Diffuse solar insolation with low UV stress.' };
   };
 
   const getAirQualityImpact = () => {
-    if (aqiVal > 100) return { label: 'Elevated air-quality stress.', level: 'high', detail: `AQI ${aqiVal} (${aqiCategory}) - particulate sensitivity active.` };
-    if (aqiVal > 50) return { label: 'Moderate air-quality stress.', level: 'moderate', detail: `AQI ${aqiVal} (${aqiCategory}) - within acceptable standard.` };
-    return { label: 'Low air-quality stress.', level: 'low', detail: `AQI ${aqiVal} (${aqiCategory}) - clean atmospheric baseline.` };
+    if (aqiVal > 100) return { label: 'ELEVATED AIR-QUALITY STRESS', level: 'high', detail: `AQI ${aqiVal} (${aqiCategory}) - particulate sensitivity active.` };
+    if (aqiVal > 50) return { label: 'MODERATE AIR-QUALITY STRESS', level: 'moderate', detail: `AQI ${aqiVal} (${aqiCategory}) - within acceptable standard.` };
+    return { label: 'LOW AIR-QUALITY STRESS', level: 'low', detail: `AQI ${aqiVal} (${aqiCategory}) - clean atmospheric baseline.` };
   };
 
   const getBiophysicalComfortImpact = () => {
-    if (wetBulbC >= 26 || heatIndexC >= 35) return { label: 'Restricted evaporative cooling.', level: 'high', detail: `Wet-bulb ${formatTemp(wetBulbC)} limits natural human metabolic cooling.` };
-    if (wetBulbC >= 21 || heatIndexC >= 29) return { label: 'Compensable metabolic thermal strain.', level: 'moderate', detail: `Dew point ${dewPointC}°C and ${humidityPct}% RH moderate cooling rate.` };
-    return { label: 'Optimal physiological comfort zone.', level: 'low', detail: `Wet-bulb ${formatTemp(wetBulbC)} enables full evaporative dissipation.` };
+    if (wetBulbC >= 26 || heatIndexC >= 35) return { label: 'RESTRICTED EVAPORATIVE COOLING', level: 'high', detail: `Wet-bulb ${formatTemp(wetBulbC)} limits natural human metabolic cooling.` };
+    if (wetBulbC >= 21 || heatIndexC >= 29) return { label: 'MODERATE PHYSIOLOGICAL STRAIN', level: 'moderate', detail: `Dew point ${dewPointC}°C and ${humidityPct}% RH moderate cooling rate.` };
+    return { label: 'OPTIMAL PHYSIOLOGICAL COMFORT', level: 'low', detail: `Wet-bulb ${formatTemp(wetBulbC)} enables full evaporative dissipation.` };
   };
 
   const heatImpact = getHeatLoadImpact();
@@ -202,9 +202,9 @@ export const WeatherView: React.FC = () => {
               <div className="space-y-3 max-w-2xl">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#2563EB] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
-                    RIGHT NOW
+                    ENVIRONMENTAL STATE · RIGHT NOW
                   </span>
-                  <StatusPill status="optimal" label="LIVE SIGNAL SYNCED" size="sm" />
+                  <StatusPill status="optimal" label="ENVIRONMENTAL SIGNALS SYNCED" size="sm" />
                 </div>
 
                 <div className="flex items-center gap-4 sm:gap-5 flex-wrap">
@@ -270,7 +270,7 @@ export const WeatherView: React.FC = () => {
                   }
                   icon={<Sparkles className="w-4 h-4 text-purple-600" />}
                 >
-                  Analyze Weather Factors
+                  EXPLAIN THE SIGNAL
                 </SecondaryButton>
 
                 <SecondaryButton
@@ -281,7 +281,7 @@ export const WeatherView: React.FC = () => {
                   onClick={() => setActiveTab('navigation')}
                   icon={<Compass className="w-4 h-4 text-[#2563EB]" />}
                 >
-                  View on Living Map
+                  VIEW ON LIVING MAP
                 </SecondaryButton>
               </div>
             </div>
@@ -289,7 +289,7 @@ export const WeatherView: React.FC = () => {
         </div>
 
         {/* ========================================================================= */}
-        {/* 2. ENVIRONMENTAL IMPACT SECTION */}
+        {/* 2. ENVIRONMENTAL CONTEXT SECTION */}
         {/* ========================================================================= */}
         <div className="mb-5 sm:mb-6">
           <Card variant="default" padding="md" className="border-slate-200">
@@ -299,18 +299,18 @@ export const WeatherView: React.FC = () => {
                   <Activity className="w-3.5 h-3.5" />
                 </div>
                 <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Environmental Impact
+                  ENVIRONMENTAL CONTEXT
                 </h2>
               </div>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold border border-slate-200">
-                Data-Grounded Conclusions
+                SIGNAL-GROUNDED CONCLUSIONS
               </span>
             </div>
 
             {/* Concise One-Statement Summary */}
             <div className="mb-3.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
               <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-1">
-                Current Environmental Assessment
+                CURRENT ENVIRONMENTAL STATE
               </div>
               <div className="text-xs font-semibold text-slate-800 space-y-0.5">
                 <div>• {heatImpact.label}</div>
@@ -373,9 +373,9 @@ export const WeatherView: React.FC = () => {
         <div className="mb-5 sm:mb-6">
           <div className="flex items-center justify-between mb-2.5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Normalized Atmospheric &amp; Biophysical Parameters
+              ENVIRONMENTAL SIGNALS
             </h3>
-            <span className="text-[11px] text-slate-400 font-medium">Click card for provenance</span>
+            <span className="text-[11px] text-slate-400 font-medium">VIEW SIGNAL SOURCES</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">

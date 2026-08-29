@@ -266,10 +266,10 @@ export const MonitoringView: React.FC = () => {
             id="btn-refresh-watchlist"
             onClick={() => refreshWatchlist()}
             disabled={isLoadingWatchlist}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 transition-colors shadow-2xs"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 transition-colors shadow-2xs uppercase"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoadingWatchlist ? 'animate-spin text-blue-600' : ''}`} />
-            Sync Mesh
+            SYNC LOCATIONS
           </button>
 
           {/* Quick Add Supported Location Menu */}
@@ -277,10 +277,10 @@ export const MonitoringView: React.FC = () => {
             <button
               id="btn-add-place-dropdown"
               onClick={() => setShowAddMenu(!showAddMenu)}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors shadow-xs"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors shadow-xs uppercase"
             >
               <Plus className="w-3.5 h-3.5" />
-              Watch Location
+              WATCH LOCATION
             </button>
 
             {showAddMenu && (

@@ -22,7 +22,7 @@ export const AnimatedTelemetryCards: React.FC = () => {
         <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-rose-500 to-orange-500"></div>
         
         <div className="flex justify-between items-start mb-2 relative z-10">
-          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">Heat Index</h3>
+          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">HEAT STRESS</h3>
           <div className="p-2 rounded-xl bg-rose-50 border border-rose-100">
             <Flame className={`w-4 h-4 ${heatStatus} animate-pulse`} />
           </div>
@@ -56,7 +56,7 @@ export const AnimatedTelemetryCards: React.FC = () => {
         <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-amber-400 to-yellow-600"></div>
         
         <div className="flex justify-between items-start mb-2 relative z-10">
-          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">Air Quality</h3>
+          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">AIR QUALITY</h3>
           <div className="p-2 rounded-xl bg-amber-50 border border-amber-100">
             <Wind className={`w-4 h-4 ${aqiStatus} float-animation`} />
           </div>
@@ -81,7 +81,7 @@ export const AnimatedTelemetryCards: React.FC = () => {
         <div className="mt-3 relative z-10 text-xs font-medium text-slate-500 flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping absolute opacity-75"></span>
           <span className="w-2 h-2 rounded-full bg-emerald-500 relative"></span>
-          Live Ingestion
+          LIVE SIGNAL
         </div>
       </div>
 
@@ -90,7 +90,7 @@ export const AnimatedTelemetryCards: React.FC = () => {
         <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-blue-400 to-cyan-600"></div>
         
         <div className="flex justify-between items-start mb-2 relative z-10">
-          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">Humidity</h3>
+          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">HUMIDITY</h3>
           <div className="p-2 rounded-xl bg-blue-50 border border-blue-100">
             <Droplets className={`w-4 h-4 ${humidityStatus} bounce-subtle`} />
           </div>
@@ -115,7 +115,7 @@ export const AnimatedTelemetryCards: React.FC = () => {
         <div className="mt-3 relative z-10 text-xs font-medium text-slate-500 flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping absolute opacity-75"></span>
           <span className="w-2 h-2 rounded-full bg-blue-500 relative"></span>
-          Ambient Sensors
+          AMBIENT SIGNAL
         </div>
       </div>
 
