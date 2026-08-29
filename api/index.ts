@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { createApp } from '../server';
+import { createApp } from '../dist/server.cjs';
 
 let cachedApp: any = null;
 
@@ -9,3 +9,4 @@ export default async function handler(req: any, res: any) {
   }
   return cachedApp(req, res);
 }
+
