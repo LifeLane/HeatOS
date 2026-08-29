@@ -8,7 +8,8 @@ import {
   Layers,
   MoreVertical,
   Flame,
-  Menu
+  Menu,
+  Sliders
 } from 'lucide-react';
 import { useLocation } from '../../context/LocationContext';
 import { useNavigation } from '../../context/NavigationContext';
@@ -28,7 +29,7 @@ const AppHeader: React.FC = () => {
     refreshEnvironmentalData,
   } = useLocation();
 
-  const { setIsDemoTourOpen, setIsFabricModalOpen, setIsLocationModalOpen } = useNavigation();
+  const { setIsDemoTourOpen, setIsFabricModalOpen, setIsLocationModalOpen, setIsSettingsModalOpen } = useNavigation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { openAIWithContext } = useAIAnalyst();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -135,6 +136,18 @@ const AppHeader: React.FC = () => {
             °{tempUnit}
           </button>
 
+          {/* Quick Settings Button */}
+          <button
+            id="header-settings-btn"
+            type="button"
+            onClick={() => setIsSettingsModalOpen(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200/90 text-xs font-semibold text-slate-800 transition-all cursor-pointer shadow-2xs group"
+            title="System Settings"
+          >
+            <Sliders className="w-3.5 h-3.5 text-[#2563EB] group-hover:rotate-45 transition-transform" />
+            <span className="hidden sm:inline">Settings</span>
+          </button>
+
           {/* Mobile Menu */}
           <div className="relative md:hidden" ref={mobileMenuRef}>
             <button
@@ -147,6 +160,17 @@ const AppHeader: React.FC = () => {
             </button>
             {isMobileMenuOpen && (
               <div className="absolute right-0 top-full mt-1.5 w-52 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50">
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setIsSettingsModalOpen(true);
+                  }}
+                  className="w-full px-3.5 py-2 text-left text-xs font-bold text-blue-700 bg-blue-50/60 hover:bg-blue-100 flex items-center gap-2.5 cursor-pointer"
+                >
+                  <Sliders className="w-3.5 h-3.5 text-blue-600" />
+                  <span>System Settings</span>
+                </button>
+                <div className="my-1 border-t border-slate-100" />
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
