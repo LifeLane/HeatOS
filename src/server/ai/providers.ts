@@ -19,15 +19,22 @@ export interface ProviderConfig {
 }
 
 export function getTabiTokenConfig(): ProviderConfig {
-  let rawApiKey = process.env.TABITOKEN_API_KEY || '';
+  let rawApiKey = (process.env.TABITOKEN_API_KEY || '').trim();
+  // Remove wrapping quotes if present
+  if ((rawApiKey.startsWith('"') && rawApiKey.endsWith('"')) || (rawApiKey.startsWith("'") && rawApiKey.endsWith("'"))) {
+    rawApiKey = rawApiKey.slice(1, -1).trim();
+  }
   if (rawApiKey.includes('\n') || rawApiKey.includes('\r')) {
     const lines = rawApiKey.split(/[\r\n]+/).map(l => l.trim()).filter(Boolean);
-    const skLine = lines.find(l => l.startsWith('sk-') || l.startsWith('-'));
-    rawApiKey = skLine || lines[lines.length - 1] || lines[0] || '';
+    const skLine = lines.find(l => l.startsWith('sk-') || l.startsWith('Bearer ') || l.startsWith('-'));
+    rawApiKey = skLine || lines[0] || '';
+  }
+  if (rawApiKey.startsWith('Bearer ')) {
+    rawApiKey = rawApiKey.substring(7).trim();
   }
   const apiKey = rawApiKey.trim();
-  const endpoint = process.env.TABITOKEN_ENDPOINT || 'https://tabitoken.com/v1/chat/completions';
-  const model = process.env.TABITOKEN_MODEL || 'claude-opus-4-8';
+  const endpoint = (process.env.TABITOKEN_ENDPOINT || 'https://tabitoken.com/v1/chat/completions').trim();
+  const model = (process.env.TABITOKEN_MODEL || 'claude-opus-4-8').trim();
   const timeoutMs = parseInt(process.env.TABITOKEN_TIMEOUT || '270000', 10);
   const maxRetries = parseInt(process.env.TABITOKEN_MAX_RETRIES || '0', 10);
 
