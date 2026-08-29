@@ -83,7 +83,7 @@ export const SUBSCRIPTION_PLANS: PlanTierConfig[] = [
       'Autonomous cooling infrastructure and misting array dispatch',
       'Predictive biophysical CFD heat transport simulations',
       'Dedicated private on-premise sensor mesh integration',
-      'Custom fine-tuned microclimate Gemini AI models',
+      'Custom fine-tuned microclimate TabiToken Claude AI models',
       'Sub-meter urban canopy LiDAR micro-shading analysis',
       '24/7 dedicated climatologist support & custom SLA guarantee',
     ],

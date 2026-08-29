@@ -21,6 +21,7 @@ import { LocalIntelligenceEngine } from './src/server/ai/localIntelligence';
 import { AICacheService } from './src/server/ai/cacheService';
 import { AILoggerService } from './src/server/ai/loggerService';
 import { runAITestSuite } from './src/server/ai/tests';
+import { callTabiTokenChat, getTabiTokenConfig } from './src/server/ai/providers';
 import { PERSONA_METADATA, SKILL_METADATA } from './src/server/ai/router';
 import { MonitoringEngine, COMMERCIAL_PERSONA_CONFIGS } from './src/server/monitoring/engine';
 import { runMonitoringTestSuite } from './src/server/monitoring/tests';
@@ -883,6 +884,61 @@ export async function createApp() {
       telemetry: logStats,
       recentLogs,
     });
+  });
+
+  // TabiToken Lightweight Diagnostic Endpoint
+  app.get('/api/environmental/ai/tabitoken/diagnostics', async (req, res) => {
+    const config = getTabiTokenConfig();
+    const hasKey = Boolean(config.apiKey);
+    
+    if (!hasKey) {
+      return res.json({
+        status: 'error',
+        code: 'TABITOKEN_CONFIG_ERROR',
+        message: 'TABITOKEN_API_KEY is missing on the server.',
+        configured: false,
+        model: config.model,
+        endpoint: config.endpoint,
+      });
+    }
+
+    try {
+      const result = await callTabiTokenChat({
+        requestId: `diag_${Date.now()}`,
+        systemInstruction: 'Respond in JSON with keys: headline, whatsHappening, why, whatsNext, whatToDo, suggestedQuestions.',
+        userPrompt: 'Diagnostic health ping for TabiToken connection.',
+      });
+
+      return res.json({
+        status: 'healthy',
+        code: 'OK',
+        message: 'TabiToken connection and model response verified successfully.',
+        configured: true,
+        model: config.model,
+        endpoint: config.endpoint,
+        responseParsed: Boolean(result),
+      });
+    } catch (err: any) {
+      const diagnosticCode = err.code || 'TABITOKEN_UPSTREAM_ERROR';
+      const message = err.message || 'Unknown TabiToken error';
+      
+      return res.status(200).json({
+        status: 'error',
+        code: diagnosticCode,
+        message,
+        configured: true,
+        model: config.model,
+        endpoint: config.endpoint,
+        classification: {
+          missingApiKey: diagnosticCode === 'TABITOKEN_CONFIG_ERROR' || !config.apiKey,
+          authenticationFailure: diagnosticCode === 'TABITOKEN_AUTH_ERROR',
+          rateLimiting: diagnosticCode === 'TABITOKEN_RATE_LIMIT',
+          upstream5xx: diagnosticCode === 'TABITOKEN_MODEL_ERROR' || diagnosticCode === 'TABITOKEN_UPSTREAM_ERROR',
+          timeout: diagnosticCode === 'TABITOKEN_TIMEOUT',
+          malformedResponse: diagnosticCode === 'TABITOKEN_INVALID_RESPONSE',
+        }
+      });
+    }
   });
 
   app.get('/api/environmental/ai/tests', async (req, res) => {

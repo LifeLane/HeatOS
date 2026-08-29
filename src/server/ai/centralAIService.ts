@@ -2,16 +2,7 @@
  * HeatOS: Centralized AI Service & Smart Provider Router
  * 
  * Pipeline Architecture:
- * UI / Client Request
- *   → Central AI Service
- *   → Request Deduplication Lock
- *   → Response Cache Lookup
- *   → Local Deterministic Calculation (Base standard of truth)
- *   → Context Minimization Filter (Only essential metrics sent)
- *   → Primary Provider: Groq (Low-cost fast inference)
- *   → Fallback Provider: Nvidia (Complex reasoning / Groq recovery)
- *   → Graceful Deterministic Fallback (If both remote providers fail or no key)
- *   → Structured Response Validation & Logging
+ * UI -> HeatOS API -> CentralAIService -> Request Deduplication Lock -> Response Cache Lookup -> Deterministic Environmental Context -> TabiToken (claude-opus-4-8) -> Structured HeatOS Response
  */
 
 import { AIRouterRequest, AIRouterResponse, AIProviderName, StructuredAIOutput } from './providerTypes';
@@ -202,7 +193,7 @@ Active Events: ${JSON.stringify(curatedContext.activeEventsSummary || [], null, 
 Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScore ?? 'N/A'}/100`;
 
     
-    // 6. TabiToken AI Invocation (Exclusive Provider)
+    // 6. TabiToken AI Invocation (Exclusive Provider) with graceful local deterministic fallback
     const tabiConfig = getTabiTokenConfig();
     let provider: AIProviderName = 'tabitoken';
     let modelName = tabiConfig.model;
@@ -211,19 +202,28 @@ Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScor
     let retryCount = 0;
 
     if (!tabiConfig.apiKey) {
-      throw new Error('TABITOKEN_API_KEY environment variable is not configured on the server.');
-    }
-
-    try {
-      rawOutput = await callTabiTokenChat({
-        requestId,
-        systemInstruction,
-        userPrompt,
-        imageUrl: request.imageUrl,
-      });
-    } catch (err: any) {
-      FortyGuardLogger.error('TabiToken AI execution error', { error: err.message });
-      throw err;
+      FortyGuardLogger.warn('TABITOKEN_API_KEY environment variable is not configured. Falling back to local deterministic intelligence.', { requestId });
+      fallbackUsed = true;
+      provider = 'local_deterministic';
+      modelName = 'local-deterministic-engine';
+    } else {
+      try {
+        rawOutput = await callTabiTokenChat({
+          requestId,
+          systemInstruction,
+          userPrompt,
+          imageUrl: request.imageUrl,
+        });
+      } catch (err: any) {
+        FortyGuardLogger.warn('TabiToken AI execution failed, falling back to local deterministic intelligence', {
+          requestId,
+          error: err.message,
+          code: err.code || 'AI_FALLBACK',
+        });
+        fallbackUsed = true;
+        provider = 'local_deterministic';
+        modelName = 'local-deterministic-engine';
+      }
     }
 
     // 7. Assemble and Validate Final Structured Response
@@ -232,7 +232,7 @@ Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScor
     let suggestedQuestions = deterministicResult.suggestedQuestions;
     let confidence = deterministicResult.confidence;
 
-    if (rawOutput && rawOutput.whatsHappening && rawOutput.why && rawOutput.whatsNext && rawOutput.whatToDo) {
+    if (!fallbackUsed && rawOutput && rawOutput.whatsHappening && rawOutput.why && rawOutput.whatsNext && rawOutput.whatToDo) {
       finalStructure = {
         whatsHappening: rawOutput.whatsHappening,
         why: rawOutput.why,
@@ -242,8 +242,11 @@ Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScor
       if (rawOutput.headline) headline = rawOutput.headline;
       if (rawOutput.suggestedQuestions) suggestedQuestions = rawOutput.suggestedQuestions;
       confidence = rawOutput.confidence || 96;
-    } else {
-      throw new Error('TabiToken response missing required structured explanation fields.');
+    } else if (!fallbackUsed) {
+      FortyGuardLogger.warn('TabiToken response missing required fields, falling back to local deterministic intelligence.', { requestId });
+      fallbackUsed = true;
+      provider = 'local_deterministic';
+      modelName = 'local-deterministic-engine';
     }
 
     const structuredOutput: StructuredAIOutput = {

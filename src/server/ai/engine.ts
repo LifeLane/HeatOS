@@ -1,8 +1,8 @@
 /**
  * HeatOS Phase 8: Nature Analyst AI Engine
  * 
- * Re-routed to CentralAIService for unified AI cost optimization,
- * Groq primary router, cache lookup, request deduplication, and deterministic fallback.
+ * Re-routed to CentralAIService for unified AI orchestration,
+ * TabiToken Claude AI integration, cache lookup, request deduplication, and local deterministic fallback.
  */
 
 import { CentralAIService } from './centralAIService';
