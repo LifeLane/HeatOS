@@ -15,6 +15,7 @@ import { useLocation } from '../../context/LocationContext';
 import { useNavigation } from '../../context/NavigationContext';
 import { useAIAnalyst } from '../../context/AIAnalystContext';
 import LiveStatusPill from './LiveStatusPill';
+import ApiStatusHeaderWidget from './ApiStatusHeaderWidget';
 
 const AppHeader: React.FC = () => {
   const {
@@ -93,6 +94,9 @@ const AppHeader: React.FC = () => {
             </span>
             <ChevronDown className="w-3 h-3 text-slate-400 flex-shrink-0" />
           </button>
+
+          {/* API Status Check & Multi-Stream Data Sources Telemetry Widget */}
+          <ApiStatusHeaderWidget />
 
           {/* Quick Refresh Button */}
           <button

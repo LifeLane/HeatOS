@@ -1,9 +1,11 @@
 import React from 'react';
-import { Flame, Wind, Droplets, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { Flame, Wind, Droplets, TrendingUp, TrendingDown, Minus, Info } from 'lucide-react';
 import { useLocation } from '../../context/LocationContext';
+import { useExplanation } from '../../context/ExplanationContext';
 
 export const AnimatedTelemetryCards: React.FC = () => {
-  const { currentLocation, normalizedState } = useLocation();
+  const { currentLocation, normalizedState, formatTemp } = useLocation();
+  const { explainMetric } = useExplanation();
 
   // Extract variables
   const heatIndex = normalizedState?.currentConditions?.heatIndex?.value || currentLocation.ambientTemp + 1;
@@ -18,12 +20,22 @@ export const AnimatedTelemetryCards: React.FC = () => {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
       
       {/* Heat Index Card */}
-      <div className="telemetry-card group relative bg-white border border-slate-200/80 hover:border-blue-300 rounded-2xl p-5 overflow-hidden transition-all duration-300 shadow-xs hover:shadow-md">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => explainMetric('heatIndex', `${heatIndex}°C`)}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && explainMetric('heatIndex', `${heatIndex}°C`)}
+        className="telemetry-card group relative bg-white border border-slate-200/80 hover:border-blue-400 hover:shadow-md active:scale-[0.99] rounded-2xl p-5 overflow-hidden transition-all duration-300 shadow-xs cursor-pointer select-none"
+        title="Click to view full heat stress explanation, provenance & biophysical calculation"
+      >
         <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-rose-500 to-orange-500"></div>
         
         <div className="flex justify-between items-start mb-2 relative z-10">
-          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">HEAT STRESS</h3>
-          <div className="p-2 rounded-xl bg-rose-50 border border-rose-100">
+          <div className="flex items-center gap-1.5">
+            <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider group-hover:text-blue-600 transition-colors">HEAT STRESS</h3>
+            <Info className="w-3 h-3 text-slate-300 group-hover:text-blue-500 transition-colors opacity-0 group-hover:opacity-100" />
+          </div>
+          <div className="p-2 rounded-xl bg-rose-50 border border-rose-100 group-hover:bg-rose-100 transition-colors">
             <Flame className={`w-4 h-4 ${heatStatus} animate-pulse`} />
           </div>
         </div>
@@ -44,20 +56,33 @@ export const AnimatedTelemetryCards: React.FC = () => {
           </div>
         </div>
         
-        <div className="mt-3 relative z-10 text-xs font-medium text-slate-500 flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping absolute opacity-75"></span>
-          <span className="w-2 h-2 rounded-full bg-rose-500 relative"></span>
-          FortyGuard Thermal Engine
+        <div className="mt-3 relative z-10 text-xs font-medium text-slate-500 flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping absolute opacity-75"></span>
+            <span className="w-2 h-2 rounded-full bg-rose-500 relative"></span>
+            <span>FortyGuard Thermal Engine</span>
+          </div>
+          <span className="text-[10px] text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Explain &rarr;</span>
         </div>
       </div>
 
       {/* Air Quality Card */}
-      <div className="telemetry-card group relative bg-white border border-slate-200/80 hover:border-blue-300 rounded-2xl p-5 overflow-hidden transition-all duration-300 shadow-xs hover:shadow-md">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => explainMetric('airQuality', `${airQuality} AQI`)}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && explainMetric('airQuality', `${airQuality} AQI`)}
+        className="telemetry-card group relative bg-white border border-slate-200/80 hover:border-blue-400 hover:shadow-md active:scale-[0.99] rounded-2xl p-5 overflow-hidden transition-all duration-300 shadow-xs cursor-pointer select-none"
+        title="Click to view air quality index explanation, pollutant breakdown & source provenance"
+      >
         <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-amber-400 to-yellow-600"></div>
         
         <div className="flex justify-between items-start mb-2 relative z-10">
-          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">AIR QUALITY</h3>
-          <div className="p-2 rounded-xl bg-amber-50 border border-amber-100">
+          <div className="flex items-center gap-1.5">
+            <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider group-hover:text-blue-600 transition-colors">AIR QUALITY</h3>
+            <Info className="w-3 h-3 text-slate-300 group-hover:text-blue-500 transition-colors opacity-0 group-hover:opacity-100" />
+          </div>
+          <div className="p-2 rounded-xl bg-amber-50 border border-amber-100 group-hover:bg-amber-100 transition-colors">
             <Wind className={`w-4 h-4 ${aqiStatus} float-animation`} />
           </div>
         </div>
@@ -78,20 +103,33 @@ export const AnimatedTelemetryCards: React.FC = () => {
           </div>
         </div>
         
-        <div className="mt-3 relative z-10 text-xs font-medium text-slate-500 flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping absolute opacity-75"></span>
-          <span className="w-2 h-2 rounded-full bg-emerald-500 relative"></span>
-          LIVE SIGNAL
+        <div className="mt-3 relative z-10 text-xs font-medium text-slate-500 flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping absolute opacity-75"></span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 relative"></span>
+            <span>LIVE SIGNAL</span>
+          </div>
+          <span className="text-[10px] text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Explain &rarr;</span>
         </div>
       </div>
 
       {/* Humidity Card */}
-      <div className="telemetry-card group relative bg-white border border-slate-200/80 hover:border-blue-300 rounded-2xl p-5 overflow-hidden transition-all duration-300 shadow-xs hover:shadow-md">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => explainMetric('humidity', `${humidity}%`)}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && explainMetric('humidity', `${humidity}%`)}
+        className="telemetry-card group relative bg-white border border-slate-200/80 hover:border-blue-400 hover:shadow-md active:scale-[0.99] rounded-2xl p-5 overflow-hidden transition-all duration-300 shadow-xs cursor-pointer select-none"
+        title="Click to view humidity explanation, psychrometric comfort & sensor provenance"
+      >
         <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-blue-400 to-cyan-600"></div>
         
         <div className="flex justify-between items-start mb-2 relative z-10">
-          <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider">HUMIDITY</h3>
-          <div className="p-2 rounded-xl bg-blue-50 border border-blue-100">
+          <div className="flex items-center gap-1.5">
+            <h3 className="text-slate-500 text-xs font-bold uppercase tracking-wider group-hover:text-blue-600 transition-colors">HUMIDITY</h3>
+            <Info className="w-3 h-3 text-slate-300 group-hover:text-blue-500 transition-colors opacity-0 group-hover:opacity-100" />
+          </div>
+          <div className="p-2 rounded-xl bg-blue-50 border border-blue-100 group-hover:bg-blue-100 transition-colors">
             <Droplets className={`w-4 h-4 ${humidityStatus} bounce-subtle`} />
           </div>
         </div>
@@ -112,10 +150,13 @@ export const AnimatedTelemetryCards: React.FC = () => {
           </div>
         </div>
         
-        <div className="mt-3 relative z-10 text-xs font-medium text-slate-500 flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping absolute opacity-75"></span>
-          <span className="w-2 h-2 rounded-full bg-blue-500 relative"></span>
-          AMBIENT SIGNAL
+        <div className="mt-3 relative z-10 text-xs font-medium text-slate-500 flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping absolute opacity-75"></span>
+            <span className="w-2 h-2 rounded-full bg-blue-500 relative"></span>
+            <span>AMBIENT SIGNAL</span>
+          </div>
+          <span className="text-[10px] text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Explain &rarr;</span>
         </div>
       </div>
 

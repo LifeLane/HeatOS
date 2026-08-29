@@ -58,7 +58,7 @@ export const ContextualAIAnalystDrawer: React.FC = () => {
     }
   }, [activeContext, isAIDrawerOpen]);
 
-  const runAnalysis = async (queryText?: string) => {
+  const runAnalysis = async (queryText?: string, bypassCache: boolean = true) => {
     const textToRun = queryText || prompt;
     if (!textToRun.trim()) return;
 
@@ -73,6 +73,7 @@ export const ContextualAIAnalystDrawer: React.FC = () => {
         prompt: textToRun,
         preferredPersona: selectedPersona,
         preferredSkill: selectedSkill,
+        bypassCache,
       });
       setAnalysis(result);
     } catch (err: any) {

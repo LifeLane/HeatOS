@@ -21,6 +21,7 @@ import {
 import { useLocation } from '../../context/LocationContext';
 import { useFortyGuard } from '../../context/FortyGuardContext';
 import { useNavigation } from '../../context/NavigationContext';
+import { useExplanation } from '../../context/ExplanationContext';
 import { EnvironmentalCategory, StatusSeverity, SpatialZone } from '../../types';
 import PageContainer from '../ui/PageContainer';
 import Section from '../ui/Section';
@@ -39,6 +40,7 @@ export const HomeView: React.FC = () => {
   const { currentLocation, formatTemp, tempUnit, lastTelemetryTime } = useLocation();
   const { connection, reconnect, isSyncing } = useFortyGuard();
   const { setActiveTab, setSelectedZone, setIsInspectorOpen, setIsFortyGuardModalOpen, setIsFabricModalOpen } = useNavigation();
+  const explanation = useExplanation();
 
   // Phase 5: Nature Pulse State
   const [pulse, setPulse] = useState<NaturePulseResult | null>(null);
@@ -241,7 +243,12 @@ export const HomeView: React.FC = () => {
 
                 {/* Microclimate key facts */}
                 <div className="flex flex-wrap items-center gap-4 pt-1 text-xs sm:text-sm">
-                  <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => explanation.explainMetric('ambientTemp', formatTemp(currentLocation.ambientTemp))}
+                    className="flex items-center gap-1.5 hover:text-blue-600 cursor-pointer transition-colors"
+                    title="Click to explain ambient temperature"
+                  >
                     <span className="text-slate-600">Ambient Temp:</span>
                     <span className="font-mono font-bold text-slate-900">
                       {formatTemp(currentLocation.ambientTemp)}
@@ -249,25 +256,45 @@ export const HomeView: React.FC = () => {
                     <span className="text-xs text-slate-600 font-normal">
                       (Perceived {formatTemp(currentLocation.apparentTemp)})
                     </span>
-                  </div>
+                  </button>
 
                   <div className="h-3 w-[1px] bg-slate-200" />
 
-                  <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => explanation.explainMetric('thermalComfortIndex', `${currentLocation.thermalComfortIndex} / 100`)}
+                    className="flex items-center gap-1.5 hover:text-blue-600 cursor-pointer transition-colors"
+                    title="Click to explain environmental pulse index"
+                  >
                     <span className="text-slate-600">Environmental Pulse:</span>
                     <span className="font-mono font-bold text-[#2563EB]">
                       <NumberCounter value={currentLocation.thermalComfortIndex} /> / 100
                     </span>
-                  </div>
+                  </button>
 
                   <div className="h-3 w-[1px] bg-slate-200 hidden xs:block" />
 
-                  <div className="flex items-center gap-1.5 hidden xs:flex">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      explanation.explainAIInsight(
+                        'Active Sensor Nodes',
+                        `Active IoT edge monitoring nodes for ${currentLocation.name}.`,
+                        [
+                          `Active nodes: ${currentLocation.activeSensors} reporting in real-time`,
+                          `Sensors: Heat, humidity, PM2.5 AQI, and thermal infrared sensors`,
+                          `Network state: Optimal`,
+                        ]
+                      )
+                    }
+                    className="flex items-center gap-1.5 hidden xs:flex hover:text-emerald-700 cursor-pointer transition-colors"
+                    title="Click to explain active sensors"
+                  >
                     <span className="text-slate-600">Active Sensors:</span>
                     <span className="font-mono font-bold text-emerald-700">
                       {currentLocation.activeSensors} nodes
                     </span>
-                  </div>
+                  </button>
                 </div>
               </div>
 

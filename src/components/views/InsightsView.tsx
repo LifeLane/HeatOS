@@ -132,6 +132,7 @@ export const InsightsView: React.FC = () => {
     prompt?: string;
     quickQuestionKey?: string;
     persona?: AIPersona;
+    bypassCache?: boolean;
   }) => {
     setIsLoading(true);
     setError(null);
@@ -144,6 +145,7 @@ export const InsightsView: React.FC = () => {
         prompt: params.prompt || userPrompt,
         preferredPersona,
         quickQuestionKey: params.quickQuestionKey,
+        bypassCache: params.bypassCache ?? true, // Default to fresh evaluation when explicitly triggered by user
       });
       setAnalysis(response);
       if (params.prompt) {

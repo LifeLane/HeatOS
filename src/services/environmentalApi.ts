@@ -134,6 +134,72 @@ export async function toggleFabricProvider(providerId: string, enabled: boolean)
   return response.json();
 }
 
+export interface ApiPingSource {
+  id: string;
+  name: string;
+  category: string;
+  status: 'online' | 'degraded' | 'offline';
+  latencyMs: number;
+  endpoint: string;
+  dataType: string;
+  enabled: boolean;
+  isFallback: boolean;
+  message: string;
+  error?: string;
+  lastChecked: string;
+}
+
+export interface ApiPingReport {
+  success: boolean;
+  timestamp: string;
+  totalDurationMs: number;
+  overallStatus: 'healthy' | 'degraded' | 'offline';
+  onlineCount: number;
+  totalCount: number;
+  avgLatencyMs: number;
+  sources: ApiPingSource[];
+  aiService: {
+    status: 'online' | 'fallback' | 'degraded';
+    model: string;
+    endpoint: string;
+    latencyMs: number;
+    configured: boolean;
+    note: string;
+    cache: {
+      totalEntries: number;
+      activeEntries: number;
+      maxEntries: number;
+    };
+  };
+}
+
+/**
+ * Ping all Environmental APIs, Data Fabric providers, and AI endpoints
+ */
+export async function pingAllApis(): Promise<ApiPingReport> {
+  const response = await fetch('/api/environmental/status/ping', {
+    headers: { 'Cache-Control': 'no-cache' }
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to ping APIs: HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+/**
+ * Purge AI response cache to ensure completely fresh upstream evaluations
+ */
+export async function clearAiCache(): Promise<{ success: boolean; message: string; clearedEntries: number }> {
+  const response = await fetch('/api/environmental/ai/cache/clear', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to clear AI cache: HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
 /**
  * Run Data Fabric self-diagnostic test suite
  */
@@ -144,4 +210,5 @@ export async function fetchFabricTestSuiteReport() {
   }
   return response.json();
 }
+
 

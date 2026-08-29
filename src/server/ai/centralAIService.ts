@@ -59,10 +59,13 @@ export class CentralAIService {
         });
         return cached;
       }
+    } else {
+      // User explicitly requested cache bypass - invalidate any stale entry for this key
+      AICacheService.delete(dedupeKey);
     }
 
-    // 3. Request Deduplication: If identical request is already running, join its promise
-    if (this.inFlightRequests.has(dedupeKey)) {
+    // 3. Request Deduplication: If identical request is already running, join its promise (unless bypassCache is requested)
+    if (!request.bypassCache && this.inFlightRequests.has(dedupeKey)) {
       try {
         const result = await this.inFlightRequests.get(dedupeKey)!;
         return {
@@ -80,8 +83,8 @@ export class CentralAIService {
 
     try {
       const response = await executionPromise;
-      // Save to cache if valid
-      if (response.success && !request.bypassCache) {
+      // Save to cache ONLY if successful and NOT a fallback / degraded response
+      if (response.success && !request.bypassCache && !response.fallbackUsed) {
         AICacheService.set(dedupeKey, response);
       }
       return response;

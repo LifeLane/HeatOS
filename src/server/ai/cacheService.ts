@@ -98,6 +98,13 @@ export class AICacheService {
   }
 
   /**
+   * Delete specific cache entry
+   */
+  public static delete(key: string): boolean {
+    return this.cache.delete(key);
+  }
+
+  /**
    * Flush cache
    */
   public static clear(): void {

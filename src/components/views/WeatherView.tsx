@@ -29,6 +29,7 @@ import { useLocation } from '../../context/LocationContext';
 import { useFortyGuard } from '../../context/FortyGuardContext';
 import { useAIAnalyst } from '../../context/AIAnalystContext';
 import { useNavigation } from '../../context/NavigationContext';
+import { useExplanation } from '../../context/ExplanationContext';
 import PageContainer from '../ui/PageContainer';
 import Card from '../ui/Card';
 import MetricCard from '../ui/MetricCard';
@@ -54,6 +55,7 @@ export const WeatherView: React.FC = () => {
 
   const { openAIWithContext } = useAIAnalyst();
   const { setActiveTab } = useNavigation();
+  const explanation = useExplanation();
 
   // Extract from normalizedState or fallback with high-fidelity telemetry
   const conditions = normalizedState?.currentConditions;
@@ -137,10 +139,11 @@ export const WeatherView: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 self-end sm:self-auto">
-            <div
-              onClick={() => inspectProvenance('temperature')}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200/90 text-xs font-mono font-medium text-slate-700 cursor-pointer hover:border-slate-300 transition-colors shadow-2xs"
-              title="Click to inspect provenance"
+            <button
+              type="button"
+              onClick={() => explanation.explainMetric('temperature', formatTemp(tempC))}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200/90 text-xs font-mono font-medium text-slate-700 cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition-colors shadow-2xs group"
+              title="Click to inspect signal provenance & telemetry health"
             >
               {connectionStatus === 'LIVE' ? (
                 <span className="relative flex h-2 w-2">
@@ -150,11 +153,11 @@ export const WeatherView: React.FC = () => {
               ) : (
                 <span className="h-2 w-2 rounded-full bg-slate-400" />
               )}
-              <span className="font-bold text-[11px] uppercase tracking-wider text-slate-800">
+              <span className="font-bold text-[11px] uppercase tracking-wider text-slate-800 group-hover:text-blue-600">
                 {statusLabel}
               </span>
               <span className="text-[10px] text-slate-400">({lastTelemetryTime})</span>
-            </div>
+            </button>
 
             <button
               id="weather-refresh-btn"
@@ -204,31 +207,53 @@ export const WeatherView: React.FC = () => {
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#2563EB] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
                     ENVIRONMENTAL STATE · RIGHT NOW
                   </span>
-                  <StatusPill status="optimal" label="ENVIRONMENTAL SIGNALS SYNCED" size="sm" />
+                  <button
+                    type="button"
+                    onClick={() => explanation.explainMetric('ambientTemp', formatTemp(tempC))}
+                    className="cursor-pointer hover:opacity-85 transition-opacity"
+                    title="Click to view synchronization details"
+                  >
+                    <StatusPill status="optimal" label="ENVIRONMENTAL SIGNALS SYNCED" size="sm" />
+                  </button>
                 </div>
 
                 <div className="flex items-center gap-4 sm:gap-5 flex-wrap">
-                  <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-50 to-blue-50 border border-slate-200/80 flex items-center justify-center flex-shrink-0 shadow-2xs">
+                  <button
+                    type="button"
+                    onClick={() => explanation.explainMetric('ambientTemp', formatTemp(tempC))}
+                    className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-50 to-blue-50 border border-slate-200/80 hover:border-blue-400 flex items-center justify-center flex-shrink-0 shadow-2xs cursor-pointer group transition-all"
+                    title="Click to inspect ambient temperature"
+                  >
                     <Sun className="w-8 h-8 text-amber-500 animate-[spin_20s_linear_infinite]" />
                     <CloudSun className="w-5 h-5 text-blue-600 absolute bottom-1 right-1" />
-                  </div>
+                  </button>
 
                   <div>
                     <div className="flex items-baseline flex-wrap gap-x-3 gap-y-1">
-                      <span
-                        onClick={() => inspectProvenance('temperature', formatTemp(tempC))}
-                        className="text-4xl sm:text-5xl font-black tracking-tight text-slate-900 font-mono hover:text-blue-600 cursor-pointer transition-colors"
+                      <button
+                        type="button"
+                        onClick={() => explanation.explainMetric('temperature', formatTemp(tempC))}
+                        className="text-4xl sm:text-5xl font-black tracking-tight text-slate-900 font-mono hover:text-blue-600 cursor-pointer transition-colors text-left"
                         title="Click to inspect ambient temperature provenance"
                       >
                         {formatTemp(tempC)}
-                      </span>
+                      </button>
                       <div className="space-y-0.5">
-                        <span className="text-sm sm:text-base font-bold text-slate-700">
+                        <button
+                          type="button"
+                          onClick={() => explanation.explainMetric('feelsLike', formatTemp(apparentC))}
+                          className="text-sm sm:text-base font-bold text-slate-700 hover:text-blue-600 transition-colors cursor-pointer block text-left"
+                          title="Click to inspect perceived heat calculation"
+                        >
                           PERCEIVED HEAT {formatTemp(apparentC)}
-                        </span>
-                        <div className="text-xs font-semibold text-[#2563EB] flex items-center gap-1.5">
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => explanation.explainMetric('ambientTemp', formatTemp(tempC))}
+                          className="text-xs font-semibold text-[#2563EB] hover:underline flex items-center gap-1.5 cursor-pointer text-left"
+                        >
                           <span>{conditionText}</span>
-                        </div>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -238,8 +263,9 @@ export const WeatherView: React.FC = () => {
                   A live snapshot of the environmental conditions shaping this location. Surface conditions are running{' '}
                   <button
                     type="button"
-                    onClick={() => inspectProvenance('surfaceHeatAnomaly', `+${uhiVal.toFixed(1)}°C`)}
+                    onClick={() => explanation.explainMetric('surfaceHeatAnomaly', `+${uhiVal.toFixed(1)}°C`)}
                     className="font-bold text-amber-700 hover:underline cursor-pointer"
+                    title="Click to view urban heat island anomaly details"
                   >
                     +{uhiVal.toFixed(1)}°C above regional baseline
                   </button>{' '}
@@ -254,18 +280,17 @@ export const WeatherView: React.FC = () => {
                   size="md"
                   className="w-full justify-center"
                   onClick={() =>
-                    openAIWithContext(
-                      `Analyze the current weather and microclimate factors for ${currentLocation.displayName}: Ambient Temperature ${formatTemp(
-                        tempC
-                      )}, Apparent Feels-Like ${formatTemp(apparentC)}, Heat Index ${formatTemp(
-                        heatIndexC
-                      )}, Psychrometric Wet-Bulb ${formatTemp(wetBulbC)}, Relative Humidity ${humidityPct}%, Dew Point ${dewPointC.toFixed(
-                        1
-                      )}°C, Atmospheric Pressure ${pressureHpa} hPa, Wind ${windData.speedKmh} km/h ${windData.directionCardinal} (Gusts ${
-                        windData.gustKmh
-                      } km/h), Solar Irradiance ${solarGhi} W/m², UV Index ${uvIdx}, AQI ${aqiVal} (${aqiCategory}), FortyGuard UHI Surface Anomaly +${uhiVal.toFixed(
-                        1
-                      )}°C, Tree Canopy ${canopyPct}%. What are the physiological and localized urban implications?`
+                    explanation.explainAIInsight(
+                      `Comprehensive Microclimate Analysis · ${currentLocation.displayName}`,
+                      `Deep thermodynamic and physiological assessment based on ${currentLocation.name} multi-signal streams.`,
+                      [
+                        `Ambient: ${formatTemp(tempC)} (Feels like ${formatTemp(apparentC)})`,
+                        `Heat Stress: NOAA HI ${formatTemp(heatIndexC)} · Wet-Bulb ${formatTemp(wetBulbC)}`,
+                        `Vapor Burden: Relative Humidity ${humidityPct}% · Dew Point ${dewPointC.toFixed(1)}°C`,
+                        `Ventilation: Wind ${windData.speedKmh} km/h ${windData.directionCardinal} (Gusts ${windData.gustKmh} km/h)`,
+                        `Radiative Insolation: Solar GHI ${solarGhi} W/m² · UV Index ${uvIdx}`,
+                        `Urban Canopy & Baseline: +${uhiVal.toFixed(1)}°C UHI Anomaly · ${canopyPct}% Tree Canopy`,
+                      ]
                     )
                   }
                   icon={<Sparkles className="w-4 h-4 text-purple-600" />}
@@ -308,9 +333,34 @@ export const WeatherView: React.FC = () => {
             </div>
 
             {/* Concise One-Statement Summary */}
-            <div className="mb-3.5 p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-              <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-1">
-                CURRENT ENVIRONMENTAL STATE
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() =>
+                explanation.explainAIInsight(
+                  'Current Environmental State',
+                  `Integrated biophysical status for ${currentLocation.name} computed from real-time microclimate streams.`,
+                  [heatImpact.label, solarImpact.label, airImpact.label, bioImpact.label]
+                )
+              }
+              onKeyDown={(e) =>
+                (e.key === 'Enter' || e.key === ' ') &&
+                explanation.explainAIInsight(
+                  'Current Environmental State',
+                  `Integrated biophysical status for ${currentLocation.name} computed from real-time microclimate streams.`,
+                  [heatImpact.label, solarImpact.label, airImpact.label, bioImpact.label]
+                )
+              }
+              className="mb-3.5 p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/50 border border-slate-200/80 hover:border-blue-300 transition-all cursor-pointer group"
+              title="Click to view detailed environmental state synthesis"
+            >
+              <div className="flex items-center justify-between mb-1">
+                <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 group-hover:text-blue-600 transition-colors">
+                  CURRENT ENVIRONMENTAL STATE
+                </div>
+                <span className="text-[10px] font-semibold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                  Explain &rarr;
+                </span>
               </div>
               <div className="text-xs font-semibold text-slate-800 space-y-0.5">
                 <div>• {heatImpact.label}</div>
@@ -321,10 +371,31 @@ export const WeatherView: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {/* Heat Load */}
-              <div className="p-3 rounded-2xl bg-orange-50/50 border border-orange-100/90 space-y-1">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-orange-900">
-                  <Flame className="w-3.5 h-3.5 text-orange-600" />
-                  <span>{heatImpact.label}</span>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() =>
+                  explanation.explainMetric('surfaceHeatAnomaly', `+${uhiVal.toFixed(1)}°C`, {
+                    label: heatImpact.label,
+                    whatItMeans: heatImpact.detail,
+                  })
+                }
+                onKeyDown={(e) =>
+                  (e.key === 'Enter' || e.key === ' ') &&
+                  explanation.explainMetric('surfaceHeatAnomaly', `+${uhiVal.toFixed(1)}°C`, {
+                    label: heatImpact.label,
+                    whatItMeans: heatImpact.detail,
+                  })
+                }
+                className="p-3 rounded-2xl bg-orange-50/50 hover:bg-orange-100/60 border border-orange-100/90 hover:border-orange-300 space-y-1 cursor-pointer transition-all active:scale-[0.98]"
+                title="Click to inspect Heat Load biophysical impact"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-orange-900">
+                    <Flame className="w-3.5 h-3.5 text-orange-600" />
+                    <span>{heatImpact.label}</span>
+                  </div>
+                  <Info className="w-3 h-3 text-orange-400 opacity-0 group-hover:opacity-100" />
                 </div>
                 <p className="text-[11px] text-slate-600 leading-snug">
                   {heatImpact.detail}
@@ -332,10 +403,31 @@ export const WeatherView: React.FC = () => {
               </div>
 
               {/* Solar Exposure */}
-              <div className="p-3 rounded-2xl bg-amber-50/50 border border-amber-100/90 space-y-1">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
-                  <Sun className="w-3.5 h-3.5 text-amber-600" />
-                  <span>{solarImpact.label}</span>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() =>
+                  explanation.explainMetric('solarIrradiance', `${solarGhi} W/m²`, {
+                    label: solarImpact.label,
+                    whatItMeans: solarImpact.detail,
+                  })
+                }
+                onKeyDown={(e) =>
+                  (e.key === 'Enter' || e.key === ' ') &&
+                  explanation.explainMetric('solarIrradiance', `${solarGhi} W/m²`, {
+                    label: solarImpact.label,
+                    whatItMeans: solarImpact.detail,
+                  })
+                }
+                className="p-3 rounded-2xl bg-amber-50/50 hover:bg-amber-100/60 border border-amber-100/90 hover:border-amber-300 space-y-1 cursor-pointer transition-all active:scale-[0.98]"
+                title="Click to inspect Solar Exposure radiative model"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
+                    <Sun className="w-3.5 h-3.5 text-amber-600" />
+                    <span>{solarImpact.label}</span>
+                  </div>
+                  <Info className="w-3 h-3 text-amber-400 opacity-0 group-hover:opacity-100" />
                 </div>
                 <p className="text-[11px] text-slate-600 leading-snug">
                   {solarImpact.detail}
@@ -343,10 +435,31 @@ export const WeatherView: React.FC = () => {
               </div>
 
               {/* Air Quality */}
-              <div className="p-3 rounded-2xl bg-blue-50/50 border border-blue-100/90 space-y-1">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-blue-900">
-                  <Wind className="w-3.5 h-3.5 text-blue-600" />
-                  <span>{airImpact.label}</span>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() =>
+                  explanation.explainMetric('airQuality', `${aqiVal} AQI`, {
+                    label: airImpact.label,
+                    whatItMeans: airImpact.detail,
+                  })
+                }
+                onKeyDown={(e) =>
+                  (e.key === 'Enter' || e.key === ' ') &&
+                  explanation.explainMetric('airQuality', `${aqiVal} AQI`, {
+                    label: airImpact.label,
+                    whatItMeans: airImpact.detail,
+                  })
+                }
+                className="p-3 rounded-2xl bg-blue-50/50 hover:bg-blue-100/60 border border-blue-100/90 hover:border-blue-300 space-y-1 cursor-pointer transition-all active:scale-[0.98]"
+                title="Click to inspect Air Quality atmospheric impact"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-blue-900">
+                    <Wind className="w-3.5 h-3.5 text-blue-600" />
+                    <span>{airImpact.label}</span>
+                  </div>
+                  <Info className="w-3 h-3 text-blue-400 opacity-0 group-hover:opacity-100" />
                 </div>
                 <p className="text-[11px] text-slate-600 leading-snug">
                   {airImpact.detail}
@@ -354,10 +467,31 @@ export const WeatherView: React.FC = () => {
               </div>
 
               {/* Biophysical Comfort */}
-              <div className="p-3 rounded-2xl bg-cyan-50/50 border border-cyan-100/90 space-y-1">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-900">
-                  <Droplets className="w-3.5 h-3.5 text-cyan-600" />
-                  <span>{bioImpact.label}</span>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() =>
+                  explanation.explainMetric('wetBulb', formatTemp(wetBulbC), {
+                    label: bioImpact.label,
+                    whatItMeans: bioImpact.detail,
+                  })
+                }
+                onKeyDown={(e) =>
+                  (e.key === 'Enter' || e.key === ' ') &&
+                  explanation.explainMetric('wetBulb', formatTemp(wetBulbC), {
+                    label: bioImpact.label,
+                    whatItMeans: bioImpact.detail,
+                  })
+                }
+                className="p-3 rounded-2xl bg-cyan-50/50 hover:bg-cyan-100/60 border border-cyan-100/90 hover:border-cyan-300 space-y-1 cursor-pointer transition-all active:scale-[0.98]"
+                title="Click to inspect Biophysical Comfort psychrometrics"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-900">
+                    <Droplets className="w-3.5 h-3.5 text-cyan-600" />
+                    <span>{bioImpact.label}</span>
+                  </div>
+                  <Info className="w-3 h-3 text-cyan-400 opacity-0 group-hover:opacity-100" />
                 </div>
                 <p className="text-[11px] text-slate-600 leading-snug">
                   {bioImpact.detail}

@@ -33,6 +33,8 @@ import { EnvironmentalBriefModal } from './components/modals/EnvironmentalBriefM
 import { SubscriptionModal } from './components/modals/SubscriptionModal';
 import { ContextualAIAnalystDrawer } from './components/modals/ContextualAIAnalystDrawer';
 import { CommercialDemoTour } from './components/common/CommercialDemoTour';
+import { useLocation } from './context/LocationContext';
+import { useExplanation } from './context/ExplanationContext';
 
 const MainContent: React.FC = () => {
   const {
@@ -42,6 +44,17 @@ const MainContent: React.FC = () => {
     isDemoTourOpen,
     setIsDemoTourOpen,
   } = useNavigation();
+
+  const { activeProvenanceMetric, closeProvenanceModal } = useLocation();
+  const { explainMetric } = useExplanation();
+
+  // Bridge any inspectProvenance calls directly to the Universal Explanation Modal
+  React.useEffect(() => {
+    if (activeProvenanceMetric) {
+      explainMetric(activeProvenanceMetric.key, activeProvenanceMetric.formattedValue);
+      closeProvenanceModal();
+    }
+  }, [activeProvenanceMetric, explainMetric, closeProvenanceModal]);
 
   // Scroll to top immediately whenever active module / tab changes
   React.useEffect(() => {

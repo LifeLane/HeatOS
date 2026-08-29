@@ -131,27 +131,70 @@ export const DashboardView: React.FC = () => {
             </h1>
             
             <div className="flex flex-col items-center mb-6">
-              <div className="text-7xl md:text-8xl font-black tracking-tighter text-slate-900 mb-2 font-mono">
+              <button
+                type="button"
+                onClick={() => explanation.explainMetric('ambientTemp', formatTemp(currentLocation.ambientTemp))}
+                className="group text-7xl md:text-8xl font-black tracking-tighter text-slate-900 mb-2 font-mono hover:text-blue-600 transition-colors cursor-pointer focus:outline-hidden"
+                title="Click to view full ambient temperature explanation & sensor mesh provenance"
+              >
                 {formatTemp(currentLocation.ambientTemp)}
-              </div>
-              <div className="text-lg md:text-xl font-medium text-slate-500 mb-6 font-mono">
+                <span className="block text-[11px] font-sans font-semibold tracking-normal text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                  Click to inspect signal provenance &rarr;
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => explanation.explainMetric('feelsLike', formatTemp(currentLocation.apparentTemp))}
+                className="text-lg md:text-xl font-medium text-slate-500 mb-4 font-mono hover:text-blue-600 transition-colors cursor-pointer focus:outline-hidden"
+                title="Click to inspect perceived heat & biometeorological model"
+              >
                 PERCEIVED HEAT {formatTemp(currentLocation.apparentTemp)}
-              </div>
-              <div className={`px-4 py-2 rounded-full border text-sm font-bold ${getConditionColor()}`}>
+              </button>
+              <button
+                type="button"
+                onClick={() => explanation.explainMetric('thermalComfortIndex', getConditionText())}
+                className={`px-4 py-2 rounded-full border text-sm font-bold cursor-pointer hover:shadow-xs transition-all ${getConditionColor()}`}
+                title="Click to inspect thermal comfort classification"
+              >
                 {getConditionText()}
-              </div>
+              </button>
             </div>
 
             {/* KEY INTELLIGENCE */}
-            <div className="w-full max-w-2xl bg-slate-50 rounded-xl p-6 border border-slate-100 mb-8 space-y-3">
-              <div className="flex items-center justify-center gap-2 text-slate-700 font-medium">
-                <TrendingUp className="w-5 h-5 text-orange-500" />
+            <div className="w-full max-w-2xl bg-slate-50 hover:bg-slate-100/80 rounded-xl p-6 border border-slate-100 mb-8 space-y-3 transition-colors">
+              <button
+                type="button"
+                onClick={() =>
+                  explanation.explainForecastEvent({
+                    title: 'Thermal Peak Approaching',
+                    time: '14:00–17:00',
+                    temperature: formatTemp(currentLocation.ambientTemp + 2.5),
+                    anomaly: `+${(currentLocation.surfaceHeatAnomaly + 1.2).toFixed(1)}°C`,
+                    why: 'High shortwave solar irradiance combined with low-albedo paved urban surfaces drives peak diurnal heat accumulation between 14:00 and 17:00.',
+                  })
+                }
+                className="w-full flex items-center justify-center gap-2 text-slate-700 font-medium hover:text-blue-600 transition-colors cursor-pointer group"
+                title="Click to view thermal peak forecast explanation"
+              >
+                <TrendingUp className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform" />
                 <span className="font-mono text-sm tracking-tight font-bold">THERMAL PEAK APPROACHING · 14:00–17:00</span>
-              </div>
-              <div className="flex items-center justify-center gap-2 text-slate-700 font-medium">
-                <Flame className="w-5 h-5 text-red-500" />
+                <span className="text-[11px] text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity font-semibold ml-1">&rarr;</span>
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  explanation.explainMetric(
+                    'surfaceHeatAnomaly',
+                    `+${currentLocation.surfaceHeatAnomaly.toFixed(1)}°C`
+                  )
+                }
+                className="w-full flex items-center justify-center gap-2 text-slate-700 font-medium hover:text-blue-600 transition-colors cursor-pointer group"
+                title="Click to view local heat signal explanation & satellite baseline"
+              >
+                <Flame className="w-5 h-5 text-red-500 group-hover:scale-110 transition-transform" />
                 <span className="font-mono text-sm tracking-tight font-bold">LOCAL HEAT SIGNAL · +{currentLocation.surfaceHeatAnomaly.toFixed(1)}°C ABOVE BASELINE</span>
-              </div>
+                <span className="text-[11px] text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity font-semibold ml-1">&rarr;</span>
+              </button>
             </div>
 
             {/* PRIMARY ACTIONS */}
