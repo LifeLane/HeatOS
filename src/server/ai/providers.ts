@@ -24,6 +24,16 @@ export function getTabiTokenConfig(): ProviderConfig {
   if ((rawApiKey.startsWith('"') && rawApiKey.endsWith('"')) || (rawApiKey.startsWith("'") && rawApiKey.endsWith("'"))) {
     rawApiKey = rawApiKey.slice(1, -1).trim();
   }
+  if (
+    rawApiKey === 'MY_TABITOKEN_API_KEY' ||
+    rawApiKey === 'your_tabitoken_api_key' ||
+    rawApiKey === 'undefined' ||
+    rawApiKey === 'null' ||
+    rawApiKey.includes('PLACEHOLDER') ||
+    rawApiKey.length < 8
+  ) {
+    rawApiKey = '';
+  }
   if (rawApiKey.includes('\n') || rawApiKey.includes('\r')) {
     const lines = rawApiKey.split(/[\r\n]+/).map(l => l.trim()).filter(Boolean);
     const skLine = lines.find(l => l.startsWith('sk-') || l.startsWith('Bearer ') || l.startsWith('-'));
@@ -35,8 +45,8 @@ export function getTabiTokenConfig(): ProviderConfig {
   const apiKey = rawApiKey.trim();
   const endpoint = (process.env.TABITOKEN_ENDPOINT || 'https://tabitoken.com/v1/chat/completions').trim();
   const model = (process.env.TABITOKEN_MODEL || 'claude-opus-4-8').trim();
-  const timeoutMs = parseInt(process.env.TABITOKEN_TIMEOUT || '270000', 10);
-  const maxRetries = parseInt(process.env.TABITOKEN_MAX_RETRIES || '0', 10);
+  const timeoutMs = parseInt(process.env.TABITOKEN_TIMEOUT || '20000', 10);
+  const maxRetries = parseInt(process.env.TABITOKEN_MAX_RETRIES || '1', 10);
 
   return {
     endpoint,
@@ -160,16 +170,14 @@ export async function callTabiTokenChat(params: {
       }
 
       if (!response.ok) {
-        FortyGuardLogger.warn(`TabiToken HTTP ${response.status} on attempt ${attempt}`, {
-          requestId,
-          status: response.status,
-          latencyMs,
-          errorSnippet: responseText.substring(0, 200),
-        });
-
         let errorCode = 'TABITOKEN_UPSTREAM_ERROR';
         if (response.status === 401 || response.status === 403) {
           errorCode = 'TABITOKEN_AUTH_ERROR';
+          FortyGuardLogger.info(`TabiToken auth unavailable (${response.status}), switching to local deterministic intelligence`, {
+            requestId,
+            status: response.status,
+            latencyMs,
+          });
           const authErr: any = new Error(`TabiToken Authentication Error (${response.status}): Access denied or invalid API key.`);
           authErr.code = errorCode;
           throw authErr;
@@ -179,8 +187,15 @@ export async function callTabiTokenChat(params: {
           errorCode = 'TABITOKEN_MODEL_ERROR';
         }
 
-        if (attempt <= config.maxRetries) {
-          await new Promise(r => setTimeout(r, 1000 * attempt));
+        FortyGuardLogger.warn(`TabiToken HTTP ${response.status} on attempt ${attempt}`, {
+          requestId,
+          status: response.status,
+          latencyMs,
+          errorSnippet: responseText.substring(0, 200),
+        });
+
+        if (attempt <= config.maxRetries && response.status !== 401 && response.status !== 403) {
+          await new Promise(r => setTimeout(r, 500 * attempt));
           continue;
         }
 
@@ -244,8 +259,9 @@ export async function callTabiTokenChat(params: {
         throw timeoutErr;
       }
 
-      if (attempt <= config.maxRetries) {
-        await new Promise(r => setTimeout(r, 1000 * attempt));
+      const nonRetryableCodes = ['TABITOKEN_AUTH_ERROR', 'TABITOKEN_CONFIG_ERROR', 'TABITOKEN_UPSTREAM_BLOCKED'];
+      if (!nonRetryableCodes.includes(err.code) && attempt <= config.maxRetries) {
+        await new Promise(r => setTimeout(r, 500 * attempt));
         continue;
       }
       throw err;

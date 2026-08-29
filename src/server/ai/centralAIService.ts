@@ -205,7 +205,7 @@ Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScor
     let retryCount = 0;
 
     if (!tabiConfig.apiKey) {
-      FortyGuardLogger.warn('TABITOKEN_API_KEY environment variable is not configured. Falling back to local deterministic intelligence.', { requestId });
+      FortyGuardLogger.info('Local deterministic intelligence engine engaged (TabiToken key unconfigured or in offline mode)', { requestId });
       fallbackUsed = true;
       provider = 'local_deterministic';
       modelName = 'local-deterministic-engine';
@@ -218,10 +218,9 @@ Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScor
           imageUrl: request.imageUrl,
         });
       } catch (err: any) {
-        FortyGuardLogger.warn('TabiToken AI execution failed, falling back to local deterministic intelligence', {
+        FortyGuardLogger.info('Upstream AI unavailable, engaging local deterministic intelligence engine', {
           requestId,
-          error: err.message,
-          code: err.code || 'AI_FALLBACK',
+          reason: err.message,
         });
         fallbackUsed = true;
         provider = 'local_deterministic';
