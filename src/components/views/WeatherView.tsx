@@ -201,10 +201,10 @@ export const WeatherView: React.FC = () => {
               {/* Left: Atmospheric State */}
               <div className="space-y-3 max-w-2xl">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">
-                    Environmental Conditions Right Now
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#2563EB] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
+                    RIGHT NOW
                   </span>
-                  <StatusPill status="optimal" label="SYNOPTIC MESH SYNCED" size="sm" />
+                  <StatusPill status="optimal" label="LIVE SIGNAL SYNCED" size="sm" />
                 </div>
 
                 <div className="flex items-center gap-4 sm:gap-5 flex-wrap">
@@ -224,7 +224,7 @@ export const WeatherView: React.FC = () => {
                       </span>
                       <div className="space-y-0.5">
                         <span className="text-sm sm:text-base font-bold text-slate-700">
-                          Feels like {formatTemp(apparentC)}
+                          PERCEIVED HEAT {formatTemp(apparentC)}
                         </span>
                         <div className="text-xs font-semibold text-[#2563EB] flex items-center gap-1.5">
                           <span>{conditionText}</span>
@@ -235,15 +235,15 @@ export const WeatherView: React.FC = () => {
                 </div>
 
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Surface dew point {(dewPointC).toFixed(1)}°C, atmospheric pressure {pressureHpa} hPa, and psychrometric wet-bulb temperature {formatTemp(wetBulbC)}. FortyGuard thermal inertia records a{' '}
+                  A live snapshot of the environmental conditions shaping this location. Surface conditions are running{' '}
                   <button
                     type="button"
                     onClick={() => inspectProvenance('surfaceHeatAnomaly', `+${uhiVal.toFixed(1)}°C`)}
                     className="font-bold text-amber-700 hover:underline cursor-pointer"
                   >
-                    +{uhiVal.toFixed(1)}°C UHI delta
+                    +{uhiVal.toFixed(1)}°C above regional baseline
                   </button>{' '}
-                  above regional background.
+                  due to localized thermal retention.
                 </p>
               </div>
 

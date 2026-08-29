@@ -66,7 +66,7 @@ const AppHeader: React.FC = () => {
         {/* Desktop Title / Context */}
         <div className="hidden md:flex flex-col">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-800 tracking-wide uppercase">Operational Intelligence</span>
+            <span className="text-xs font-bold text-slate-800 tracking-wide uppercase">ENVIRONMENTAL INTELLIGENCE</span>
             <div className="w-1 h-1 rounded-full bg-slate-300" />
             <LiveStatusPill
               status={connectionStatus}
@@ -122,7 +122,7 @@ const AppHeader: React.FC = () => {
             title="Ask HeatOS AI"
           >
             <Sparkles className="w-3.5 h-3.5 text-blue-300" />
-            <span>Ask HeatOS</span>
+            <span>ASK HEATOS</span>
           </button>
 
           {/* Temperature Toggle */}

@@ -24,13 +24,13 @@ export const MobileBottomNav: React.FC = () => {
     {
       id: 'dashboard',
       aliases: ['dashboard', 'home'],
-      label: 'Dashboard',
+      label: 'Overview',
       icon: LayoutDashboard,
     },
     {
       id: 'weather',
       aliases: ['weather'],
-      label: 'Weather',
+      label: 'Right Now',
       icon: CloudSun,
     },
     {
@@ -42,20 +42,20 @@ export const MobileBottomNav: React.FC = () => {
     {
       id: 'navigation',
       aliases: ['navigation', 'map'],
-      label: 'Nav',
+      label: 'Map',
       icon: Compass,
     },
     {
       id: 'alerts',
       aliases: ['alerts', 'events'],
-      label: 'Alerts',
+      label: 'Events',
       icon: Bell,
       badgeDot: true,
     },
     {
       id: 'tools',
       aliases: ['tools'],
-      label: 'Tools',
+      label: 'Workbench',
       icon: Wrench,
     },
   ];

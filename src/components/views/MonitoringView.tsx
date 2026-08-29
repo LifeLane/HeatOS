@@ -127,14 +127,14 @@ export const MonitoringView: React.FC = () => {
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Decision Support Engine
+                ENVIRONMENTAL WATCH
               </span>
               <span className="text-xs text-slate-300">•</span>
-              <span className="text-xs text-slate-500 font-mono">HeatOS Phase 9 Monitoring</span>
+              <span className="text-xs text-slate-500 font-mono">OPERATIONAL MONITORING</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Environmental Monitoring & Watchlist</h1>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Environmental Watch</h1>
             <p className="text-sm text-slate-600 max-w-3xl leading-relaxed">
-              Track places, critical infrastructure assets, facility sites, and microclimate events with deterministic alert thresholds and rapid action dispatch.
+              Track the places, assets, and environmental signals that can affect operations. Continuously watch environmental conditions across sites, assets, and critical locations.
             </p>
           </div>
 
@@ -189,7 +189,7 @@ export const MonitoringView: React.FC = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white border border-slate-200/80 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs">
           <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>Watched Entities</span>
+            <span>LOCATIONS UNDER WATCH</span>
             <BookmarkCheck className="w-4 h-4 text-emerald-600" />
           </div>
           <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">{totalWatched}</div>
@@ -198,7 +198,7 @@ export const MonitoringView: React.FC = () => {
 
         <div className="bg-white border border-slate-200/80 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs">
           <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>Active High/Crit Alerts</span>
+            <span>ACTIVE HIGH-RISK SIGNALS</span>
             <ShieldAlert className="w-4 h-4 text-rose-600" />
           </div>
           <div className={`text-2xl sm:text-3xl font-black font-mono ${criticalHighAlerts > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
@@ -209,7 +209,7 @@ export const MonitoringView: React.FC = () => {
 
         <div className="bg-white border border-slate-200/80 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs">
           <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>Average Nature Pulse</span>
+            <span>ENVIRONMENTAL PULSE</span>
             <Activity className="w-4 h-4 text-blue-600" />
           </div>
           <div className={`text-2xl sm:text-3xl font-black font-mono ${getPulseColor(avgPulseScore)}`}>
@@ -220,7 +220,7 @@ export const MonitoringView: React.FC = () => {
 
         <div className="bg-white border border-slate-200/80 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs">
           <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>Peak UHI Surface Delta</span>
+            <span>PEAK HEAT DELTA</span>
             <Thermometer className="w-4 h-4 text-amber-600" />
           </div>
           <div className="text-2xl sm:text-3xl font-black text-amber-600 font-mono">+{highestUhi.toFixed(1)}°C</div>

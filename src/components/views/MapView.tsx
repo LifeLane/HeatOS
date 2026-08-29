@@ -48,19 +48,19 @@ export const MapView: React.FC = () => {
   return (
     <div className="w-full h-[calc(100vh-8rem)] md:h-[calc(100vh-6rem)] min-h-[600px] flex flex-col relative rounded-xl border border-slate-200/80 overflow-hidden shadow-xs">
       
-      {/* CoolRoute Navigation & NASA Maps Configured Banner */}
+      {/* CoolRoute Navigation & Earth Observation Signals Banner */}
       <div className="bg-white border-b border-slate-200/80 shrink-0">
         <div className="p-3 sm:px-6 flex items-center justify-between gap-3">
           <div 
             className="flex items-center gap-2 cursor-pointer select-none"
             onClick={() => setIsBannerOpen(!isBannerOpen)}
           >
-            <div className="flex items-center gap-2 text-blue-700 font-black tracking-tight text-sm uppercase">
+            <div className="flex items-center gap-2 text-[#2563EB] font-black tracking-tight text-sm uppercase">
               <Map className="w-4 h-4" />
-              <span>CoolRoute™ Navigation</span>
+              <span>THE LIVING MAP / COOLROUTE</span>
             </div>
-            <span className="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-bold bg-blue-50 text-blue-700 rounded-full border border-blue-200">
-              NASA Maps API Configured
+            <span className="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-bold bg-blue-50 text-[#2563EB] rounded-full border border-blue-200">
+              EARTH OBSERVATION SIGNALS
             </span>
             <button className="p-1 text-slate-500 hover:text-slate-700">
               {isBannerOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -75,23 +75,23 @@ export const MapView: React.FC = () => {
               }}
               className="px-4 py-1.5 bg-[#2563EB] hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
             >
-              Calculate Route <ArrowRight className="w-3.5 h-3.5" />
+              Calculate Cool Route <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
         
         <div className={`overflow-hidden transition-all duration-300 ${isBannerOpen ? 'max-h-[300px] opacity-100 px-6 pb-3' : 'max-h-0 opacity-0 px-6 pb-0'}`}>
-          <p className="text-xs text-slate-500 font-medium max-w-3xl leading-relaxed">
-            Pedestrian thermal routing powered by FortyGuard microclimate mesh and NASA Maps API (MODIS / GIBS / FIRMS thermal anomaly data) to minimize urban heat island exposure and direct UV load.
+          <p className="text-xs text-slate-600 font-medium max-w-3xl leading-relaxed">
+            See environmental conditions at street level — and find where heat, exposure, and cooling differ. Environmental conditions vary block by block. HeatOS makes those differences visible. Find the lower-exposure path through the city using FortyGuard microclimate mesh and satellite thermal signals.
           </p>
         </div>
       </div>
 
-      {/* NASA Earth Observation Satellite API Layer Bar */}
+      {/* Earth Observation Signals Layer Bar */}
       <div className="bg-slate-900 text-white px-4 py-2 shrink-0 flex items-center justify-between gap-4 overflow-x-auto no-scrollbar border-b border-slate-800">
         <div className="flex items-center gap-2 shrink-0">
           <Satellite className="w-4 h-4 text-sky-400 animate-pulse" />
-          <span className="text-[11px] font-extrabold uppercase tracking-wider text-sky-300">NASA Earth Observation API:</span>
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-sky-300">EARTH OBSERVATION SIGNALS:</span>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           {nasaLayers.map((layer) => {

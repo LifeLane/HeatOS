@@ -210,14 +210,14 @@ export const ToolsView: React.FC = () => {
               </span>
               <span className="text-slate-300">•</span>
               <span className="text-xs font-mono text-slate-500">
-                HeatOS Core Workbench
+                ENVIRONMENTAL WORKBENCH
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">
-              Environmental Intelligence Workbench
+              ENVIRONMENTAL WORKBENCH
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 font-medium">
-              Observe, analyze, predict and act on environmental conditions.
+              Specialized modeling tools and simulation engines for deep environmental analysis.
             </p>
           </div>
 

@@ -96,40 +96,45 @@ export const ForecastView: React.FC = () => {
     <PageContainer maxWidth="5xl">
       <FadeIn>
         
-        {/* WHAT HAPPENS NEXT HERO */}
+        {/* WHAT'S COMING HERO */}
         <div className="mb-6 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
           <div className="p-6 md:p-10 flex flex-col">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
-                <TrendingUp className="w-5 h-5" />
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600">
+                  <TrendingUp className="w-5 h-5" />
+                </div>
+                <h1 className="text-sm font-bold tracking-widest text-[#2563EB] uppercase">
+                  WHAT'S COMING
+                </h1>
               </div>
-              <h1 className="text-sm font-bold tracking-widest text-slate-400 uppercase">
-                WHAT HAPPENS NEXT?
-              </h1>
+              <span className="text-xs text-slate-500 font-medium">
+                HeatOS combines environmental signals to identify what is likely to change next — and why.
+              </span>
             </div>
 
             <div className="flex flex-col md:flex-row gap-8 items-start md:items-center">
               <div className="flex-1">
                 <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-2">
-                  {peakEvent.event || 'Thermal Peak'}
+                  Thermal peak approaching
                 </h2>
                 <div className="flex items-center gap-2 text-slate-500 font-medium mb-6">
                   <Clock className="w-4 h-4" />
-                  <span>Today · {peakEvent.hour} – {parseInt(peakEvent.hour) + 3}:00</span>
+                  <span>Expected peak at {peakEvent.hour} · Projected {formatTemp(peakEvent.temp)}</span>
                 </div>
                 
                 <div className="space-y-4 mb-6">
                   <div className="flex items-baseline gap-3">
                     <span className="text-4xl font-black font-mono text-slate-900">{formatTemp(peakEvent.temp)}</span>
-                    <span className="text-sm font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded-lg border border-orange-200">
-                      +{peakEvent.uhi.toFixed(1)}°C urban anomaly
+                    <span className="text-sm font-bold text-orange-600 bg-orange-50 px-2.5 py-1 rounded-lg border border-orange-200">
+                      +{peakEvent.uhi.toFixed(1)}°C local heat signal
                     </span>
                   </div>
                   
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase mb-1">WHY?</h3>
+                    <h3 className="text-xs font-bold text-slate-500 uppercase mb-1">WHY THIS MATTERS</h3>
                     <p className="text-sm text-slate-700 font-medium">
-                      Solar exposure combined with low canopy coverage ({currentLocation.canopyCoverage}%) and high surface heat retention in this grid.
+                      High solar exposure, limited canopy ({currentLocation.canopyCoverage}%), and surface heat retention are reinforcing local warming.
                     </p>
                   </div>
                 </div>
@@ -137,27 +142,27 @@ export const ForecastView: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-center gap-3">
                   <button
                     onClick={handleExplainForecast}
-                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2"
+                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white text-sm font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Sparkles className="w-4 h-4" />
-                    <span>Explain Forecast</span>
+                    <span>Explain the Signal</span>
                   </button>
                   <button
                     onClick={() => {
                       setActiveTab('tools');
                       openTool('heat-action-plan', 'ACT');
                     }}
-                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-800 text-sm font-bold transition-all flex items-center justify-center gap-2 shadow-xs"
+                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-800 text-sm font-bold transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer"
                   >
                     <Flame className="w-4 h-4 text-amber-600" />
-                    <span>Review Heat Action Plan</span>
+                    <span>Prepare for the Peak</span>
                   </button>
                 </div>
               </div>
 
               {/* Graphical Timeline Representation */}
               <div className="w-full md:w-1/3 bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-3">
-                <h3 className="text-xs font-bold text-slate-500 uppercase mb-3">Timeline</h3>
+                <h3 className="text-xs font-bold text-slate-500 uppercase mb-3">NEXT SIGNALS</h3>
                 {hourlyData.slice(0,4).map((item, idx) => (
                   <div key={idx} className={`flex items-center justify-between p-3 rounded-xl ${item.event === 'Thermal Peak' ? 'bg-orange-100/50 border border-orange-200' : 'bg-white border border-slate-100'}`}>
                     <div className="flex items-center gap-3">
@@ -175,7 +180,7 @@ export const ForecastView: React.FC = () => {
 
         {/* COMPREHENSIVE 5-DAY DATA MATRIX */}
         <h3 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4 mt-8">
-          EXTENDED PROJECTIONS
+          LOOKING AHEAD
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
           {dailyForecast.map((day, idx) => (

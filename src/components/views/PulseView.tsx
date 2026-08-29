@@ -173,15 +173,15 @@ export const PulseView: React.FC = () => {
           <div>
             <div className="flex items-center gap-2.5">
               <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-                Environmental Telemetry Pulse
+                NATURE PULSE
               </h1>
               <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold font-mono">
                 <PulseIndicator color="bg-emerald-500" />
-                LIVE STREAM
+                LIVE SIGNAL
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              High-frequency sensor node matrix reporting across {currentLocation.name} spatial perimeter.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              One environmental signal, six dimensions. A composite view across heat, air, water, nature, fire, and solar conditions.
             </p>
           </div>
 
@@ -201,7 +201,7 @@ export const PulseView: React.FC = () => {
               isLoading={isSyncing}
               icon={<RefreshCw className="w-3.5 h-3.5" />}
             >
-              Sync Mesh
+              Sync Signals
             </PrimaryButton>
           </div>
         </div>
@@ -223,11 +223,11 @@ export const PulseView: React.FC = () => {
                 <div className="flex items-center gap-2 mb-3">
                   <Trees className="w-5 h-5 text-emerald-600" />
                   <h3 className="text-sm font-black text-emerald-900 tracking-tight">
-                    Mitigation Sandbox
+                    MITIGATION SANDBOX
                   </h3>
                 </div>
                 <p className="text-xs text-emerald-800/80 leading-relaxed mb-4">
-                  Interactive simulator: place tree canopies and cool roofs to dynamically reduce UHI and calculate cooling impact.
+                  Test an intervention. See the environmental impact.
                 </p>
               </div>
               <PrimaryButton
@@ -235,9 +235,9 @@ export const PulseView: React.FC = () => {
                   setActiveTab('tools');
                   openTool('urban-heat-sandbox', 'EXPLORE');
                 }}
-                className="w-full justify-center bg-emerald-600 hover:bg-emerald-500 border-none text-white shadow-xs"
+                className="w-full justify-center bg-emerald-600 hover:bg-emerald-500 border-none text-white shadow-xs cursor-pointer"
               >
-                Launch Simulator
+                Launch Mitigation Simulator
               </PrimaryButton>
             </div>
 

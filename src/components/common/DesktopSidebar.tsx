@@ -34,8 +34,8 @@ const NAV_GROUPS = [
   {
     label: 'OPERATE',
     items: [
-      { id: 'dashboard', aliases: ['dashboard', 'home'], label: 'Dashboard', icon: LayoutDashboard },
-      { id: 'weather', aliases: ['weather'], label: 'Weather', icon: CloudSun },
+      { id: 'dashboard', aliases: ['dashboard', 'home'], label: 'Overview', icon: LayoutDashboard },
+      { id: 'weather', aliases: ['weather'], label: 'Right Now', icon: CloudSun },
       { id: 'forecast', aliases: ['forecast'], label: 'Forecast', icon: TrendingUp },
       { id: 'navigation', aliases: ['map'], label: 'Living Map', icon: Map },
     ]
@@ -43,9 +43,9 @@ const NAV_GROUPS = [
   {
     label: 'MONITOR',
     items: [
-      { id: 'alerts', aliases: ['alerts', 'events'], label: 'Alerts', icon: Bell },
-      { id: 'monitor', aliases: ['monitor'], label: 'Monitors', icon: Activity },
-      { id: 'pulse', aliases: ['pulse'], label: 'Environmental Pulse', icon: Flame },
+      { id: 'alerts', aliases: ['alerts', 'events'], label: 'Events', icon: Bell },
+      { id: 'monitor', aliases: ['monitor'], label: 'Monitoring', icon: Activity },
+      { id: 'pulse', aliases: ['pulse'], label: 'Nature Pulse', icon: Flame },
     ]
   },
   {

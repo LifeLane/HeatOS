@@ -221,23 +221,21 @@ export const HomeView: React.FC = () => {
               {/* Left: Environmental overview */}
               <div className="space-y-3 max-w-2xl">
                 <div className="flex flex-wrap items-center gap-2">
-                  <StatusPill
-                    status={currentLocation.status}
-                    label={currentLocation.statusText}
-                    size="md"
-                  />
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#2563EB] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
+                    ENVIRONMENTAL INTELLIGENCE
+                  </span>
                   <span className="text-xs font-mono font-medium text-slate-500 flex items-center gap-1">
                     <Clock className="w-3 h-3 text-slate-400" />
-                    Updated {lastTelemetryTime}
+                    Signal Synced {lastTelemetryTime}
                   </span>
                 </div>
 
                 <div>
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
-                    Living Environment Status for {currentLocation.name}
+                    Know the environment around you.
                   </h1>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">
-                    Continuous multi-dimensional environmental intelligence powered by real-time spatial mesh sensor arrays.
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                    HeatOS turns live environmental signals into the context, risks, and actions that matter now.
                   </p>
                 </div>
 
@@ -249,14 +247,14 @@ export const HomeView: React.FC = () => {
                       {formatTemp(currentLocation.ambientTemp)}
                     </span>
                     <span className="text-xs text-slate-600 font-normal">
-                      (Feels {formatTemp(currentLocation.apparentTemp)})
+                      (Perceived {formatTemp(currentLocation.apparentTemp)})
                     </span>
                   </div>
 
                   <div className="h-3 w-[1px] bg-slate-200" />
 
                   <div className="flex items-center gap-1.5">
-                    <span className="text-slate-600">Comfort Score:</span>
+                    <span className="text-slate-600">Environmental Pulse:</span>
                     <span className="font-mono font-bold text-[#2563EB]">
                       <NumberCounter value={currentLocation.thermalComfortIndex} /> / 100
                     </span>
@@ -282,16 +280,16 @@ export const HomeView: React.FC = () => {
                   icon={<ArrowRight className="w-4 h-4" />}
                   iconPosition="right"
                 >
-                  Explore Spatial Heat Map
+                  Explore the Living Map
                 </PrimaryButton>
                 <SecondaryButton
-                  id="home-view-telemetry-btn"
+                  id="home-ask-heatos-btn"
                   size="md"
                   variant="outline"
-                  onClick={() => setActiveTab('pulse')}
-                  icon={<Activity className="w-4 h-4 text-emerald-600" />}
+                  onClick={() => setActiveTab('ai')}
+                  icon={<Sparkles className="w-4 h-4 text-purple-600" />}
                 >
-                  View Live Telemetry Pulse
+                  Ask HeatOS
                 </SecondaryButton>
               </div>
             </div>

@@ -60,42 +60,42 @@ const PERSONA_CONFIG: Record<
 > = {
   AUTO: {
     name: 'Auto-Route',
-    role: 'Intelligent Intent Dispatcher',
+    role: 'Chooses the right analytical lens for the question.',
     icon: Sparkles,
     color: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white',
     badge: 'border-blue-200 bg-blue-50 text-blue-800',
   },
   NATURE_ANALYST: {
     name: 'Nature Analyst',
-    role: 'Biophysical Intelligence Specialist',
+    role: 'Explains environmental and ecological signals.',
     icon: Leaf,
     color: 'bg-emerald-600 text-white',
     badge: 'border-emerald-200 bg-emerald-50 text-emerald-800',
   },
   CLIMATE_ANALYST: {
     name: 'Climate Analyst',
-    role: 'Microclimate & Trend Modeler',
+    role: 'Interprets heat, exposure, and microclimate patterns.',
     icon: CloudSun,
     color: 'bg-sky-600 text-white',
     badge: 'border-sky-200 bg-sky-50 text-sky-800',
   },
   RISK_ANALYST: {
     name: 'Risk Analyst',
-    role: 'Hazard & Vulnerability Assessor',
+    role: 'Surfaces hazards, vulnerabilities, and operational risk.',
     icon: ShieldAlert,
     color: 'bg-rose-600 text-white',
     badge: 'border-rose-200 bg-rose-50 text-rose-800',
   },
   RESILIENCE_ADVISOR: {
     name: 'Resilience Advisor',
-    role: 'Urban Mitigation & Action Strategist',
+    role: 'Turns environmental signals into practical responses.',
     icon: Lightbulb,
     color: 'bg-amber-600 text-white',
     badge: 'border-amber-200 bg-amber-50 text-amber-800',
   },
   SYSTEM_GUIDE: {
     name: 'System Guide',
-    role: 'HeatOS Architecture & Metric Navigator',
+    role: 'Explains how HeatOS interprets the environment.',
     icon: BookOpen,
     color: 'bg-indigo-600 text-white',
     badge: 'border-indigo-200 bg-indigo-50 text-indigo-800',
@@ -228,15 +228,15 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
           <div>
             <div className="flex items-center gap-2.5">
               <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-                Nature Analyst AI
+                HEATOS AI ANALYST
               </h1>
               <span className="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold font-mono">
                 <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                Phase 8 Grounded
+                GROUNDED IN LIVE ENVIRONMENTAL SIGNALS
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Authoritative environmental intelligence interpretation grounded in live physical telemetry for {currentLocation.displayName}.
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              Ask why conditions are changing, what may happen next, and what deserves attention.
             </p>
           </div>
 
