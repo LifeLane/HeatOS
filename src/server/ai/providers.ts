@@ -19,7 +19,13 @@ export interface ProviderConfig {
 }
 
 export function getTabiTokenConfig(): ProviderConfig {
-  const apiKey = process.env.TABITOKEN_API_KEY || '';
+  let rawApiKey = process.env.TABITOKEN_API_KEY || '';
+  if (rawApiKey.includes('\n') || rawApiKey.includes('\r')) {
+    const lines = rawApiKey.split(/[\r\n]+/).map(l => l.trim()).filter(Boolean);
+    const skLine = lines.find(l => l.startsWith('sk-') || l.startsWith('-'));
+    rawApiKey = skLine || lines[lines.length - 1] || lines[0] || '';
+  }
+  const apiKey = rawApiKey.trim();
   const endpoint = process.env.TABITOKEN_ENDPOINT || 'https://tabitoken.com/v1/chat/completions';
   const model = process.env.TABITOKEN_MODEL || 'claude-opus-4-8';
   const timeoutMs = parseInt(process.env.TABITOKEN_TIMEOUT || '270000', 10);
