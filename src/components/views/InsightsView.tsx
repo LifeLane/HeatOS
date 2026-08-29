@@ -53,6 +53,7 @@ import PrimaryButton from '../ui/PrimaryButton';
 import SecondaryButton from '../ui/SecondaryButton';
 import { FadeIn } from '../motion/MotionPrimitives';
 import AIDiagnosticsModal from '../modals/AIDiagnosticsModal';
+import { useExplanation } from '../../context/ExplanationContext';
 
 const PERSONA_CONFIG: Record<
   AIPersona | 'AUTO',
@@ -105,6 +106,7 @@ const PERSONA_CONFIG: Record<
 export const InsightsView: React.FC = () => {
   const { currentLocation } = useLocation();
   const { setActiveTab } = useNavigation();
+  const explanation = useExplanation();
 
   const [selectedPersona, setSelectedPersona] = useState<AIPersona | 'AUTO'>('AUTO');
   const [userPrompt, setUserPrompt] = useState<string>('');
@@ -435,20 +437,36 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
               {/* Key Metrics Snapshot Strip */}
               {analysis.keyMetrics.length > 0 && (
                 <div className="py-4 border-b border-slate-100">
-                  <div className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5">
-                    Live Telemetry Grounding Evidence
+                  <div className="flex items-center justify-between mb-2.5">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                      Live Telemetry Grounding Evidence
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-400">
+                      Tap card to inspect calculations & provenance
+                    </span>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                     {analysis.keyMetrics.map((metric, idx) => (
-                      <div
+                      <button
+                        type="button"
                         key={idx}
-                        className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between"
+                        id={`ai-evidence-metric-${idx}`}
+                        onClick={() => {
+                          const key = metric.id || metric.label;
+                          explanation.explainMetric(key, `${metric.value} ${metric.unit}`, {
+                            label: metric.label,
+                            whatItMeans: metric.delta ? `${metric.label}: ${metric.value} ${metric.unit} (${metric.delta} vs baseline).` : undefined,
+                            source: metric.source,
+                          });
+                        }}
+                        className="p-3 rounded-xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200/80 hover:border-blue-300 flex flex-col justify-between text-left transition-all cursor-pointer group shadow-2xs"
+                        title="Click to view full scientific calculation & data provenance"
                       >
-                        <span className="text-[11px] text-slate-500 font-medium line-clamp-1">
+                        <span className="text-[11px] text-slate-500 group-hover:text-blue-700 font-medium line-clamp-1 transition-colors">
                           {metric.label}
                         </span>
                         <div className="flex items-baseline gap-1 my-1">
-                          <span className="text-base font-extrabold text-slate-900 font-mono">
+                          <span className="text-base font-extrabold text-slate-900 font-mono group-hover:text-blue-600 transition-colors">
                             {metric.value}
                           </span>
                           <span className="text-xs font-semibold text-slate-500">
@@ -456,10 +474,10 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
                           </span>
                         </div>
                         <div className="flex items-center justify-between text-[10px] text-slate-400">
-                          <span>{metric.delta || 'Nominal'}</span>
-                          <span className="truncate max-w-[80px]">{metric.source}</span>
+                          <span className="font-semibold text-slate-500">{metric.delta || 'Nominal'}</span>
+                          <span className="truncate max-w-[80px] font-mono">{metric.source}</span>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -468,64 +486,151 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
               {/* Standard 4-Part Structure Cards */}
               <div className="pt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* 1. WHAT'S HAPPENING */}
-                <div className="p-4 rounded-2xl bg-emerald-50/30 border border-emerald-100 flex flex-col justify-between">
+                <button
+                  type="button"
+                  id="ai-card-whats-happening"
+                  onClick={() =>
+                    explanation.explainAIInsight(
+                      "What's Happening",
+                      analysis.structure.whatsHappening,
+                      [
+                        analysis.headline,
+                        `${analysis.confidence}% Telemetry Grounding`,
+                        `Persona: ${analysis.personaTitle}`,
+                        `Engine: ${analysis.providerModel}`,
+                      ]
+                    )
+                  }
+                  className="p-4 rounded-2xl bg-emerald-50/30 hover:bg-emerald-50/60 border border-emerald-100 hover:border-emerald-300 flex flex-col justify-between text-left transition-all cursor-pointer group shadow-2xs"
+                  title="Click to view explanation"
+                >
                   <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                      <h3 className="text-xs font-extrabold uppercase tracking-wider text-emerald-900">
-                        What's Happening
-                      </h3>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                        <h3 className="text-xs font-extrabold uppercase tracking-wider text-emerald-900 group-hover:text-emerald-950">
+                          What's Happening
+                        </h3>
+                      </div>
+                      <span className="text-[10px] font-mono text-emerald-600 opacity-80 group-hover:opacity-100">
+                        Inspect ↗
+                      </span>
                     </div>
                     <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                       {analysis.structure.whatsHappening}
                     </p>
                   </div>
-                </div>
+                </button>
 
                 {/* 2. WHY */}
-                <div className="p-4 rounded-2xl bg-sky-50/30 border border-sky-100 flex flex-col justify-between">
+                <button
+                  type="button"
+                  id="ai-card-why-drivers"
+                  onClick={() =>
+                    explanation.explainAIInsight(
+                      "Why (Physical Drivers)",
+                      analysis.structure.why,
+                      [
+                        analysis.headline,
+                        'Biophysical microclimatic heat retention',
+                        'Solar irradiance and convective boundary dynamics',
+                        `Verified with ${analysis.citations.length} live data sources`,
+                      ]
+                    )
+                  }
+                  className="p-4 rounded-2xl bg-sky-50/30 hover:bg-sky-50/60 border border-sky-100 hover:border-sky-300 flex flex-col justify-between text-left transition-all cursor-pointer group shadow-2xs"
+                  title="Click to view explanation"
+                >
                   <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="w-2 h-2 rounded-full bg-sky-500" />
-                      <h3 className="text-xs font-extrabold uppercase tracking-wider text-sky-900">
-                        Why (Physical Drivers)
-                      </h3>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-sky-500" />
+                        <h3 className="text-xs font-extrabold uppercase tracking-wider text-sky-900 group-hover:text-sky-950">
+                          Why (Physical Drivers)
+                        </h3>
+                      </div>
+                      <span className="text-[10px] font-mono text-sky-600 opacity-80 group-hover:opacity-100">
+                        Inspect ↗
+                      </span>
                     </div>
                     <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                       {analysis.structure.why}
                     </p>
                   </div>
-                </div>
+                </button>
 
                 {/* 3. WHAT'S NEXT */}
-                <div className="p-4 rounded-2xl bg-amber-50/30 border border-amber-100 flex flex-col justify-between">
+                <button
+                  type="button"
+                  id="ai-card-whats-next"
+                  onClick={() =>
+                    explanation.explainAIInsight(
+                      "What's Next (Trajectory)",
+                      analysis.structure.whatsNext,
+                      [
+                        analysis.headline,
+                        'Diurnal thermal projection curve',
+                        'Nocturnal cooling lag estimation',
+                        `Grounding Confidence: ${analysis.confidence}%`,
+                      ]
+                    )
+                  }
+                  className="p-4 rounded-2xl bg-amber-50/30 hover:bg-amber-50/60 border border-amber-100 hover:border-amber-300 flex flex-col justify-between text-left transition-all cursor-pointer group shadow-2xs"
+                  title="Click to view explanation"
+                >
                   <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="w-2 h-2 rounded-full bg-amber-500" />
-                      <h3 className="text-xs font-extrabold uppercase tracking-wider text-amber-900">
-                        What's Next (Trajectory)
-                      </h3>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-amber-500" />
+                        <h3 className="text-xs font-extrabold uppercase tracking-wider text-amber-900 group-hover:text-amber-950">
+                          What's Next (Trajectory)
+                        </h3>
+                      </div>
+                      <span className="text-[10px] font-mono text-amber-600 opacity-80 group-hover:opacity-100">
+                        Inspect ↗
+                      </span>
                     </div>
                     <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                       {analysis.structure.whatsNext}
                     </p>
                   </div>
-                </div>
+                </button>
 
                 {/* 4. WHAT TO DO */}
-                <div className="p-4 rounded-2xl bg-rose-50/30 border border-rose-100 flex flex-col justify-between">
+                <button
+                  type="button"
+                  id="ai-card-what-to-do"
+                  onClick={() =>
+                    explanation.explainAIInsight(
+                      "What To Do (Action Plan)",
+                      analysis.structure.whatToDo,
+                      [
+                        analysis.headline,
+                        ...analysis.suggestedActions.map((a) => `Action: ${a.label}`),
+                        'Operational heat health interventions & cooling assets',
+                      ]
+                    )
+                  }
+                  className="p-4 rounded-2xl bg-rose-50/30 hover:bg-rose-50/60 border border-rose-100 hover:border-rose-300 flex flex-col justify-between text-left transition-all cursor-pointer group shadow-2xs"
+                  title="Click to view explanation"
+                >
                   <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="w-2 h-2 rounded-full bg-rose-500" />
-                      <h3 className="text-xs font-extrabold uppercase tracking-wider text-rose-900">
-                        What To Do (Action Plan)
-                      </h3>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-rose-500" />
+                        <h3 className="text-xs font-extrabold uppercase tracking-wider text-rose-900 group-hover:text-rose-950">
+                          What To Do (Action Plan)
+                        </h3>
+                      </div>
+                      <span className="text-[10px] font-mono text-rose-600 opacity-80 group-hover:opacity-100">
+                        Inspect ↗
+                      </span>
                     </div>
                     <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                       {analysis.structure.whatToDo}
                     </p>
                   </div>
-                </div>
+                </button>
               </div>
 
               {/* Action Dispatchers & Grounding Citations Footer */}
@@ -540,7 +645,7 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
                       key={idx}
                       id={`ai-action-btn-${idx}`}
                       onClick={() => handleExecuteAction(action)}
-                      className="px-3 py-1.5 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs font-medium transition-colors flex items-center gap-1.5 shadow-2xs"
+                      className="px-3 py-1.5 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs font-medium transition-colors flex items-center gap-1.5 shadow-2xs cursor-pointer"
                     >
                       <span>{action.label}</span>
                       <ArrowRight className="w-3 h-3 text-slate-400" />
@@ -549,7 +654,7 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
                   <button
                     id="export-report-btn"
                     onClick={handleExportReport}
-                    className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-medium transition-colors flex items-center gap-1.5"
+                    className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer"
                   >
                     <FileText className="w-3.5 h-3.5 text-slate-500" />
                     <span>Export Brief (MD)</span>
@@ -559,7 +664,7 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
                 {/* Citations Toggle */}
                 <button
                   onClick={() => setShowCitations(!showCitations)}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+                  className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
                 >
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
                   <span>{analysis.citations.length} Verified Sources</span>
@@ -575,9 +680,21 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {analysis.citations.map((c, idx) => (
-                      <div
+                      <button
+                        type="button"
                         key={idx}
-                        className="p-2.5 rounded-xl bg-white border border-slate-200 text-xs flex items-start justify-between"
+                        onClick={() =>
+                          explanation.explainAIInsight(
+                            c.sourceName,
+                            `Authoritative telemetry ingestion from ${c.sourceName}. Freshness tier: ${c.freshness}.`,
+                            [
+                              `Parameters Used: ${c.parametersUsed.join(', ')}`,
+                              `Data Freshness: ${c.freshness}`,
+                              'Ingested via HeatOS Verified Environmental State Pipeline',
+                            ]
+                          )
+                        }
+                        className="p-2.5 rounded-xl bg-white hover:bg-blue-50/50 border border-slate-200 hover:border-blue-300 text-xs flex items-start justify-between text-left transition-colors cursor-pointer"
                       >
                         <div>
                           <div className="font-bold text-slate-800">{c.sourceName}</div>
@@ -588,7 +705,7 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
                         <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-mono font-bold">
                           {c.freshness}
                         </span>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import {
   Lock,
   Sparkles,
   ExternalLink,
+  Info,
   Wrench,
   Eye,
   Activity,
@@ -35,6 +36,7 @@ import {
   Maximize2,
 } from 'lucide-react';
 import { ToolDefinition, ToolCategoryInfo } from '../../types/tools';
+import { useExplanation } from '../../context/ExplanationContext';
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   Eye,
@@ -82,16 +84,36 @@ export const ToolCard: React.FC<ToolCardProps> = ({
   onLaunch,
   idPrefix = 'tool-card',
 }) => {
+  const explanation = useExplanation();
   const Icon = ICON_MAP[tool.iconName] || Wrench;
   const isComingSoon = tool.availability === 'COMING SOON';
+
+  const handleExplainTool = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    explanation.explainAIInsight(
+      tool.name,
+      tool.description,
+      [
+        `Category: ${tool.category}`,
+        `Availability: ${tool.availability}`,
+        ...(tool.tags || []).map((t) => `Domain: #${t}`),
+        'Data Grounding: HeatOS Environmental Telemetry Pipeline',
+      ]
+    );
+  };
 
   const statusBadge = () => {
     if (isComingSoon) {
       return (
-        <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-100/90 text-slate-500 border border-slate-200 flex items-center gap-1">
+        <button
+          type="button"
+          onClick={handleExplainTool}
+          className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-100/90 hover:bg-blue-50 text-slate-500 hover:text-blue-700 border border-slate-200 hover:border-blue-300 flex items-center gap-1 cursor-pointer transition-colors"
+          title="Click to view tool specification & metrics explanation"
+        >
           <Clock className="w-2.5 h-2.5 text-slate-400" />
           <span>COMING SOON</span>
-        </span>
+        </button>
       );
     }
     if (tool.availability === 'LIVE') {
@@ -121,11 +143,13 @@ export const ToolCard: React.FC<ToolCardProps> = ({
       id={`${idPrefix}-${tool.id}`}
       className={`group relative flex flex-col justify-between p-4 sm:p-4.5 rounded-2xl border transition-all duration-200 select-none ${
         isComingSoon
-          ? 'bg-slate-50/70 border-slate-200/90 border-dashed opacity-85 cursor-not-allowed'
+          ? 'bg-slate-50/70 hover:bg-slate-100/80 border-slate-200/90 border-dashed cursor-pointer'
           : 'bg-white border-slate-200/90 hover:border-blue-400/80 hover:shadow-md cursor-pointer active:scale-[0.99]'
       }`}
       onClick={() => {
-        if (!isComingSoon) {
+        if (isComingSoon) {
+          handleExplainTool();
+        } else {
           onLaunch(tool);
         }
       }}

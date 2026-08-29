@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useMonitoring } from '../../context/MonitoringContext';
 import { useLocation } from '../../context/LocationContext';
+import { useExplanation } from '../../context/ExplanationContext';
 import {
   CommercialPersonaMode,
   AlertTier,
@@ -49,6 +50,7 @@ export const MonitoringView: React.FC = () => {
   } = useMonitoring();
 
   const { supportedLocations } = useLocation();
+  const explanation = useExplanation();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
@@ -176,9 +178,15 @@ export const MonitoringView: React.FC = () => {
             <span className="hidden sm:inline">Focus:</span>
             <div className="flex flex-wrap gap-1">
               {personaConfig.focusMetrics.map((m, i) => (
-                <span key={i} className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[11px] border border-slate-200">
+                <button
+                  type="button"
+                  key={i}
+                  onClick={() => explanation.explainMetric(m, undefined, { label: m })}
+                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-mono text-[11px] border border-slate-200 hover:border-blue-300 transition-colors cursor-pointer"
+                  title={`Inspect ${m} metric calculation & provenance`}
+                >
                   {m}
-                </span>
+                </button>
               ))}
             </div>
           </div>
@@ -187,45 +195,98 @@ export const MonitoringView: React.FC = () => {
 
       {/* KPI Cards Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200/80 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+        <button
+          type="button"
+          id="kpi-locations-under-watch"
+          onClick={() =>
+            explanation.explainMetric('locationsUnderWatch', totalWatched, {
+              label: 'Locations Under Watch',
+              whatItMeans: `${totalWatched} active commercial sites, municipal zones, logistics campuses & critical infrastructure assets monitored under continuous 30-second synchronization.`,
+            })
+          }
+          className="bg-white hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-300 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs text-left transition-all cursor-pointer group"
+          title="Click to view metric provenance & explanation"
+        >
+          <div className="flex items-center justify-between text-xs text-slate-500 font-medium group-hover:text-blue-600 transition-colors">
             <span>LOCATIONS UNDER WATCH</span>
             <BookmarkCheck className="w-4 h-4 text-emerald-600" />
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">{totalWatched}</div>
+          <div className="text-2xl sm:text-3xl font-black text-slate-900 group-hover:text-blue-600 font-mono transition-colors">
+            {totalWatched}
+          </div>
           <div className="text-[11px] text-slate-500">Cities, Assets, Sites & Campuses</div>
-        </div>
+        </button>
 
-        <div className="bg-white border border-slate-200/80 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+        <button
+          type="button"
+          id="kpi-active-high-risk-signals"
+          onClick={() =>
+            explanation.explainMetric('activeHighRiskSignals', criticalHighAlerts, {
+              label: 'Active High-Risk Signals',
+              whatItMeans: `${criticalHighAlerts} active deterministic alarms currently triggered across monitored facilities based on empirical physical thresholds.`,
+            })
+          }
+          className="bg-white hover:bg-rose-50/40 border border-slate-200/80 hover:border-rose-300 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs text-left transition-all cursor-pointer group"
+          title="Click to view alarm explanation & physical thresholds"
+        >
+          <div className="flex items-center justify-between text-xs text-slate-500 font-medium group-hover:text-rose-600 transition-colors">
             <span>ACTIVE HIGH-RISK SIGNALS</span>
             <ShieldAlert className="w-4 h-4 text-rose-600" />
           </div>
-          <div className={`text-2xl sm:text-3xl font-black font-mono ${criticalHighAlerts > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
+          <div
+            className={`text-2xl sm:text-3xl font-black font-mono transition-colors ${
+              criticalHighAlerts > 0 ? 'text-rose-600 group-hover:text-rose-700' : 'text-emerald-600 group-hover:text-emerald-700'
+            }`}
+          >
             {criticalHighAlerts}
           </div>
           <div className="text-[11px] text-slate-500">Deterministic Threshold Alarms</div>
-        </div>
+        </button>
 
-        <div className="bg-white border border-slate-200/80 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+        <button
+          type="button"
+          id="kpi-environmental-pulse"
+          onClick={() =>
+            explanation.explainMetric('environmentalPulse', `${avgPulseScore}/100`, {
+              label: 'Network Environmental Pulse Score',
+              whatItMeans: `Network-wide average environmental vitality of ${avgPulseScore}/100 synthesized across 6 ecological dimensions (Heat, Air, Water, Nature, Fire, Solar).`,
+            })
+          }
+          className="bg-white hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-300 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs text-left transition-all cursor-pointer group"
+          title="Click to view 6-dimension pulse calculation & weighting"
+        >
+          <div className="flex items-center justify-between text-xs text-slate-500 font-medium group-hover:text-blue-600 transition-colors">
             <span>ENVIRONMENTAL PULSE</span>
             <Activity className="w-4 h-4 text-blue-600" />
           </div>
-          <div className={`text-2xl sm:text-3xl font-black font-mono ${getPulseColor(avgPulseScore)}`}>
-            {avgPulseScore}<span className="text-sm font-normal text-slate-400">/100</span>
+          <div className={`text-2xl sm:text-3xl font-black font-mono transition-colors ${getPulseColor(avgPulseScore)}`}>
+            {avgPulseScore}
+            <span className="text-sm font-normal text-slate-400">/100</span>
           </div>
           <div className="text-[11px] text-slate-500">Multi-factor environmental vitality</div>
-        </div>
+        </button>
 
-        <div className="bg-white border border-slate-200/80 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs">
-          <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+        <button
+          type="button"
+          id="kpi-peak-heat-delta"
+          onClick={() =>
+            explanation.explainMetric('peakHeatDelta', `+${highestUhi.toFixed(1)}°C`, {
+              label: 'Peak Heat Delta (UHI)',
+              whatItMeans: `Peak surface-to-air urban heat island delta of +${highestUhi.toFixed(1)}°C measured across active monitored locations compared to regional baseline.`,
+            })
+          }
+          className="bg-white hover:bg-amber-50/40 border border-slate-200/80 hover:border-amber-300 rounded-xl p-4 sm:p-5 space-y-1.5 shadow-xs text-left transition-all cursor-pointer group"
+          title="Click to view Urban Heat Island physical calculation"
+        >
+          <div className="flex items-center justify-between text-xs text-slate-500 font-medium group-hover:text-amber-600 transition-colors">
             <span>PEAK HEAT DELTA</span>
             <Thermometer className="w-4 h-4 text-amber-600" />
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-amber-600 font-mono">+{highestUhi.toFixed(1)}°C</div>
+          <div className="text-2xl sm:text-3xl font-black text-amber-600 group-hover:text-amber-700 font-mono transition-colors">
+            +{highestUhi.toFixed(1)}°C
+          </div>
           <div className="text-[11px] text-slate-500">Max surface-to-air heat retention</div>
-        </div>
+        </button>
       </div>
 
       {/* Watchlist Controls Bar */}
@@ -371,28 +432,69 @@ export const MonitoringView: React.FC = () => {
                   </div>
 
                   {/* Pulse Score Circle */}
-                  <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-50 border border-slate-200/80 text-center min-w-[56px]">
-                    <span className="text-[9px] font-bold uppercase text-slate-400">Pulse</span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      explanation.explainMetric('environmentalPulse', `${item.pulseScore}/100`, {
+                        label: `${item.name} • Environmental Pulse`,
+                        whatItMeans: `Overall environmental vitality score of ${item.pulseScore}/100 for ${item.name} synthesized across 6 physical dimensions.`,
+                      });
+                    }}
+                    className="flex flex-col items-center justify-center p-2 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-300 text-center min-w-[56px] transition-all cursor-pointer group/pulse"
+                    title="Click to inspect Pulse score calculation"
+                  >
+                    <span className="text-[9px] font-bold uppercase text-slate-400 group-hover/pulse:text-blue-600 transition-colors">Pulse</span>
                     <span className={`text-xl font-black font-mono ${getPulseColor(item.pulseScore)}`}>
                       {item.pulseScore}
                     </span>
-                  </div>
+                  </button>
                 </div>
 
                 {/* Microclimate Stats Pill */}
-                <div className="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200/80 text-center">
-                  <div>
-                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Ambient</span>
-                    <span className="text-sm font-bold text-slate-900 font-mono">{item.ambientTempC}°C</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">UHI Delta</span>
-                    <span className="text-sm font-bold text-amber-600 font-mono">+{item.uhiDeltaC}°C</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-semibold text-slate-500 uppercase block">Wet-Bulb</span>
-                    <span className="text-sm font-bold text-blue-600 font-mono">{item.wetBulbC}°C</span>
-                  </div>
+                <div className="grid grid-cols-3 gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200/80 text-center">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      explanation.explainMetric('ambientTemp', `${item.ambientTempC}°C`, {
+                        label: `${item.name} • Ambient Temperature`,
+                      });
+                    }}
+                    className="p-1.5 rounded-lg hover:bg-white hover:shadow-2xs transition-all cursor-pointer text-center group/metric"
+                    title="Inspect Ambient Air Temperature"
+                  >
+                    <span className="text-[10px] font-semibold text-slate-500 group-hover/metric:text-blue-600 uppercase block transition-colors">Ambient</span>
+                    <span className="text-sm font-bold text-slate-900 font-mono block">{item.ambientTempC}°C</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      explanation.explainMetric('surfaceHeatAnomaly', `+${item.uhiDeltaC}°C`, {
+                        label: `${item.name} • UHI Heat Delta`,
+                      });
+                    }}
+                    className="p-1.5 rounded-lg hover:bg-white hover:shadow-2xs transition-all cursor-pointer text-center group/metric"
+                    title="Inspect Surface Heat Anomaly (UHI Delta)"
+                  >
+                    <span className="text-[10px] font-semibold text-slate-500 group-hover/metric:text-amber-600 uppercase block transition-colors">UHI Delta</span>
+                    <span className="text-sm font-bold text-amber-600 font-mono block">+{item.uhiDeltaC}°C</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      explanation.explainMetric('wetBulb', `${item.wetBulbC}°C`, {
+                        label: `${item.name} • Wet-Bulb Temperature`,
+                      });
+                    }}
+                    className="p-1.5 rounded-lg hover:bg-white hover:shadow-2xs transition-all cursor-pointer text-center group/metric"
+                    title="Inspect Wet-Bulb Temperature"
+                  >
+                    <span className="text-[10px] font-semibold text-slate-500 group-hover/metric:text-blue-600 uppercase block transition-colors">Wet-Bulb</span>
+                    <span className="text-sm font-bold text-blue-600 font-mono block">{item.wetBulbC}°C</span>
+                  </button>
                 </div>
 
                 {/* Trend Indicator */}
