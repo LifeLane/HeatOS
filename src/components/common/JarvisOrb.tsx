@@ -87,12 +87,11 @@ export const JarvisOrb: React.FC = () => {
         latitude: location?.lat || 0,
         longitude: location?.lng || 0,
         locationName: location?.address || 'Current Location',
-        forceProvider: visionMode ? 'moonshot' : 'nvidia' // Moonshot K3 for vision/max reasoning, Nemotron for standard
       };
 
       // Mocking image capture if vision mode is enabled
       if (visionMode) {
-        payload.imageUrl = 'https://assets.ngc.nvidia.com/products/api-catalog/phi-3-5-vision/example1b.jpg';
+        payload.imageUrl = 'https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80';
         payload.prompt = `[SATELLITE/VISION SCENE] ${command}`;
       }
 
@@ -149,7 +148,7 @@ export const JarvisOrb: React.FC = () => {
         <button
           onClick={() => setVisionMode(!visionMode)}
           className={`p-3 rounded-full shadow-lg transition-all ${visionMode ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-50'}`}
-          title="Toggle Moonshot K3 Satellite Vision"
+          title="Toggle Satellite Vision Analysis"
         >
           <ImageIcon className="w-5 h-5" />
         </button>

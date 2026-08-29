@@ -118,7 +118,6 @@ export class CentralAIService {
       activeEventId,
       activeMetricKey,
       quickQuestionKey,
-      forceProvider,
       targetedData,
     } = request;
 
@@ -217,6 +216,7 @@ Composite Vitality Score: ${pulseResult?.overallScore ?? targetedData?.pulseScor
 
     try {
       rawOutput = await callTabiTokenChat({
+        requestId,
         systemInstruction,
         userPrompt,
         imageUrl: request.imageUrl,

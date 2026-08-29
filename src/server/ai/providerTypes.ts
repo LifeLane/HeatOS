@@ -4,7 +4,7 @@
 
 import { AIPersona, AISkill, AIAction, KeyMetricSnapshot, GroundingCitation, StructuredExplanation } from './types';
 
-export type AIProviderName = 'tabitoken' | 'groq' | 'nvidia' | 'moonshot' | 'local_deterministic';
+export type AIProviderName = 'tabitoken' | 'local_deterministic';
 
 export interface StructuredAIOutput {
   summary: string;
@@ -28,7 +28,6 @@ export interface AIRouterRequest {
   activeMetricKey?: string;
   quickQuestionKey?: string;
   bypassCache?: boolean;
-  forceProvider?: AIProviderName;
   imageUrl?: string;
   // Specific targeted data to minimize context window
   targetedData?: {

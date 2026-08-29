@@ -42,6 +42,7 @@ export async function createApp() {
   app.get('/api/health', (req, res) => {
     const config = getFortyGuardConfig();
     const stats = globalDataOrchestrator.getCacheStats();
+    const hasApiKey = Boolean(process.env.TABITOKEN_API_KEY);
 
     res.json({
       status: 'healthy',
@@ -51,6 +52,9 @@ export async function createApp() {
       mockMode: config.mock,
       baseUrl: config.baseUrl,
       ai: {
+        provider: 'tabitoken',
+        model: process.env.TABITOKEN_MODEL || 'claude-opus-4-8',
+        configured: hasApiKey,
         route: 'available',
         providers: ['tabitoken'],
       },
@@ -808,7 +812,6 @@ export async function createApp() {
         activeMetricKey,
         quickQuestionKey,
         bypassCache: Boolean(bypassCache),
-        forceProvider,
         imageUrl,
         targetedData,
       });
@@ -836,13 +839,16 @@ export async function createApp() {
 
       return res.json(clientResponse);
     } catch (err: any) {
+      const errorCode = err.code || 'AI_INTERNAL_ERROR';
       FortyGuardLogger.error('Error in /api/environmental/ai/route', {
         requestId,
+        errorCode,
         error: err.message,
       });
       return res.status(500).json({
         error: true,
-        message: err.message || 'Failed to route AI execution',
+        code: errorCode,
+        message: err.message || 'HeatOS Intelligence is temporarily unavailable.',
       });
     }
   });
