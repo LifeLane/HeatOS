@@ -336,7 +336,7 @@ ${analysis.citations.map(c => `- ${c.sourceName} (${c.freshness})`).join('\n')}
               <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
               Signature Analyst Inquiries
             </span>
-            <span className="text-[11px] text-slate-400">Instant Grounded Answers</span>
+            <span className="text-[11px] text-slate-400">Grounded Analysis</span>
           </div>
 
           <div className="flex flex-wrap gap-2">
