@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { pingAllApis, clearAiCache, ApiPingReport, ApiPingSource } from '../../services/environmentalApi';
 import { useNavigation } from '../../context/NavigationContext';
+import { safeFormatShortTime } from '../../utils/formatters';
 
 const ROTATING_ICONS = [
   { id: 'thermal', icon: Thermometer, color: 'text-rose-500', bg: 'bg-rose-50 border-rose-200', label: 'FortyGuard Thermal' },
@@ -408,7 +409,7 @@ export const ApiStatusHeaderWidget: React.FC = () => {
             </button>
 
             <span className="text-[10px] font-mono text-slate-400">
-              Synced {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              Synced {safeFormatShortTime(new Date())}
             </span>
           </div>
         </div>

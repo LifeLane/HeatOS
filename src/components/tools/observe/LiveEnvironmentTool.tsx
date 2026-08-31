@@ -26,6 +26,7 @@ import StatusPill from '../../ui/StatusPill';
 import PrimaryButton from '../../ui/PrimaryButton';
 import SecondaryButton from '../../ui/SecondaryButton';
 import { SourceAttributionBadge } from '../../common/SourceAttributionBadge';
+import { safeFormatTime } from '../../../utils/formatters';
 
 export const LiveEnvironmentTool: React.FC = () => {
   const { currentLocation, formatTemp, tempUnit } = useLocation();
@@ -47,7 +48,7 @@ export const LiveEnvironmentTool: React.FC = () => {
         countryCode: currentLocation.countryCode,
       });
       setState(snapshot);
-      setLastRefreshed(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+      setLastRefreshed(safeFormatTime(new Date()));
     } catch (err) {
       console.error('Failed to fetch live environment stream:', err);
     } finally {

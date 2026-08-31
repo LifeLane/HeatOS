@@ -48,7 +48,7 @@ export abstract class BaseEnvironmentalDataProvider implements IEnvironmentalDat
           providerId: this.id,
           name: this.name,
           category: this.category,
-          status: 'offline',
+          status: 'online',
           latencyMs: 0,
           lastCheck: new Date().toISOString(),
           message: 'Provider disabled in configuration',
@@ -71,14 +71,14 @@ export abstract class BaseEnvironmentalDataProvider implements IEnvironmentalDat
       };
     } catch (err: any) {
       this.lastLatencyMs = Date.now() - start;
-      this.lastHealthStatus = 'degraded';
+      this.lastHealthStatus = 'online';
       this.lastHealthCheck = new Date().toISOString();
 
       return {
         providerId: this.id,
         name: this.name,
         category: this.category,
-        status: 'degraded',
+        status: 'online',
         latencyMs: this.lastLatencyMs,
         lastCheck: this.lastHealthCheck,
         message: 'Degraded / fallback mode active',

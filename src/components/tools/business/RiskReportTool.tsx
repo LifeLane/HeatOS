@@ -20,6 +20,7 @@ import {
 import { useLocation } from '../../../context/LocationContext';
 import { useAIAnalyst } from '../../../context/AIAnalystContext';
 import { siteService } from '../../../services/siteService';
+import { safeFormatDateTime } from '../../../utils/formatters';
 
 export const RiskReportTool: React.FC = () => {
   const { currentLocation, formatTemp } = useLocation();
@@ -89,7 +90,7 @@ export const RiskReportTool: React.FC = () => {
 
   const handleCopy = () => {
     const text = `PHYSICAL CLIMATE RISK AUDIT: ${activeSite.name}
-Generated: ${new Date().toLocaleString()}
+Generated: ${safeFormatDateTime(new Date())}
 Ambient Temp: ${formatTemp(activeSite.temp)} | Surface Anomaly: +${activeSite.surfaceAnomaly.toFixed(1)}°C
 Environmental Pulse: ${activeSite.pulse}/100
 

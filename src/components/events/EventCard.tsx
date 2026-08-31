@@ -38,6 +38,7 @@ import { EnvironmentalEvent, EnvironmentalEventType } from '../../server/events/
 import { EventSeverityBadge } from './EventSeverityBadge';
 import Card from '../ui/Card';
 import { useExplanation } from '../../context/ExplanationContext';
+import { safeFormatRelativeTime } from '../../utils/formatters';
 import { useNavigation } from '../../context/NavigationContext';
 
 interface EventCardProps {
@@ -121,11 +122,7 @@ export const EventCard: React.FC<EventCardProps> = ({
   };
 
   const formatRelativeTime = (isoString: string) => {
-    const diffMs = Date.now() - new Date(isoString).getTime();
-    const mins = Math.max(1, Math.round(diffMs / 60000));
-    if (mins < 60) return `${mins}m ago`;
-    const hours = Math.round(mins / 60);
-    return `${hours}h ago`;
+    return safeFormatRelativeTime(isoString, 'Just now');
   };
 
   return (

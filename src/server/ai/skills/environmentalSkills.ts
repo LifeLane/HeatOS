@@ -24,6 +24,7 @@ import {
   buildGroundingCitations,
 } from './base';
 import { KeyMetricSnapshot, AIAction } from '../types';
+import { safeFormatShortTime } from '../../../utils/formatters';
 
 export class EnvironmentalSkillRegistry {
   /**
@@ -140,7 +141,7 @@ export class EnvironmentalSkillRegistry {
       structure: {
         whatsHappening: `${targetEvent.summary.whatChanged} Severity level is classified as ${targetEvent.severity} with an impact rating of ${targetEvent.impact.severityScore}/100.`,
         why: `${targetEvent.summary.why} Contributing physical drivers: ${targetEvent.drivers.join('; ')}. Baseline delta indicates a departure of ${targetEvent.evidence.baselineComparison?.delta || 'significant magnitude'} from seasonal norms.`,
-        whatsNext: `Event expected duration is estimated at ${targetEvent.expectedEnd ? 'through ' + new Date(targetEvent.expectedEnd).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'next 3 to 6 hours'} unless atmospheric dispersion or convective cooling occurs.`,
+        whatsNext: `Event expected duration is estimated at ${targetEvent.expectedEnd ? 'through ' + safeFormatShortTime(targetEvent.expectedEnd, 'next 3 to 6 hours') : 'next 3 to 6 hours'} unless atmospheric dispersion or convective cooling occurs.`,
         whatToDo: `Recommended Action: ${targetEvent.recommendedAction.primary}. Secondary interventions: ${targetEvent.recommendedAction.secondary?.join(', ') || 'Increase monitoring frequency'}.`,
       },
       keyMetrics,

@@ -25,6 +25,7 @@ import StatusPill from '../../ui/StatusPill';
 import PrimaryButton from '../../ui/PrimaryButton';
 import SecondaryButton from '../../ui/SecondaryButton';
 import { DiagnosticSuiteReport } from '../../../services/environmentalDataService';
+import { safeFormatTime } from '../../../utils/formatters';
 
 interface DataVariable {
   id: string;
@@ -365,7 +366,7 @@ export const DataExplorerTool: React.FC = () => {
                   </span>
                 </div>
                 <span className="font-mono text-[11px] text-emerald-700">
-                  Executed at {new Date(localDiagReport.executedAt).toLocaleTimeString()}
+                  Executed at {safeFormatTime(localDiagReport.executedAt, 'Recently')}
                 </span>
               </div>
 

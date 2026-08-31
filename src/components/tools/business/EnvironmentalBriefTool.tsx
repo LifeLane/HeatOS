@@ -23,6 +23,7 @@ import {
 import { useLocation } from '../../../context/LocationContext';
 import { useAIAnalyst } from '../../../context/AIAnalystContext';
 import { siteService } from '../../../services/siteService';
+import { safeFormatDateTime } from '../../../utils/formatters';
 
 export const EnvironmentalBriefTool: React.FC = () => {
   const { currentLocation, formatTemp } = useLocation();
@@ -72,7 +73,7 @@ export const EnvironmentalBriefTool: React.FC = () => {
     const briefText = `=====================================================
 HEATOS ENVIRONMENTAL BRIEFING REPORT (OPERATIONAL AUDIT)
 Scope: ${reportScope === 'single' ? activeSite.name : 'Enterprise Multi-Site Portfolio (12 Facilities)'}
-Generated: ${new Date().toLocaleString()}
+Generated: ${safeFormatDateTime(new Date())}
 Target Location: ${activeSite.city}, ${activeSite.country}
 Climate Classification: ${activeSite.climateZone}
 =====================================================
@@ -201,7 +202,7 @@ Provenance: FortyGuard Real-Time Sensor Mesh, NOAA GFS, Copernicus Sentinel-2, O
           </div>
 
           <div className="text-[11px] font-mono text-slate-400">
-            Generated: {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
+            Generated: {safeFormatDateTime(new Date())}
           </div>
         </div>
       </div>

@@ -17,6 +17,7 @@ import Card from '../../ui/Card';
 import StatusPill from '../../ui/StatusPill';
 import PrimaryButton from '../../ui/PrimaryButton';
 import SecondaryButton from '../../ui/SecondaryButton';
+import { safeFormatDate } from '../../../utils/formatters';
 
 export const HeatActionPlanTool: React.FC = () => {
   const { currentLocation, formatTemp } = useLocation();
@@ -68,7 +69,7 @@ export const HeatActionPlanTool: React.FC = () => {
   ];
 
   const handleCopyPlan = () => {
-    const text = `HEAT ACTION PLAN - ${currentLocation.displayName}\nDate: ${new Date().toLocaleDateString()}\nCurrent Ambient: ${formatTemp(currentLocation.ambientTemp)}\n\n` +
+    const text = `HEAT ACTION PLAN - ${currentLocation.displayName}\nDate: ${safeFormatDate(new Date())}\nCurrent Ambient: ${formatTemp(currentLocation.ambientTemp)}\n\n` +
       diurnalPhases.map((p) => `[${p.time}] ${p.phase} (${p.status})\n${p.protocol}\n`).join('\n');
     navigator.clipboard.writeText(text);
     setCopied(true);

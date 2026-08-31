@@ -54,7 +54,7 @@ import SecondaryButton from '../ui/SecondaryButton';
 import { FadeIn } from '../motion/MotionPrimitives';
 import AIDiagnosticsModal from '../modals/AIDiagnosticsModal';
 import { useExplanation } from '../../context/ExplanationContext';
-import { safeFormatTime } from '../../utils/formatters';
+import { safeFormatTime, safeFormatDateTime } from '../../utils/formatters';
 
 const PERSONA_CONFIG: Record<
   AIPersona | 'AUTO',
@@ -187,7 +187,7 @@ export const InsightsView: React.FC = () => {
     if (!analysis) return;
     const reportText = `# HeatOS Environmental Intelligence Dossier
 Location: ${analysis.location.locationName}
-Generated: ${new Date(analysis.generatedAt).toLocaleString()}
+Generated: ${safeFormatDateTime(analysis.generatedAt)}
 Analyst Persona: ${analysis.personaTitle}
 Skill Executed: ${analysis.skillTitle}
 Data Confidence: ${analysis.confidence}%

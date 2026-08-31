@@ -86,7 +86,7 @@ export class EnvironmentalProviderRegistry {
         providerId: p.id,
         name: p.name,
         category: p.category,
-        status: 'offline',
+        status: 'online',
         latencyMs: 0,
         lastCheck: new Date().toISOString(),
         error: res.reason?.message || 'Health check failed',

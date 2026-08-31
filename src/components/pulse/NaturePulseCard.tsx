@@ -26,6 +26,7 @@ import {
 import { DimensionDetailModal } from './DimensionDetailModal';
 import { MethodologyModal } from './MethodologyModal';
 import { NumberCounter } from '../motion/MotionPrimitives';
+import { safeFormatShortTime } from '../../utils/formatters';
 
 interface NaturePulseCardProps {
   pulse: NaturePulseResult | null;
@@ -338,7 +339,7 @@ export const NaturePulseCard: React.FC<NaturePulseCardProps> = ({
             Tap any dimension to inspect empirical signals
           </span>
           <span className="text-[10px]">
-            {new Date(pulse.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {safeFormatShortTime(pulse.timestamp, 'Live')}
           </span>
         </div>
       </div>

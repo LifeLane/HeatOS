@@ -9,6 +9,7 @@ import { ExplanationMetadata, ExplanationDataType } from '../types/explanation';
 import { LocationData, SpatialZone } from '../types';
 import { NormalizedEnvironmentalState } from '../types/normalizedEnvironmentalState';
 import { EnvironmentalEvent } from '../server/events/types';
+import { safeFormatTime, safeFormatShortTime } from '../utils/formatters';
 
 // Metric Knowledge Base Dictionary
 export const METRIC_KNOWLEDGE_BASE: Record<string, Partial<ExplanationMetadata>> = {
@@ -648,7 +649,7 @@ export class ExplanationService {
     // Determine real freshness timestamp
     const timestamp =
       normalizedState?.metadata?.timestamps?.syncedAt
-        ? `Updated ${new Date(normalizedState.metadata.timestamps.syncedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`
+        ? `Updated ${safeFormatTime(normalizedState.metadata.timestamps.syncedAt, 'Live Telemetry Active')}`
         : normalizedState?.metadata?.lastSuccessfulSyncHuman
         ? `Updated ${normalizedState.metadata.lastSuccessfulSyncHuman}`
         : 'Live Telemetry Active';
@@ -698,7 +699,7 @@ export class ExplanationService {
       source: primarySource,
       sourceInstitution: 'FortyGuard Spatial Mesh & Synoptic Anomaly Engine',
       dataType: alert.type === 'HEAT_ANOMALY' ? 'MEASURED' : 'DERIVED',
-      timestamp: `Detected ${new Date(alert.detectedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+      timestamp: `Detected ${safeFormatShortTime(alert.detectedAt, 'Recently')}`,
       whatItMeans: alert.summary?.whatChanged || alert.summary?.why || 'Environmental parameter crossed critical threshold.',
       whyItMatters: alert.impact?.healthRisk || 'Compound environmental extremes elevate localized physical risk and stress building cooling systems.',
       confidence: `${alert.confidence}%`,

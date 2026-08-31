@@ -32,6 +32,7 @@ import {
   AlertTier,
 } from '../../server/monitoring/types';
 import { runMonitoringTestSuite } from '../../services/monitoringApi';
+import { safeFormatShortTime } from '../../utils/formatters';
 
 export const MonitoringView: React.FC = () => {
   const {
@@ -504,7 +505,7 @@ export const MonitoringView: React.FC = () => {
                     <span>{item.trendLabel}</span>
                   </div>
                   <span className="text-[11px] text-slate-400 font-mono">
-                    {new Date(item.lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {safeFormatShortTime(item.lastUpdated, 'Live')}
                   </span>
                 </div>
               </div>

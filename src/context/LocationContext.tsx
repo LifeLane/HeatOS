@@ -10,6 +10,7 @@ import {
   globalEnvironmentalDataService,
   DiagnosticSuiteReport,
 } from '../services/environmentalDataService';
+import { safeFormatTime } from '../utils/formatters';
 
 export const SUPPORTED_LOCATIONS: LocationData[] = [
   {
@@ -274,7 +275,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setNormalizedState(state);
       setConnectionStatus(state.metadata.connectionStatus);
       setStatusLabel(state.metadata.statusLabel);
-      setLastTelemetryTime(state.metadata.timestamps.syncedAt);
+      setLastTelemetryTime(safeFormatTime(state.metadata.timestamps.syncedAt, 'Live'));
 
       // Also construct backwards-compatible legacy EnvironmentalState
       const legacyState: EnvironmentalState = {

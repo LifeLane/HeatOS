@@ -33,6 +33,7 @@ import StatusPill from '../../ui/StatusPill';
 import PrimaryButton from '../../ui/PrimaryButton';
 import SecondaryButton from '../../ui/SecondaryButton';
 import { FadeIn } from '../../motion/MotionPrimitives';
+import { safeFormatTime } from '../../../utils/formatters';
 import { SourceAttributionBadge } from '../../common/SourceAttributionBadge';
 
 export const EnvironmentalScanTool: React.FC = () => {
@@ -70,7 +71,7 @@ export const EnvironmentalScanTool: React.FC = () => {
 
       setState(snapshotData);
       setEvents(eventFeed.events || []);
-      setLastScanned(new Date().toLocaleTimeString());
+      setLastScanned(safeFormatTime(new Date()));
     } catch (err: any) {
       console.error('Environmental Scan error:', err);
       setError(err.message || 'Failed to complete environmental scan.');

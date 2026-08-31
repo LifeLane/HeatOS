@@ -24,6 +24,7 @@ import {
   COMMERCIAL_PERSONA_CONFIGS,
 } from './types';
 import { FortyGuardLogger } from '../fortyguard/logger';
+import { safeFormatShortTime } from '../../utils/formatters';
 
 export { COMMERCIAL_PERSONA_CONFIGS };
 
@@ -252,7 +253,7 @@ export class MonitoringEngine {
         observedValue: evt.evidence.signals[0]?.observedValue || `${ambientT}°C`,
         baselineDelta: evt.evidence.baselineComparison?.delta ? `+${evt.evidence.baselineComparison.delta.toFixed(1)}°C` : undefined,
         whyItMatters: evt.impact.healthRisk || evt.impact.operationalImpact || 'Potential microclimate stress',
-        expectedDuration: evt.expectedEnd ? 'Through ' + new Date(evt.expectedEnd).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Next 3-6 hours',
+        expectedDuration: evt.expectedEnd ? 'Through ' + safeFormatShortTime(evt.expectedEnd, 'Next 3-6 hours') : 'Next 3-6 hours',
         recommendedAction: evt.recommendedAction.primary,
         sources: evt.sources.map(s => s.sourceName),
         acknowledged: isAck,
@@ -389,7 +390,7 @@ export class MonitoringEngine {
         operationalImpact: targetEvent.impact.operationalImpact || 'Increased outdoor worker fatigue and cooling demand.',
       },
       expectedDuration: targetEvent.expectedEnd
-        ? `Active until ${new Date(targetEvent.expectedEnd).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+        ? `Active until ${safeFormatShortTime(targetEvent.expectedEnd, 'Diurnal dissipation')}`
         : 'Estimated 3 to 6 hours until diurnal radiative dissipation',
       recommendedAction: {
         primary: targetEvent.recommendedAction.primary,

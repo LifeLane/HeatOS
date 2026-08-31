@@ -24,6 +24,7 @@ import PageContainer from '../ui/PageContainer';
 import Card from '../ui/Card';
 import { FadeIn, CardEntrance } from '../motion/MotionPrimitives';
 import MetricCard from '../ui/MetricCard';
+import { safeFormatDate } from '../../utils/formatters';
 
 export const ForecastView: React.FC = () => {
   const {
@@ -81,7 +82,7 @@ export const ForecastView: React.FC = () => {
   const dailyForecast = Array.from({ length: 5 }).map((_, i) => {
     const d = new Date();
     d.setDate(d.getDate() + i + 1);
-    const dayLabel = i === 0 ? 'Tomorrow' : d.toLocaleDateString([], { weekday: 'long' });
+    const dayLabel = i === 0 ? 'Tomorrow' : safeFormatDate(d, `Day +${i + 1}`, { weekday: 'long' });
     const baseT = currentLocation.ambientTemp;
     const dailyBaseT = baseT + (Math.sin(i) * 3); // realistic variance based on current temps
     return {
