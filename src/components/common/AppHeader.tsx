@@ -209,7 +209,7 @@ const AppHeader: React.FC = () => {
                   className="w-full px-3.5 py-2 text-left text-xs font-medium text-purple-700 hover:bg-purple-50 flex items-center gap-2.5 cursor-pointer"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                  <span>Ask AI Analyst</span>
+                  <span>Ask HeatOS</span>
                 </button>
                 <button
                   onClick={() => {

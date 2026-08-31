@@ -273,12 +273,12 @@ export const AlertsView: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
-                  ENVIRONMENTAL WATCH
+                  ENVIRONMENTAL EVENTS
                 </h1>
                 <StatusPill status="optimal" label="ACTIVE WATCH" size="sm" />
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                Track the places, assets, and environmental signals that can affect operations.
+                Significant environmental changes detected across monitored locations.
               </p>
             </div>
           </div>

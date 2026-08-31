@@ -58,7 +58,7 @@ export const LocationSnapshotTool: React.FC = () => {
               className="px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#2563EB] text-xs font-bold flex items-center gap-2 transition-colors cursor-pointer"
             >
               <Sparkles className="w-4 h-4" />
-              <span>Ask AI About This Location</span>
+              <span>Ask HeatOS About This Location</span>
             </button>
           </div>
         </div>

@@ -30,13 +30,13 @@ export const MobileBottomNav: React.FC = () => {
     {
       id: 'weather',
       aliases: ['weather'],
-      label: 'Right Now',
+      label: 'Live State',
       icon: CloudSun,
     },
     {
       id: 'forecast',
       aliases: ['forecast'],
-      label: 'Forecast',
+      label: 'Outlook',
       icon: TrendingUp,
     },
     {
@@ -55,7 +55,7 @@ export const MobileBottomNav: React.FC = () => {
     {
       id: 'tools',
       aliases: ['tools'],
-      label: 'Workbench',
+      label: 'Tools',
       icon: Wrench,
     },
   ];

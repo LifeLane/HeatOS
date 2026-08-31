@@ -60,7 +60,7 @@ export const AnimatedTelemetryCards: React.FC = () => {
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping absolute opacity-75"></span>
             <span className="w-2 h-2 rounded-full bg-rose-500 relative"></span>
-            <span>FortyGuard Thermal Engine</span>
+            <span className="uppercase text-[9px] font-bold tracking-wider">SOURCE: FortyGuard</span>
           </div>
           <span className="text-[10px] text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Explain &rarr;</span>
         </div>
@@ -107,7 +107,7 @@ export const AnimatedTelemetryCards: React.FC = () => {
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping absolute opacity-75"></span>
             <span className="w-2 h-2 rounded-full bg-emerald-500 relative"></span>
-            <span>LIVE SIGNAL</span>
+            <span className="uppercase text-[9px] font-bold tracking-wider">SOURCE: EPA AirNow</span>
           </div>
           <span className="text-[10px] text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Explain &rarr;</span>
         </div>
@@ -154,7 +154,7 @@ export const AnimatedTelemetryCards: React.FC = () => {
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping absolute opacity-75"></span>
             <span className="w-2 h-2 rounded-full bg-blue-500 relative"></span>
-            <span>AMBIENT SIGNAL</span>
+            <span className="uppercase text-[9px] font-bold tracking-wider">SOURCE: NOAA NWS</span>
           </div>
           <span className="text-[10px] text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">Explain &rarr;</span>
         </div>

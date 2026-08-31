@@ -113,14 +113,14 @@ export const ContextualAIAnalystDrawer: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-bold text-slate-900">
-                  HeatOS Nature Analyst AI
+                  Ask HeatOS
                 </h2>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-100 text-[#2563EB]">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-100 text-[#2563EB]" title="Context: Live Environmental State">
                   GROUNDED
                 </span>
               </div>
               <p className="text-xs text-slate-500">
-                Grounded environmental intelligence for {currentLocation.displayName}
+                Turn environmental signals into understandable answers.
               </p>
             </div>
           </div>
@@ -147,7 +147,7 @@ export const ContextualAIAnalystDrawer: React.FC = () => {
                 type="text"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Ask Nature Analyst about heat, weather, risk, or microclimates..."
+                placeholder="Ask HeatOS about environmental changes or risks..."
                 className="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB]"
               />
             </div>
@@ -161,16 +161,17 @@ export const ContextualAIAnalystDrawer: React.FC = () => {
               ) : (
                 <Send className="w-3.5 h-3.5" />
               )}
-              <span className="hidden sm:inline">Ask AI</span>
+              <span className="hidden sm:inline">Ask</span>
             </button>
           </form>
 
           {/* Quick Context Question Chips */}
           <div className="flex items-center gap-1.5 overflow-x-auto pt-2.5 scrollbar-none">
             {[
-              'Why does it feel hotter than the temperature?',
-              'What is the 3-hour heat island trajectory?',
-              'How can urban heat risk be mitigated here?',
+              'What is changing here?',
+              'Why is heat risk elevated?',
+              'How do current conditions compare?',
+              'What should I pay attention to next?',
             ].map((q, idx) => (
               <button
                 key={idx}
@@ -195,10 +196,10 @@ export const ContextualAIAnalystDrawer: React.FC = () => {
                 <Sparkles className="w-5 h-5 animate-spin" />
               </div>
               <div className="text-sm font-bold text-slate-800">
-                Synthesizing Environmental Telemetry...
+                Synthesizing environmental state...
               </div>
               <p className="text-xs text-slate-500 max-w-xs">
-                Querying FortyGuard thermal mesh, synoptic NOAA data, EPA AQI, and Copernicus canopy density.
+                Analyzing observations across connected sources.
               </p>
             </div>
           )}
@@ -345,7 +346,7 @@ export const ContextualAIAnalystDrawer: React.FC = () => {
                 Grounded Environmental Assistant Ready
               </h3>
               <p className="text-xs text-slate-500 max-w-sm mx-auto mb-4 leading-relaxed">
-                Click a suggested inquiry above or press &quot;Ask AI&quot; to interpret microclimate drivers and UHI factors for {currentLocation.displayName}.
+                Click a suggested inquiry above or press &quot;Ask HeatOS&quot; to interpret microclimate drivers and UHI factors for {currentLocation.displayName}.
               </p>
               <button
                 type="button"

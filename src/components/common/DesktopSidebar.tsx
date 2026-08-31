@@ -35,27 +35,27 @@ const NAV_GROUPS = [
     label: 'OPERATE',
     items: [
       { id: 'dashboard', aliases: ['dashboard', 'home'], label: 'Overview', icon: LayoutDashboard },
-      { id: 'weather', aliases: ['weather'], label: 'Right Now', icon: CloudSun },
-      { id: 'forecast', aliases: ['forecast'], label: 'Forecast', icon: TrendingUp },
-      { id: 'navigation', aliases: ['map'], label: 'Living Map', icon: Map },
+      { id: 'weather', aliases: ['weather'], label: 'Live State', icon: CloudSun },
+      { id: 'forecast', aliases: ['forecast'], label: 'Environmental Outlook', icon: TrendingUp },
+      { id: 'navigation', aliases: ['map'], label: 'Environmental Map', icon: Map },
     ]
   },
   {
     label: 'MONITOR',
     items: [
-      { id: 'alerts', aliases: ['alerts', 'events'], label: 'Events', icon: Bell },
-      { id: 'monitor', aliases: ['monitor'], label: 'Monitoring', icon: Activity },
+      { id: 'alerts', aliases: ['alerts', 'events'], label: 'Environmental Events', icon: Bell },
+      { id: 'monitor', aliases: ['monitor'], label: 'Environmental Watch', icon: Activity },
       { id: 'pulse', aliases: ['pulse'], label: 'Nature Pulse', icon: Flame },
     ]
   },
   {
     label: 'INTELLIGENCE',
     items: [
-      { id: 'ai', aliases: ['ai'], label: 'AI Analyst', icon: Sparkles },
+      { id: 'ai', aliases: ['ai'], label: 'Ask HeatOS', icon: Sparkles },
     ]
   },
   {
-    label: 'TOOLS',
+    label: 'RESEARCH',
     items: [
       { id: 'tools', aliases: ['tools'], label: 'Workbench', icon: Wrench },
     ]

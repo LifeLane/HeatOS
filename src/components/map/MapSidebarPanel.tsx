@@ -331,7 +331,7 @@ export const MapSidebarPanel: React.FC<MapSidebarPanelProps> = ({
                   className="p-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4" />
-                  <span>Ask AI Analyst</span>
+                  <span>Ask HeatOS</span>
                 </button>
                 <button
                   type="button"

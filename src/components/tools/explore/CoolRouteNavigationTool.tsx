@@ -140,7 +140,7 @@ export const CoolRouteNavigationTool: React.FC = () => {
                     onClick={() => openAIWithContext(`Explain the health benefits of choosing a route that is 3.7C cooler for a 15 minute walk in ${currentLocation.displayName}.`)}
                     className="mt-3 text-xs font-bold text-blue-700 hover:underline flex items-center gap-1"
                   >
-                    Ask AI Analyst for Health Impact
+                    Ask HeatOS for Health Impact
                   </button>
                 </div>
               </div>

@@ -57,7 +57,7 @@ export const MapView: React.FC = () => {
           >
             <div className="flex items-center gap-2 text-[#2563EB] font-black tracking-tight text-sm uppercase">
               <Map className="w-4 h-4" />
-              <span>THE LIVING MAP / COOLROUTE</span>
+              <span>ENVIRONMENTAL MAP</span>
             </div>
             <span className="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-bold bg-blue-50 text-[#2563EB] rounded-full border border-blue-200">
               EARTH OBSERVATION SIGNALS
@@ -82,7 +82,7 @@ export const MapView: React.FC = () => {
         
         <div className={`overflow-hidden transition-all duration-300 ${isBannerOpen ? 'max-h-[300px] opacity-100 px-6 pb-3' : 'max-h-0 opacity-0 px-6 pb-0'}`}>
           <p className="text-xs text-slate-600 font-medium max-w-3xl leading-relaxed">
-            See environmental conditions at street level — and find where heat, exposure, and cooling differ. Environmental conditions vary block by block. HeatOS makes those differences visible. Find the lower-exposure path through the city using FortyGuard microclimate mesh and satellite thermal signals.
+            Current environmental state across the selected area. See where conditions differ and identify anomalies using environmental observation signals.
           </p>
         </div>
       </div>

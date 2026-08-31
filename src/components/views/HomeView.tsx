@@ -224,20 +224,19 @@ export const HomeView: React.FC = () => {
               <div className="space-y-3 max-w-2xl">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#2563EB] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
-                    ENVIRONMENTAL INTELLIGENCE
+                    ENVIRONMENTAL INTELLIGENCE OPERATING SYSTEM
                   </span>
                   <span className="text-xs font-mono font-medium text-slate-500 flex items-center gap-1">
                     <Clock className="w-3 h-3 text-slate-400" />
                     Signal Synced {lastTelemetryTime}
                   </span>
                 </div>
-
                 <div>
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
-                    Know the environment around you.
+                    See the environment as a system.
                   </h1>
                   <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                    HeatOS turns live environmental signals into the context, risks, and actions that matter now.
+                    HeatOS synthesizes real-world environmental signals into a contextual state that helps people understand conditions, detect change and make informed decisions.
                   </p>
                 </div>
 
@@ -307,7 +306,7 @@ export const HomeView: React.FC = () => {
                   icon={<ArrowRight className="w-4 h-4" />}
                   iconPosition="right"
                 >
-                  Explore the Living Map
+                  Explore Live State
                 </PrimaryButton>
                 <SecondaryButton
                   id="home-ask-heatos-btn"

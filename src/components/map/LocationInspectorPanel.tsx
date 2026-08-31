@@ -410,7 +410,7 @@ export const LocationInspectorPanel: React.FC<LocationInspectorPanelProps> = ({
               <span>Explain</span>
             </button>
 
-            {/* Forecast */}
+            {/* Outlook */}
             <button
               id="inspector-action-forecast-btn"
               type="button"
@@ -418,7 +418,7 @@ export const LocationInspectorPanel: React.FC<LocationInspectorPanelProps> = ({
               className="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold flex flex-col items-center justify-center gap-1 border border-slate-200/80 active:scale-95 transition-all cursor-pointer"
             >
               <LineChart className="w-3.5 h-3.5 text-orange-600" />
-              <span>Forecast</span>
+              <span>Outlook</span>
             </button>
 
             {/* Create Alert */}

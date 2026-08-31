@@ -165,7 +165,7 @@ export const AiAnalystTool: React.FC = () => {
             className="text-xs py-2.5 px-4 flex items-center gap-1.5 flex-shrink-0"
           >
             <Send className="w-3.5 h-3.5" />
-            <span>Ask AI</span>
+            <span>Ask HeatOS</span>
           </PrimaryButton>
         </form>
       </div>

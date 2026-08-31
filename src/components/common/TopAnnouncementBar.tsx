@@ -58,15 +58,11 @@ export const TopAnnouncementBar: React.FC<TopAnnouncementBarProps> = ({ classNam
           {/* Collapsed Headline Badges */}
           <div className="flex items-center gap-1.5 sm:gap-2 truncate">
             <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-extrabold tracking-wider text-[10px] sm:text-[11px] whitespace-nowrap">
-              REAL-WORLD ENGINE
+              LIVE SYSTEM
             </span>
             <span className="text-slate-600 hidden xs:inline">•</span>
-            <span className="text-slate-200 font-semibold tracking-wide whitespace-nowrap">
-              100+ FILES
-            </span>
-            <span className="text-slate-600 hidden sm:inline">•</span>
-            <span className="text-slate-300 hidden sm:inline font-medium tracking-wide whitespace-nowrap">
-              10+ LIVE DATA APIs + FORTYGUARD
+            <span className="text-slate-300 font-medium tracking-wide whitespace-nowrap text-[11px] sm:text-[12px]">
+              Environmental intelligence operating layer
             </span>
           </div>
         </div>
@@ -151,9 +147,16 @@ export const TopAnnouncementBar: React.FC<TopAnnouncementBarProps> = ({ classNam
                 <div className="w-6 h-6 rounded-md bg-blue-500/10 border border-blue-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
                   <Info className="w-3.5 h-3.5 text-blue-400" />
                 </div>
-                <div className="space-y-1.5 flex-1">
+                <div className="space-y-2 flex-1">
+                  <h4 className="text-sm font-bold text-white tracking-wide">HEATOS</h4>
                   <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
-                    HeatOS is a real-world working environmental intelligence engine, built across 100+ files and integrated with 10+ external data APIs alongside the primary FortyGuard API. Some live API requests may occasionally fail or return delayed data due to third-party rate limits and limited external resources. We sincerely apologize for any temporary gaps.
+                    A working environmental intelligence system that synthesizes real-world environmental signals into a contextual environmental state.
+                  </p>
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+                    Built as a solo project with 100+ internal files and 11+ connected APIs/providers.
+                  </p>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans italic">
+                    Some external sources may occasionally be unavailable due to provider limits or resource constraints. HeatOS is designed to degrade gracefully and surface data availability rather than silently fabricate certainty.
                   </p>
                 </div>
               </div>

@@ -109,11 +109,11 @@ export const ForecastView: React.FC = () => {
                   <TrendingUp className="w-5 h-5" />
                 </div>
                 <h1 className="text-sm font-bold tracking-widest text-[#2563EB] uppercase">
-                  WHAT'S COMING
+                  ENVIRONMENTAL OUTLOOK
                 </h1>
               </div>
               <span className="text-xs text-slate-500 font-medium">
-                HeatOS combines environmental signals to identify what is likely to change next — and why.
+                How current conditions may evolve.
               </span>
             </div>
 

@@ -651,7 +651,7 @@ export const MetricExplanation: React.FC<MetricExplanationProps> = ({
         </div>
 
         {/* ------------------------------------------------------------- */}
-        {/* 3. FOOTER ACTIONS: Ask AI, Copy, Close */}
+        {/* 3. FOOTER ACTIONS: Ask HeatOS, Copy, Close */}
         {/* ------------------------------------------------------------- */}
         <div className="px-5 py-3.5 sm:px-6 sm:py-4 bg-slate-50/90 border-t border-slate-100 flex items-center justify-between gap-2 shrink-0 pb-safe">
           <button
@@ -671,7 +671,6 @@ export const MetricExplanation: React.FC<MetricExplanationProps> = ({
               </>
             )}
           </button>
-
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -680,7 +679,7 @@ export const MetricExplanation: React.FC<MetricExplanationProps> = ({
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs font-bold transition-colors cursor-pointer shadow-2xs"
             >
               <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-              <span>Ask AI Analyst</span>
+              <span>Ask HeatOS</span>
             </button>
 
             <button

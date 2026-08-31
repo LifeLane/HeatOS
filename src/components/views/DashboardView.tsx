@@ -126,9 +126,12 @@ export const DashboardView: React.FC = () => {
         {/* ========================================================================= */}
         <div className="mb-6 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
           <div className="p-6 md:p-10 flex flex-col items-center text-center">
-            <h1 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">
-              RIGHT NOW
+            <h1 className="text-sm font-bold tracking-widest text-[#2563EB] uppercase mb-1">
+              CURRENT ENVIRONMENTAL STATE
             </h1>
+            <p className="text-xs text-slate-500 font-medium mb-6">
+              A synthesized view of the conditions affecting this location.
+            </p>
             
             <div className="flex flex-col items-center mb-6">
               <button
@@ -204,7 +207,7 @@ export const DashboardView: React.FC = () => {
                 className="w-full sm:w-auto px-8 py-3 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
               >
                 <MapIcon className="w-5 h-5" />
-                <span>EXPLORE THE LIVING MAP</span>
+                <span>EXPLORE ENVIRONMENTAL MAP</span>
               </button>
               <button
                 onClick={handleAskHeatOS}
